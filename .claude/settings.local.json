@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c:*)",
+      "Bash(dir:*)",
+      "Bash(unzip:*)",
+      "Bash(for:*)",
+      "Bash(do echo \"=== $f ===\")",
+      "Bash(done)",
+      "Bash(cd:*)",
+      "Bash(if [ -d \".git\" ])",
+      "Bash(then echo \"Git repository found\")",
+      "Bash(else echo \"No git repository found\")",
+      "Bash(fi)",
+      "Bash(du:*)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

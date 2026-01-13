@@ -1,0 +1,58 @@
+# ===========================================
+# Proyecto: Sao Paulo Biodiversity & Health
+# ===========================================
+
+# =====================
+# DATOS GRANDES (NO VERSION CONTROL)
+# =====================
+data/raw/*.csv
+data/geo/**/*.shp
+data/geo/**/*.shx
+data/geo/**/*.dbf
+data/geo/**/*.prj
+data/geo/**/*.cpg
+
+# =====================
+# DOCUMENTOS ADMINISTRATIVOS (BECAS)
+# =====================
+admin/
+
+# =====================
+# PYTHON
+# =====================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+env/
+.venv/
+.ipynb_checkpoints/
+
+# =====================
+# IDE Y EDITORES
+# =====================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# =====================
+# OS
+# =====================
+.DS_Store
+Thumbs.db
+desktop.ini
+~$*
+
+# =====================
+# ARCHIVOS TEMPORALES
+# =====================
+*.tmp
+*.temp
+*.log
+*.bak
+*.zip
