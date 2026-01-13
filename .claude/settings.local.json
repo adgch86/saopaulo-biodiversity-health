@@ -20,7 +20,9 @@
       "Bash(git commit:*)",
       "Bash(gh auth status:*)",
       "Bash(gh auth login:*)",
-      "Bash(gh repo create:*)"
+      "Bash(gh repo create:*)",
+      "Bash(git push:*)",
+      "Bash(python scripts/crear_word.py:*)"
     ]
   }
 }
