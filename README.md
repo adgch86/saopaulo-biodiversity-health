@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![FAIR](https://img.shields.io/badge/FAIR-Compliant-green.svg)](https://www.go-fair.org/fair-principles/)
-[![DOI](https://img.shields.io/badge/DOI-pending-lightgrey.svg)](https://zenodo.org/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18303824.svg)](https://doi.org/10.5281/zenodo.18303824)
 
 Analysis of correlations between biodiversity, climate risks, universal access to services (UAI), and health outcomes across the 645 municipalities of São Paulo State, Brazil.
 

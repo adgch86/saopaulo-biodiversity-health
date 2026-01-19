@@ -9,6 +9,9 @@ authors:
     affiliation: "University of São Paulo (USP)"
     email: adgch86@gmail.com
 identifiers:
+  - type: doi
+    value: "10.5281/zenodo.18303824"
+    description: "Zenodo DOI"
   - type: url
     value: "https://github.com/adgch86/saopaulo-biodiversity-health"
     description: "GitHub Repository"
