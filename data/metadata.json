@@ -1,0 +1,334 @@
+{
+  "@context": {
+    "dcterms": "http://purl.org/dc/terms/",
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "schema": "https://schema.org/"
+  },
+  "title": "São Paulo Biodiversity-Health-Governance Dataset",
+  "description": "Integrated dataset analyzing correlations between biodiversity, climate risks, universal access to services (UAI), and health outcomes across 645 municipalities in São Paulo State, Brazil. Supports research on the dilution effect, conservation-poverty paradox, and governance gaps.",
+  "version": "1.0.0",
+  "dateCreated": "2026-01-19",
+  "dateModified": "2026-01-19",
+  "license": "MIT",
+  "licenseUrl": "https://opensource.org/licenses/MIT",
+  "creator": {
+    "name": "Adrian David González Chaves",
+    "orcid": "https://orcid.org/0000-0002-5233-8957",
+    "affiliation": "University of São Paulo (USP)",
+    "email": "adgch86@gmail.com"
+  },
+  "publisher": {
+    "name": "Adrian David González Chaves",
+    "type": "Person"
+  },
+  "spatialCoverage": {
+    "name": "São Paulo State, Brazil",
+    "geo": {
+      "type": "GeoShape",
+      "box": "-25.31 -53.11 -19.78 -44.16"
+    },
+    "administrativeUnit": "State",
+    "country": "Brazil",
+    "countryCode": "BR"
+  },
+  "temporalCoverage": {
+    "startDate": "2010",
+    "endDate": "2019",
+    "note": "Health data covers 2010-2019; UAI data from 2020-2024"
+  },
+  "keywords": [
+    "biodiversity",
+    "public health",
+    "planetary health",
+    "dilution effect",
+    "climate change",
+    "environmental governance",
+    "São Paulo",
+    "Brazil",
+    "epidemiology",
+    "dengue",
+    "malaria",
+    "urban agriculture index",
+    "multidimensional vulnerability"
+  ],
+  "language": "en",
+  "dataFiles": [
+    {
+      "name": "645_sin_salud.csv",
+      "description": "Environmental and UAI data for all 645 municipalities",
+      "format": "text/csv",
+      "records": 645,
+      "size": "55 MB",
+      "access": "restricted"
+    },
+    {
+      "name": "187_con_salud.csv",
+      "description": "Epidemiological data for 187 municipalities",
+      "format": "text/csv",
+      "records": 187,
+      "size": "19 MB",
+      "access": "restricted"
+    },
+    {
+      "name": "df_sin_cuadrantes.pkl",
+      "description": "Main processed dataset with quadrant classification",
+      "format": "application/x-pickle",
+      "records": 645,
+      "access": "open"
+    }
+  ],
+  "variables": [
+    {
+      "name": "cod_ibge",
+      "label": "IBGE Municipality Code",
+      "description": "Official 7-digit IBGE code for Brazilian municipalities",
+      "type": "string",
+      "format": "^[0-9]{7}$",
+      "source": "IBGE",
+      "vocabulary": "http://www.ibge.gov.br/codigos"
+    },
+    {
+      "name": "nome_municipio",
+      "label": "Municipality Name",
+      "description": "Official municipality name",
+      "type": "string",
+      "source": "IBGE"
+    },
+    {
+      "name": "mean_species_richness",
+      "label": "Mean Species Richness",
+      "description": "Average number of distinct species (all taxa combined)",
+      "type": "numeric",
+      "unit": "count",
+      "min": 350,
+      "max": 755,
+      "source": "INPE",
+      "temporalCoverage": "circa 2015",
+      "vocabulary": "http://aims.fao.org/aos/agrovoc/c_36642"
+    },
+    {
+      "name": "Vert_rich_risk",
+      "label": "Vertebrate Richness Risk",
+      "description": "Risk index for vertebrate species richness loss",
+      "type": "numeric",
+      "unit": "index",
+      "min": 0,
+      "max": 1,
+      "source": "INPE"
+    },
+    {
+      "name": "forest_cover_pct",
+      "label": "Forest Cover Percentage",
+      "description": "Percentage of municipality area covered by native forest",
+      "type": "numeric",
+      "unit": "percent",
+      "min": 0,
+      "max": 100,
+      "source": "INPE/MapBiomas"
+    },
+    {
+      "name": "UAI_housing",
+      "label": "UAI - Housing",
+      "description": "Universal Access Index component for housing access",
+      "type": "numeric",
+      "unit": "index",
+      "min": 0,
+      "max": 1,
+      "source": "AdaptaBrasil MCTI",
+      "methodology": "Composite of housing quality indicators"
+    },
+    {
+      "name": "UAI_env",
+      "label": "UAI - Environment",
+      "description": "Universal Access Index component for environmental services",
+      "type": "numeric",
+      "unit": "index",
+      "min": 0,
+      "max": 1,
+      "source": "AdaptaBrasil MCTI"
+    },
+    {
+      "name": "UAI_food",
+      "label": "UAI - Food Security",
+      "description": "Universal Access Index component for food access",
+      "type": "numeric",
+      "unit": "index",
+      "min": 0,
+      "max": 1,
+      "source": "AdaptaBrasil MCTI"
+    },
+    {
+      "name": "UAI_mob",
+      "label": "UAI - Mobility",
+      "description": "Universal Access Index component for transportation access",
+      "type": "numeric",
+      "unit": "index",
+      "min": 0,
+      "max": 1,
+      "source": "AdaptaBrasil MCTI"
+    },
+    {
+      "name": "UAI_Crisk",
+      "label": "UAI - Climate Risk",
+      "description": "Universal Access Index component for climate risk preparedness",
+      "type": "numeric",
+      "unit": "index",
+      "min": 0,
+      "max": 1,
+      "source": "AdaptaBrasil MCTI"
+    },
+    {
+      "name": "flooding_exposure",
+      "label": "Flood Exposure",
+      "description": "Exposure to flooding events",
+      "type": "numeric",
+      "unit": "index",
+      "source": "AdaptaBrasil MCTI"
+    },
+    {
+      "name": "flooding_risks",
+      "label": "Flood Risk",
+      "description": "Overall flood risk assessment",
+      "type": "numeric",
+      "unit": "index",
+      "source": "AdaptaBrasil MCTI"
+    },
+    {
+      "name": "hydric_stress_exp",
+      "label": "Water Stress Exposure",
+      "description": "Exposure to water scarcity conditions",
+      "type": "numeric",
+      "unit": "index",
+      "source": "AdaptaBrasil MCTI"
+    },
+    {
+      "name": "hydric_stress_risk",
+      "label": "Water Stress Risk",
+      "description": "Overall water stress risk assessment",
+      "type": "numeric",
+      "unit": "index",
+      "source": "AdaptaBrasil MCTI"
+    },
+    {
+      "name": "incidence_dengue",
+      "label": "Dengue Incidence",
+      "description": "Average annual dengue fever incidence rate",
+      "type": "numeric",
+      "unit": "cases per 100,000 population",
+      "source": "DATASUS",
+      "temporalCoverage": "2010-2019",
+      "vocabulary": "http://id.who.int/icd/entity/928952090",
+      "icd10": "A90-A91"
+    },
+    {
+      "name": "incidence_diarrhea",
+      "label": "Diarrhea Incidence",
+      "description": "Average annual diarrheal disease incidence rate",
+      "type": "numeric",
+      "unit": "cases per 100,000 population",
+      "source": "DATASUS",
+      "temporalCoverage": "2010-2019",
+      "vocabulary": "http://id.who.int/icd/entity/1766440644",
+      "icd10": "A09"
+    },
+    {
+      "name": "incidence_malaria",
+      "label": "Malaria Incidence",
+      "description": "Average annual malaria incidence rate",
+      "type": "numeric",
+      "unit": "cases per 100,000 population",
+      "source": "DATASUS",
+      "temporalCoverage": "2010-2019",
+      "vocabulary": "http://id.who.int/icd/entity/1692969555",
+      "icd10": "B50-B54"
+    },
+    {
+      "name": "incidence_leptospirosis",
+      "label": "Leptospirosis Incidence",
+      "description": "Average annual leptospirosis incidence rate",
+      "type": "numeric",
+      "unit": "cases per 100,000 population",
+      "source": "DATASUS",
+      "temporalCoverage": "2010-2019",
+      "vocabulary": "http://id.who.int/icd/entity/1992461308",
+      "icd10": "A27"
+    },
+    {
+      "name": "persist_dengue",
+      "label": "Dengue Persistence",
+      "description": "Number of years (0-10) with dengue cases detected",
+      "type": "integer",
+      "unit": "years",
+      "min": 0,
+      "max": 10,
+      "source": "DATASUS (derived)"
+    },
+    {
+      "name": "copersistence",
+      "label": "Disease Copersistence Index",
+      "description": "Index measuring simultaneous persistence of multiple diseases",
+      "type": "numeric",
+      "unit": "index",
+      "min": 0,
+      "max": 1,
+      "source": "Derived",
+      "methodology": "Normalized sum of persistence indicators"
+    },
+    {
+      "name": "IVM",
+      "label": "Multidimensional Vulnerability Index",
+      "description": "Composite index integrating poverty, service access, housing, and climate vulnerability",
+      "type": "numeric",
+      "unit": "index",
+      "min": 0,
+      "max": 100,
+      "source": "Derived",
+      "methodology": "See docs/METHODOLOGY_IVM.md"
+    },
+    {
+      "name": "cuadrante",
+      "label": "Quadrant Classification",
+      "description": "Classification based on UAI (governance) and IVM (vulnerability)",
+      "type": "categorical",
+      "values": ["Q1_Modelo", "Q2_Conservar", "Q3_Vulnerable", "Q4_Desarrollo"],
+      "source": "Derived",
+      "methodology": "Median split on UAI and IVM"
+    }
+  ],
+  "methodology": {
+    "analysisType": "Cross-sectional correlation analysis",
+    "statisticalMethods": ["Pearson correlation", "Spearman correlation", "Median split classification"],
+    "software": {
+      "language": "Python",
+      "version": "3.8+",
+      "packages": ["pandas", "numpy", "scipy", "matplotlib", "seaborn", "geopandas"]
+    }
+  },
+  "qualityAssurance": {
+    "validation": ["Range checks", "Municipality code verification", "Cross-validation with published statistics"],
+    "missingData": "Complete for environmental variables; 29% coverage for health variables"
+  },
+  "relatedPublications": [
+    {
+      "title": "Dilution effect in Amazon ecosystems",
+      "authors": "Barreto et al.",
+      "year": 2025,
+      "doi": "10.1038/s43247-025-02620-7"
+    },
+    {
+      "title": "A blueprint for integrated assessment of agrifood-system burdens",
+      "authors": "Levers et al.",
+      "year": 2025,
+      "doi": "10.1088/1748-9326/ae20ac"
+    }
+  ],
+  "funding": {
+    "note": "Independent research project"
+  },
+  "accessRights": {
+    "type": "mixed",
+    "openData": ["Processed datasets", "Output files", "Code"],
+    "restrictedData": ["Large raw CSV files", "Geographic shapefiles"],
+    "accessProtocol": "See DATA_ACCESS.md"
+  }
+}

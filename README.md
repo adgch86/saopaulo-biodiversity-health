@@ -1,6 +1,12 @@
-# Biodiversidad, Salud y Acceso Universal en Sao Paulo
+# Biodiversity, Health and Universal Access in São Paulo
 
-Analisis de correlaciones entre biodiversidad, riesgos climaticos, acceso universal a servicios (UAI) y resultados de salud en los 645 municipios del Estado de Sao Paulo, Brasil.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![FAIR](https://img.shields.io/badge/FAIR-Compliant-green.svg)](https://www.go-fair.org/fair-principles/)
+[![DOI](https://img.shields.io/badge/DOI-pending-lightgrey.svg)](https://zenodo.org/)
+
+Analysis of correlations between biodiversity, climate risks, universal access to services (UAI), and health outcomes across the 645 municipalities of São Paulo State, Brazil.
+
+**Author**: [Adrian David González Chaves](https://orcid.org/0000-0002-5233-8957) | **Institution**: University of São Paulo (USP)
 
 ## Estructura del Proyecto
 
@@ -72,8 +78,8 @@ saopaulo-biodiversity-health/
 ## Instalacion
 
 ```bash
-# Clonar repositorio
-git clone https://github.com/[usuario]/saopaulo-biodiversity-health.git
+# Clone repository
+git clone https://github.com/adgch86/saopaulo-biodiversity-health.git
 cd saopaulo-biodiversity-health
 
 # Crear entorno virtual
@@ -102,10 +108,53 @@ print(df['cuadrante'].value_counts())
 - `docs/metadata.xlsx` - Definiciones de variables con fuentes
 - `docs/INFORME_ANALISIS_CORRELACIONES.md` - Analisis completo de correlaciones
 
-## Autor
+## FAIR Compliance
 
-Adrian Gonzalez-Chaves
+This project follows [FAIR principles](https://www.go-fair.org/fair-principles/) for scientific data management:
 
-## Licencia
+| Principle | Implementation |
+|-----------|----------------|
+| **Findable** | `CITATION.cff` for citation, structured `metadata.json`, ORCID linked |
+| **Accessible** | `DATA_ACCESS.md` protocol, open GitHub repository |
+| **Interoperable** | Standard vocabularies (AGROVOC, ICD-10), JSON Schema validation |
+| **Reusable** | MIT License, `PROVENANCE.md`, `REUSE_GUIDE.md`, documented methodology |
 
-MIT License
+### FAIR Documentation
+
+| Document | Description |
+|----------|-------------|
+| [CITATION.cff](CITATION.cff) | Standard citation format |
+| [DATA_ACCESS.md](DATA_ACCESS.md) | How to access the data |
+| [PROVENANCE.md](PROVENANCE.md) | Data origin and lineage |
+| [LIMITATIONS.md](LIMITATIONS.md) | Known limitations and biases |
+| [REUSE_GUIDE.md](REUSE_GUIDE.md) | Guide for reusing this work |
+| [CHANGELOG.md](CHANGELOG.md) | Version history |
+| [data/metadata.json](data/metadata.json) | Structured metadata |
+| [data/schema.json](data/schema.json) | JSON Schema for validation |
+| [data/vocabulary_mapping.json](data/vocabulary_mapping.json) | Standard vocabulary mappings |
+| [docs/METHODOLOGY_IVM.md](docs/METHODOLOGY_IVM.md) | IVM index methodology |
+
+## Author
+
+**Adrian David González Chaves**
+- ORCID: [0000-0002-5233-8957](https://orcid.org/0000-0002-5233-8957)
+- Email: adgch86@gmail.com
+- GitHub: [@adgch86](https://github.com/adgch86)
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.
+
+## Citation
+
+If you use this dataset or methodology, please cite:
+
+```bibtex
+@dataset{gonzalez_chaves_2026,
+  author = {González Chaves, Adrian David},
+  title = {Biodiversity, Health and Universal Access in São Paulo},
+  year = {2026},
+  publisher = {GitHub},
+  url = {https://github.com/adgch86/saopaulo-biodiversity-health}
+}
+```

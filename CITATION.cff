@@ -1,0 +1,59 @@
+cff-version: 1.2.0
+title: "Biodiversity, Health and Universal Access in São Paulo: A Multidimensional Analysis"
+message: "If you use this dataset or software, please cite it as below."
+type: dataset
+authors:
+  - family-names: González Chaves
+    given-names: Adrian David
+    orcid: https://orcid.org/0000-0002-5233-8957
+    affiliation: "University of São Paulo (USP)"
+    email: adgch86@gmail.com
+identifiers:
+  - type: url
+    value: "https://github.com/adgch86/saopaulo-biodiversity-health"
+    description: "GitHub Repository"
+repository-code: "https://github.com/adgch86/saopaulo-biodiversity-health"
+url: "https://github.com/adgch86/saopaulo-biodiversity-health"
+abstract: >-
+  Analysis of correlations between biodiversity, climate risks,
+  universal access to services (UAI), and health outcomes in the
+  645 municipalities of São Paulo State, Brazil. This research
+  provides evidence for the local dilution effect (biodiversity
+  reducing disease transmission), the conservation-poverty paradox,
+  and governance gaps in vulnerable municipalities.
+keywords:
+  - biodiversity
+  - public health
+  - planetary health
+  - dilution effect
+  - climate change
+  - environmental governance
+  - São Paulo
+  - Brazil
+  - epidemiology
+  - dengue
+  - malaria
+  - urban agriculture index
+  - multidimensional vulnerability
+license: MIT
+version: "1.0.0"
+date-released: "2026-01-19"
+references:
+  - type: article
+    authors:
+      - family-names: Barreto
+        given-names: João P.
+      - family-names: González-Chaves
+        given-names: Adrian D.
+    title: "Dilution effect in Amazon ecosystems"
+    journal: "Communications Earth & Environment"
+    year: 2025
+    doi: "10.1038/s43247-025-02620-7"
+  - type: article
+    authors:
+      - family-names: Levers
+        given-names: Christian
+    title: "A blueprint for integrated assessment of agrifood-system burdens"
+    journal: "Environmental Research Letters"
+    year: 2025
+    doi: "10.1088/1748-9326/ae20ac"

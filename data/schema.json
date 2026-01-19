@@ -1,0 +1,198 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/adgch86/saopaulo-biodiversity-health/data/schema.json",
+  "title": "São Paulo Biodiversity-Health-Governance Data Schema",
+  "description": "JSON Schema for validating municipality-level data in the São Paulo Biodiversity-Health-Governance Dataset",
+  "type": "object",
+  "required": ["cod_ibge", "nome_municipio"],
+  "properties": {
+    "cod_ibge": {
+      "type": "string",
+      "pattern": "^[0-9]{7}$",
+      "description": "IBGE 7-digit municipality code",
+      "examples": ["3550308"]
+    },
+    "nome_municipio": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Official municipality name",
+      "examples": ["São Paulo", "Campinas"]
+    },
+    "population": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 15000000,
+      "description": "Total population (Census 2022)"
+    },
+    "area_km2": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Municipality area in square kilometers"
+    },
+    "mean_species_richness": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 2000,
+      "description": "Mean species richness count"
+    },
+    "Vert_rich_risk": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Vertebrate richness risk index (0-1)"
+    },
+    "forest_cover_pct": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Forest cover percentage (0-100)"
+    },
+    "UAI_housing": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Universal Access Index - Housing (0-1)"
+    },
+    "UAI_env": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Universal Access Index - Environment (0-1)"
+    },
+    "UAI_food": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Universal Access Index - Food Security (0-1)"
+    },
+    "UAI_mob": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Universal Access Index - Mobility (0-1)"
+    },
+    "UAI_Crisk": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Universal Access Index - Climate Risk (0-1)"
+    },
+    "UAI_total": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Universal Access Index - Total composite (0-1)"
+    },
+    "flooding_exposure": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Flood exposure index"
+    },
+    "flooding_risks": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Flood risk index"
+    },
+    "hydric_stress_exp": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Water stress exposure index"
+    },
+    "hydric_stress_risk": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Water stress risk index"
+    },
+    "incidence_dengue": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Dengue incidence per 100,000 population"
+    },
+    "incidence_diarrhea": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Diarrheal disease incidence per 100,000 population"
+    },
+    "incidence_malaria": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Malaria incidence per 100,000 population"
+    },
+    "incidence_leptospirosis": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Leptospirosis incidence per 100,000 population"
+    },
+    "persist_dengue": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "maximum": 10,
+      "description": "Years with dengue cases (0-10)"
+    },
+    "persist_diarrhea": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "maximum": 10,
+      "description": "Years with diarrhea cases (0-10)"
+    },
+    "persist_malaria": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "maximum": 10,
+      "description": "Years with malaria cases (0-10)"
+    },
+    "persist_leptospirosis": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "maximum": 10,
+      "description": "Years with leptospirosis cases (0-10)"
+    },
+    "copersistence": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Disease copersistence index (0-1)"
+    },
+    "IVM": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Multidimensional Vulnerability Index (0-100)"
+    },
+    "cuadrante": {
+      "type": "string",
+      "enum": ["Q1_Modelo", "Q2_Conservar", "Q3_Vulnerable", "Q4_Desarrollo"],
+      "description": "Quadrant classification based on UAI and IVM"
+    },
+    "poverty_tercil": {
+      "type": "string",
+      "enum": ["Baja", "Media", "Alta"],
+      "description": "Poverty tercile classification"
+    }
+  },
+  "additionalProperties": true,
+  "examples": [
+    {
+      "cod_ibge": "3550308",
+      "nome_municipio": "São Paulo",
+      "population": 12300000,
+      "area_km2": 1521.11,
+      "mean_species_richness": 452.3,
+      "Vert_rich_risk": 0.65,
+      "forest_cover_pct": 18.5,
+      "UAI_housing": 0.78,
+      "UAI_env": 0.62,
+      "UAI_food": 0.71,
+      "UAI_mob": 0.85,
+      "UAI_Crisk": 0.54,
+      "UAI_total": 0.70,
+      "incidence_dengue": 245.8,
+      "incidence_diarrhea": 89.2,
+      "incidence_malaria": 0.3,
+      "incidence_leptospirosis": 12.4,
+      "IVM": 58.2,
+      "cuadrante": "Q4_Desarrollo"
+    }
+  ]
+}

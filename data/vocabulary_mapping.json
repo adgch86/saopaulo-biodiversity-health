@@ -1,0 +1,242 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Vocabulary Mapping for São Paulo Biodiversity-Health-Governance Dataset",
+  "description": "Maps dataset variables to standard vocabularies (AGROVOC, ICD-10, IBGE, Dublin Core) for interoperability",
+  "version": "1.0.0",
+  "dateCreated": "2026-01-19",
+  "vocabularies": {
+    "AGROVOC": {
+      "name": "AGROVOC Multilingual Thesaurus",
+      "publisher": "Food and Agriculture Organization (FAO)",
+      "url": "http://aims.fao.org/aos/agrovoc/",
+      "description": "Controlled vocabulary for agriculture, forestry, fisheries, food, and environment"
+    },
+    "ICD-10": {
+      "name": "International Classification of Diseases, 10th Revision",
+      "publisher": "World Health Organization (WHO)",
+      "url": "https://icd.who.int/browse10/2019/en",
+      "description": "Standard diagnostic tool for epidemiology, health management, and clinical purposes"
+    },
+    "ICD-11": {
+      "name": "International Classification of Diseases, 11th Revision",
+      "publisher": "World Health Organization (WHO)",
+      "url": "https://icd.who.int/en",
+      "description": "Latest revision of ICD with more detailed coding"
+    },
+    "IBGE": {
+      "name": "IBGE Classification Systems",
+      "publisher": "Instituto Brasileiro de Geografia e Estatística",
+      "url": "https://www.ibge.gov.br/",
+      "description": "Brazilian geographic and statistical classifications"
+    },
+    "DublinCore": {
+      "name": "Dublin Core Metadata Terms",
+      "publisher": "Dublin Core Metadata Initiative",
+      "url": "http://purl.org/dc/terms/",
+      "description": "Standard metadata vocabulary for resource description"
+    },
+    "ENVO": {
+      "name": "Environment Ontology",
+      "publisher": "OBO Foundry",
+      "url": "http://www.obofoundry.org/ontology/envo.html",
+      "description": "Ontology for environmental entities"
+    }
+  },
+  "mappings": {
+    "biodiversity": [
+      {
+        "localVariable": "mean_species_richness",
+        "label": "Mean Species Richness",
+        "standardTerm": "species richness",
+        "vocabulary": "AGROVOC",
+        "uri": "http://aims.fao.org/aos/agrovoc/c_36642",
+        "definition": "The number of different species represented in an ecological community"
+      },
+      {
+        "localVariable": "forest_cover_pct",
+        "label": "Forest Cover Percentage",
+        "standardTerm": "forest cover",
+        "vocabulary": "AGROVOC",
+        "uri": "http://aims.fao.org/aos/agrovoc/c_3062",
+        "definition": "Area covered by forests as a percentage of total land area"
+      },
+      {
+        "localVariable": "Vert_rich_risk",
+        "label": "Vertebrate Richness Risk",
+        "standardTerm": "biodiversity loss",
+        "vocabulary": "AGROVOC",
+        "uri": "http://aims.fao.org/aos/agrovoc/c_33949",
+        "definition": "Risk of loss of biological diversity at species level"
+      }
+    ],
+    "health": [
+      {
+        "localVariable": "incidence_dengue",
+        "label": "Dengue Incidence",
+        "standardTerm": "Dengue fever",
+        "vocabulary": "ICD-10",
+        "code": "A90-A91",
+        "uri": "http://id.who.int/icd/entity/928952090",
+        "definition": "Dengue fever and dengue haemorrhagic fever"
+      },
+      {
+        "localVariable": "incidence_diarrhea",
+        "label": "Diarrhea Incidence",
+        "standardTerm": "Diarrhoea and gastroenteritis of presumed infectious origin",
+        "vocabulary": "ICD-10",
+        "code": "A09",
+        "uri": "http://id.who.int/icd/entity/1766440644",
+        "definition": "Infectious diarrheal diseases"
+      },
+      {
+        "localVariable": "incidence_malaria",
+        "label": "Malaria Incidence",
+        "standardTerm": "Malaria",
+        "vocabulary": "ICD-10",
+        "code": "B50-B54",
+        "uri": "http://id.who.int/icd/entity/1692969555",
+        "definition": "Malaria due to various Plasmodium species"
+      },
+      {
+        "localVariable": "incidence_leptospirosis",
+        "label": "Leptospirosis Incidence",
+        "standardTerm": "Leptospirosis",
+        "vocabulary": "ICD-10",
+        "code": "A27",
+        "uri": "http://id.who.int/icd/entity/1992461308",
+        "definition": "Infectious disease caused by Leptospira bacteria"
+      }
+    ],
+    "geography": [
+      {
+        "localVariable": "cod_ibge",
+        "label": "IBGE Municipality Code",
+        "standardTerm": "Municipality Code",
+        "vocabulary": "IBGE",
+        "uri": "https://www.ibge.gov.br/explica/codigos-dos-municipios.php",
+        "definition": "7-digit unique identifier for Brazilian municipalities"
+      },
+      {
+        "localVariable": "nome_municipio",
+        "label": "Municipality Name",
+        "standardTerm": "Geographic name",
+        "vocabulary": "IBGE",
+        "uri": "https://www.ibge.gov.br/cidades-e-estados",
+        "definition": "Official name of the municipality"
+      },
+      {
+        "localVariable": "area_km2",
+        "label": "Municipality Area",
+        "standardTerm": "Area",
+        "vocabulary": "DublinCore",
+        "uri": "http://purl.org/dc/terms/extent",
+        "unit": "km2"
+      }
+    ],
+    "climate": [
+      {
+        "localVariable": "flooding_exposure",
+        "label": "Flood Exposure",
+        "standardTerm": "flood",
+        "vocabulary": "ENVO",
+        "uri": "http://purl.obolibrary.org/obo/ENVO_01000710",
+        "definition": "Exposure to flood events"
+      },
+      {
+        "localVariable": "hydric_stress_exp",
+        "label": "Water Stress Exposure",
+        "standardTerm": "water scarcity",
+        "vocabulary": "AGROVOC",
+        "uri": "http://aims.fao.org/aos/agrovoc/c_16065",
+        "definition": "Exposure to water scarcity conditions"
+      }
+    ],
+    "governance": [
+      {
+        "localVariable": "UAI_housing",
+        "label": "UAI - Housing",
+        "standardTerm": "housing",
+        "vocabulary": "AGROVOC",
+        "uri": "http://aims.fao.org/aos/agrovoc/c_3718",
+        "definition": "Universal access to adequate housing"
+      },
+      {
+        "localVariable": "UAI_food",
+        "label": "UAI - Food Security",
+        "standardTerm": "food security",
+        "vocabulary": "AGROVOC",
+        "uri": "http://aims.fao.org/aos/agrovoc/c_10967",
+        "definition": "Universal access to food"
+      },
+      {
+        "localVariable": "UAI_env",
+        "label": "UAI - Environment",
+        "standardTerm": "environmental protection",
+        "vocabulary": "AGROVOC",
+        "uri": "http://aims.fao.org/aos/agrovoc/c_2635",
+        "definition": "Universal access to environmental services"
+      },
+      {
+        "localVariable": "UAI_mob",
+        "label": "UAI - Mobility",
+        "standardTerm": "transportation",
+        "vocabulary": "AGROVOC",
+        "uri": "http://aims.fao.org/aos/agrovoc/c_7886",
+        "definition": "Universal access to transportation"
+      }
+    ],
+    "derived": [
+      {
+        "localVariable": "IVM",
+        "label": "Multidimensional Vulnerability Index",
+        "standardTerm": "vulnerability",
+        "vocabulary": "AGROVOC",
+        "uri": "http://aims.fao.org/aos/agrovoc/c_330948",
+        "definition": "Composite index of social-environmental vulnerability",
+        "methodology": "docs/METHODOLOGY_IVM.md"
+      },
+      {
+        "localVariable": "cuadrante",
+        "label": "Quadrant Classification",
+        "standardTerm": "classification",
+        "vocabulary": "DublinCore",
+        "uri": "http://purl.org/dc/terms/type",
+        "definition": "Categorical classification based on governance and vulnerability",
+        "values": {
+          "Q1_Modelo": "High UAI, Low IVM - Model municipalities",
+          "Q2_Conservar": "Low UAI, Low IVM - Conservation priority",
+          "Q3_Vulnerable": "Low UAI, High IVM - Intervention priority",
+          "Q4_Desarrollo": "High UAI, High IVM - Development focus"
+        }
+      },
+      {
+        "localVariable": "copersistence",
+        "label": "Disease Copersistence Index",
+        "standardTerm": "disease burden",
+        "vocabulary": "ICD-11",
+        "uri": "http://id.who.int/icd/entity/1473814242",
+        "definition": "Index of simultaneous presence of multiple diseases"
+      }
+    ]
+  },
+  "crosswalks": {
+    "ICD10_to_ICD11": {
+      "A90-A91": "1D2Z",
+      "A09": "1A40",
+      "B50-B54": "1F40-1F4Z",
+      "A27": "1B91"
+    },
+    "IBGE_to_ISO": {
+      "stateCode": "35",
+      "stateName": "São Paulo",
+      "countryISO": "BR",
+      "countryISO3": "BRA"
+    }
+  },
+  "notes": {
+    "AGROVOC": "Primary vocabulary for environmental and agricultural terms",
+    "ICD": "Standard for health/disease classification; ICD-10 used as primary, ICD-11 codes provided for future compatibility",
+    "IBGE": "Brazilian national standard for geographic entities",
+    "DublinCore": "Generic metadata terms for resource description"
+  }
+}
