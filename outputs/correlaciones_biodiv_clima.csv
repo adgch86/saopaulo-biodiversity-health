@@ -1,0 +1,11 @@
+biodiversidad,riesgo_climatico,nombre_clima,rho,p_value,n
+mean_species_richness,idx_climate_risk,Riesgo Climatico (indice),0.29773025596736763,1.140230046665696e-14,645
+mean_species_richness,flooding_exposure,Exposicion Inundaciones,-0.07890248599488099,0.045165332605911095,645
+mean_species_richness,flooding_risks,Riesgo Inundaciones,0.2719111002682018,2.1395094356449846e-12,645
+mean_species_richness,hydric_stress_exp,Exposicion Estres Hidrico,0.4035670179797106,1.1665016279373282e-26,645
+mean_species_richness,hydric_stress_risk,Riesgo Estres Hidrico,0.22523905887544254,7.305410557594497e-09,645
+forest_cover,idx_climate_risk,Riesgo Climatico (indice),0.0850902365526956,0.03071448857548105,645
+forest_cover,flooding_exposure,Exposicion Inundaciones,-0.05557652003233577,0.1585926987881176,645
+forest_cover,flooding_risks,Riesgo Inundaciones,0.3513375849395758,3.5635850833148316e-20,645
+forest_cover,hydric_stress_exp,Exposicion Estres Hidrico,0.10055533367001962,0.010609187618517523,645
+forest_cover,hydric_stress_risk,Riesgo Estres Hidrico,0.020157160224459222,0.6093599487171719,645

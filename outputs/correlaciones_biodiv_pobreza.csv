@@ -1,0 +1,16 @@
+biodiversidad,variable_social,nombre_social,rho,p_value,n,significant
+mean_species_richness,pct_pobreza,% Pobreza,-0.3459222164731999,1.4409084082068953e-19,645,True
+mean_species_richness,familias_rua_per_1000,Familias en calle/1000hab,0.30575608714577945,2.0034367392370274e-15,645,True
+mean_species_richness,mort_infantil,Mortalidad Infantil,0.12147489152901174,0.001997878203777357,645,True
+mean_species_richness,IDESP_ensino_medio,IDESP (Educacion),-0.014074077231327186,0.7214782584454229,644,False
+mean_species_richness,esgoto_tratado,% Esgoto Tratado,-0.34937764137588223,8.238513613030087e-20,640,True
+forest_cover,pct_pobreza,% Pobreza,-0.17992662955437758,4.259845709565214e-06,645,True
+forest_cover,familias_rua_per_1000,Familias en calle/1000hab,0.18122579216396315,3.620717920093605e-06,645,True
+forest_cover,mort_infantil,Mortalidad Infantil,0.11902762346896403,0.002463138226353821,645,True
+forest_cover,IDESP_ensino_medio,IDESP (Educacion),-0.041314264059063736,0.2951693917480484,644,False
+forest_cover,esgoto_tratado,% Esgoto Tratado,-0.302618642948314,5.0783920285907526e-15,640,True
+Vert_rich_risk,pct_pobreza,% Pobreza,0.04612677717999758,0.24207130274669397,645,False
+Vert_rich_risk,familias_rua_per_1000,Familias en calle/1000hab,-0.08310354054466874,0.03484756073995835,645,True
+Vert_rich_risk,mort_infantil,Mortalidad Infantil,0.017429877038696463,0.6586057876019398,645,False
+Vert_rich_risk,IDESP_ensino_medio,IDESP (Educacion),-0.018585393294888577,0.6378058524846367,644,False
+Vert_rich_risk,esgoto_tratado,% Esgoto Tratado,0.11038551440805644,0.0051796126303939516,640,True

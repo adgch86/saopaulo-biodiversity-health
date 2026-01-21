@@ -1,0 +1,11 @@
+biodiversidad,enfermedad,rho,p_value,n,significant
+forest_cover,incidence_dengue,-0.48593575464380195,1.7909558210589643e-12,187,True
+mean_species_richness,incidence_diarrhea,-0.45209737978925274,8.29062403270613e-11,187,True
+mean_species_richness,incidence_dengue,-0.42928660826032544,8.759714486423707e-10,187,True
+forest_cover,incidence_diarrhea,-0.39379887658797064,2.4615039512165064e-08,187,True
+mean_species_richness,incidence_malaria,-0.35774420648080285,4.991669950497184e-07,187,True
+forest_cover,incidence_malaria,-0.24934019773399396,0.0005788643723254125,187,True
+mean_species_richness,incidence_chagas,-0.024534557738956957,0.7389036085110392,187,False
+forest_cover,incidence_chagas,0.0363188538490857,0.6216695190901372,187,False
+forest_cover,incidence_leptospirose,0.29904902865739297,3.216682387704189e-05,187,True
+mean_species_richness,incidence_leptospirose,0.34812198558263663,1.0493064361522551e-06,187,True

@@ -1,0 +1,219 @@
+dimension1,var1,dimension2,var2,rho,p_value,n,significant
+Deficit Polinizacion,pol_deficit,Riesgo Seg. Alimentaria,idx_food_security_risk,1.0,0.0,645,True
+Riesgo Seg. Alimentaria,idx_food_security_risk,Deficit Polinizacion,pol_deficit,1.0,0.0,645,True
+UAI (Gobernanza),UAI_promedio,Deficit Gobernanza,idx_governance_risk,-0.9999939732348004,0.0,645,True
+Deficit Gobernanza,idx_governance_risk,UAI (Gobernanza),UAI_promedio,-0.9999939732348003,0.0,645,True
+Riesgo Biodiversidad,idx_biodiv_risk,Riqueza Especies,mean_species_richness,-0.9247672652159156,5.2956629341036447e-272,645,True
+Riqueza Especies,mean_species_richness,Riesgo Biodiversidad,idx_biodiv_risk,-0.9247672652159156,5.2956629341036447e-272,645,True
+Cobertura Forestal,forest_cover,Riesgo Biodiversidad,idx_biodiv_risk,-0.810449701140418,1.8003412234047006e-151,645,True
+Riesgo Biodiversidad,idx_biodiv_risk,Cobertura Forestal,forest_cover,-0.810449701140418,1.8003412234047006e-151,645,True
+Cobertura Forestal,forest_cover,Riesgo Seg. Alimentaria,idx_food_security_risk,-0.7653975126261965,3.4285138932859206e-125,645,True
+Cobertura Forestal,forest_cover,Deficit Polinizacion,pol_deficit,-0.7653975126261965,3.4285138932859206e-125,645,True
+Deficit Polinizacion,pol_deficit,Cobertura Forestal,forest_cover,-0.7653975126261964,3.4285138932865063e-125,645,True
+Riesgo Seg. Alimentaria,idx_food_security_risk,Cobertura Forestal,forest_cover,-0.7653975126261964,3.4285138932865063e-125,645,True
+Riqueza Especies,mean_species_richness,Riesgo Vertebrados,Vert_rich_risk,-0.7634838965704315,3.3040154249741444e-124,645,True
+Riesgo Vertebrados,Vert_rich_risk,Riqueza Especies,mean_species_richness,-0.7634838965704314,3.304015424974521e-124,645,True
+Riesgo Biodiversidad,idx_biodiv_risk,Riesgo Vertebrados,Vert_rich_risk,0.7161945726909287,1.5896044658036634e-102,645,True
+Riesgo Vertebrados,Vert_rich_risk,Riesgo Biodiversidad,idx_biodiv_risk,0.7161945726909287,1.5896044658036634e-102,645,True
+Incidencia Malaria,incidence_malaria,% Rural,pct_rural,0.7121520219841888,3.0776931754839444e-30,187,True
+Riesgo Biodiversidad,idx_biodiv_risk,Deficit Polinizacion,pol_deficit,0.7070085487872199,8.039190011421615e-99,645,True
+Riesgo Biodiversidad,idx_biodiv_risk,Riesgo Seg. Alimentaria,idx_food_security_risk,0.7070085487872199,8.039190011421615e-99,645,True
+Riesgo Seg. Alimentaria,idx_food_security_risk,Riesgo Biodiversidad,idx_biodiv_risk,0.7070085487872199,8.039190011421615e-99,645,True
+Deficit Polinizacion,pol_deficit,Riesgo Biodiversidad,idx_biodiv_risk,0.7070085487872199,8.039190011421615e-99,645,True
+Copersistencia,copersistence,% Rural,pct_rural,-0.6976567393100221,1.3461725555158628e-28,187,True
+Incidencia Malaria,incidence_malaria,UAI (Gobernanza),UAI_promedio,-0.6816017738387751,6.851343998829083e-27,187,True
+% Rural,pct_rural,Riesgo Climatico,idx_climate_risk,-0.6437774221649731,9.119173658494939e-77,645,True
+Riesgo Climatico,idx_climate_risk,% Rural,pct_rural,-0.6437774221649731,9.119173658494939e-77,645,True
+Copersistencia,copersistence,UAI (Gobernanza),UAI_promedio,0.6407465723679802,5.293367444862662e-23,187,True
+Cobertura Forestal,forest_cover,Riqueza Especies,mean_species_richness,0.6346165911424416,5.384195013233967e-74,645,True
+Riqueza Especies,mean_species_richness,Cobertura Forestal,forest_cover,0.6346165911424416,5.384195013233967e-74,645,True
+Riqueza Especies,mean_species_richness,Deficit Polinizacion,pol_deficit,-0.5672254341628035,3.4309622955225494e-56,645,True
+Riqueza Especies,mean_species_richness,Riesgo Seg. Alimentaria,idx_food_security_risk,-0.5672254341628035,3.4309622955225494e-56,645,True
+Riesgo Seg. Alimentaria,idx_food_security_risk,Riqueza Especies,mean_species_richness,-0.5672254341628035,3.4309622955225494e-56,645,True
+Deficit Polinizacion,pol_deficit,Riqueza Especies,mean_species_richness,-0.5672254341628035,3.4309622955225494e-56,645,True
+Incidencia Dengue,incidence_dengue,Deficit Polinizacion,pol_deficit,0.5434815752008583,9.193577554670325e-16,187,True
+Incidencia Dengue,incidence_dengue,Cobertura Forestal,forest_cover,-0.48593575464380195,1.7909558210589643e-12,187,True
+Incidencia Diarrea,incidence_diarrhea,Riqueza Especies,mean_species_richness,-0.45209737978925274,8.29062403270613e-11,187,True
+Mortalidad Infantil,mort_infantil,Vulnerabilidad Social,idx_social_vuln,0.4387311447109182,1.0036938059790413e-31,645,True
+Vulnerabilidad Social,idx_social_vuln,Mortalidad Infantil,mort_infantil,0.4387311447109182,1.0036938059790413e-31,645,True
+Incidencia Dengue,incidence_dengue,Riqueza Especies,mean_species_richness,-0.42928660826032544,8.759714486423707e-10,187,True
+% Poblacion Negra,pct_preta,% Rural,pct_rural,-0.4198229640966143,6.302509521351192e-29,645,True
+% Rural,pct_rural,% Poblacion Negra,pct_preta,-0.4198229640966143,6.302509521351192e-29,645,True
+Riesgo Vertebrados,Vert_rich_risk,Cobertura Forestal,forest_cover,-0.4051695438091574,7.060972552990483e-27,645,True
+Cobertura Forestal,forest_cover,Riesgo Vertebrados,Vert_rich_risk,-0.4051695438091574,7.060972552990483e-27,645,True
+Copersistencia,copersistence,% Poblacion Negra,pct_preta,0.39867453299183414,1.5923870387795303e-08,187,True
+Incidencia Malaria,incidence_malaria,% Poblacion Negra,pct_preta,-0.394330462101228,2.348149278384414e-08,187,True
+Incidencia Diarrea,incidence_diarrhea,Cobertura Forestal,forest_cover,-0.3937988765879707,2.4615039512164885e-08,187,True
+% Rural,pct_rural,Deficit Gobernanza,idx_governance_risk,0.3879521487065938,1.3491655173305537e-24,645,True
+Deficit Gobernanza,idx_governance_risk,% Rural,pct_rural,0.3879521487065938,1.3491655173305537e-24,645,True
+UAI (Gobernanza),UAI_promedio,% Rural,pct_rural,-0.38789691378490215,1.3714162726433022e-24,645,True
+% Rural,pct_rural,UAI (Gobernanza),UAI_promedio,-0.38789691378490215,1.3714162726433022e-24,645,True
+Riesgo Vertebrados,Vert_rich_risk,Riesgo Seg. Alimentaria,idx_food_security_risk,0.3795791793641137,1.5547452028247836e-23,645,True
+Riesgo Vertebrados,Vert_rich_risk,Deficit Polinizacion,pol_deficit,0.3795791793641137,1.5547452028247836e-23,645,True
+Deficit Polinizacion,pol_deficit,Riesgo Vertebrados,Vert_rich_risk,0.3795791793641136,1.5547452028248062e-23,645,True
+Riesgo Seg. Alimentaria,idx_food_security_risk,Riesgo Vertebrados,Vert_rich_risk,0.3795791793641136,1.5547452028248062e-23,645,True
+Riesgo Climatico,idx_climate_risk,Deficit Gobernanza,idx_governance_risk,-0.3758622624083522,4.4993271798435254e-23,645,True
+Deficit Gobernanza,idx_governance_risk,Riesgo Climatico,idx_climate_risk,-0.3758622624083522,4.4993271798435254e-23,645,True
+Riesgo Climatico,idx_climate_risk,UAI (Gobernanza),UAI_promedio,0.37580908029971355,4.5678037827054006e-23,645,True
+UAI (Gobernanza),UAI_promedio,Riesgo Climatico,idx_climate_risk,0.37580908029971355,4.5678037827054006e-23,645,True
+Incidencia Malaria,incidence_malaria,Riqueza Especies,mean_species_richness,-0.3577442064808029,4.99166995049713e-07,187,True
+Incidencia Diarrea,incidence_diarrhea,UAI (Gobernanza),UAI_promedio,-0.35083588449612113,8.53052591268624e-07,187,True
+Incidencia Malaria,incidence_malaria,Deficit Polinizacion,pol_deficit,0.3416805589337879,1.702148944855265e-06,187,True
+% Poblacion Negra,pct_preta,Riesgo Climatico,idx_climate_risk,0.3131649214481754,3.833724103534098e-16,645,True
+Riesgo Climatico,idx_climate_risk,% Poblacion Negra,pct_preta,0.3131649214481754,3.833724103534098e-16,645,True
+Riesgo Climatico,idx_climate_risk,Riqueza Especies,mean_species_richness,0.29773025596736763,1.140230046665696e-14,645,False
+Riqueza Especies,mean_species_richness,Riesgo Climatico,idx_climate_risk,0.29773025596736763,1.140230046665696e-14,645,False
+Incidencia Diarrea,incidence_diarrhea,% Rural,pct_rural,0.2953293445409151,4.0713479137569174e-05,187,True
+Riesgo Seg. Alimentaria,idx_food_security_risk,Vulnerabilidad Social,idx_social_vuln,-0.2891770179752566,6.858171856198606e-14,645,False
+Deficit Polinizacion,pol_deficit,Vulnerabilidad Social,idx_social_vuln,-0.2891770179752566,6.858171856198606e-14,645,False
+Vulnerabilidad Social,idx_social_vuln,Riesgo Seg. Alimentaria,idx_food_security_risk,-0.2891770179752566,6.858171856198606e-14,645,False
+Vulnerabilidad Social,idx_social_vuln,Deficit Polinizacion,pol_deficit,-0.2891770179752566,6.858171856198606e-14,645,False
+Incidencia Diarrea,incidence_diarrhea,Deficit Polinizacion,pol_deficit,0.28887812312802413,6.079984374608006e-05,187,True
+Incidencia Diarrea,incidence_diarrhea,% Poblacion Indigena,pct_indigena,-0.27810435611615875,0.00011628704927396119,187,True
+Copersistencia,copersistence,% Poblacion Indigena,pct_indigena,0.2683375165353842,0.00020466353269456107,187,True
+Cobertura Forestal,forest_cover,Vulnerabilidad Social,idx_social_vuln,0.25730631106170676,3.264593299806877e-11,645,False
+Vulnerabilidad Social,idx_social_vuln,Cobertura Forestal,forest_cover,0.25730631106170676,3.264593299806877e-11,645,False
+Vulnerabilidad Social,idx_social_vuln,% Poblacion Negra,pct_preta,0.2538971588848407,6.021688217180745e-11,645,False
+% Poblacion Negra,pct_preta,Vulnerabilidad Social,idx_social_vuln,0.2538971588848407,6.021688217180745e-11,645,False
+Incidencia Malaria,incidence_malaria,% Poblacion Indigena,pct_indigena,-0.25330327219238363,0.0004689970646289441,187,True
+Incidencia Malaria,incidence_malaria,Cobertura Forestal,forest_cover,-0.249340197733994,0.0005788643723254113,187,False
+Incidencia Diarrea,incidence_diarrhea,Mortalidad Infantil,mort_infantil,-0.24507979728230814,0.0007231449341300116,187,False
+Riesgo Biodiversidad,idx_biodiv_risk,Vulnerabilidad Social,idx_social_vuln,-0.2403532175469304,6.279912892355326e-10,645,False
+Vulnerabilidad Social,idx_social_vuln,Riesgo Biodiversidad,idx_biodiv_risk,-0.2403532175469304,6.279912892355326e-10,645,False
+Copersistencia,copersistence,Deficit Polinizacion,pol_deficit,-0.23664399716139836,0.0011109797400854012,187,False
+% Poblacion Indigena,pct_indigena,UAI (Gobernanza),UAI_promedio,0.23054781035938643,3.1456009476498863e-09,645,False
+UAI (Gobernanza),UAI_promedio,% Poblacion Indigena,pct_indigena,0.23054781035938643,3.1456009476498863e-09,645,False
+Deficit Gobernanza,idx_governance_risk,% Poblacion Indigena,pct_indigena,-0.23038078758580957,3.231128508850257e-09,645,False
+% Poblacion Indigena,pct_indigena,Deficit Gobernanza,idx_governance_risk,-0.23038078758580957,3.231128508850257e-09,645,False
+Riqueza Especies,mean_species_richness,Vulnerabilidad Social,idx_social_vuln,0.22865885644343414,4.255447994951691e-09,645,False
+Vulnerabilidad Social,idx_social_vuln,Riqueza Especies,mean_species_richness,0.22865885644343414,4.255447994951691e-09,645,False
+Riesgo Seg. Alimentaria,idx_food_security_risk,% Poblacion Indigena,pct_indigena,-0.22809078953975445,4.657900344572676e-09,645,False
+% Poblacion Indigena,pct_indigena,Deficit Polinizacion,pol_deficit,-0.22809078953975445,4.657900344572676e-09,645,False
+Deficit Polinizacion,pol_deficit,% Poblacion Indigena,pct_indigena,-0.22809078953975445,4.657900344572676e-09,645,False
+% Poblacion Indigena,pct_indigena,Riesgo Seg. Alimentaria,idx_food_security_risk,-0.22809078953975445,4.657900344572676e-09,645,False
+Cobertura Forestal,forest_cover,% Poblacion Indigena,pct_indigena,0.22540822541686112,7.11414129547108e-09,645,False
+% Poblacion Indigena,pct_indigena,Cobertura Forestal,forest_cover,0.22540822541686112,7.11414129547108e-09,645,False
+Incidencia Diarrea,incidence_diarrhea,% Poblacion Negra,pct_preta,-0.22218755849503963,0.0022409300182359548,187,False
+Riesgo Climatico,idx_climate_risk,Riesgo Biodiversidad,idx_biodiv_risk,-0.21800483943501014,2.2278363672402983e-08,645,False
+Riesgo Biodiversidad,idx_biodiv_risk,Riesgo Climatico,idx_climate_risk,-0.21800483943501014,2.2278363672402983e-08,645,False
+Incidencia Dengue,incidence_dengue,% Poblacion Indigena,pct_indigena,-0.21431491266344743,0.0032257673841306345,187,False
+Incidencia Malaria,incidence_malaria,Mortalidad Infantil,mort_infantil,-0.2044828065498234,0.004996871955066409,187,False
+Riqueza Especies,mean_species_richness,UAI (Gobernanza),UAI_promedio,0.2027743459039907,2.059424817118718e-07,645,False
+UAI (Gobernanza),UAI_promedio,Riqueza Especies,mean_species_richness,0.20277434590399068,2.059424817118718e-07,645,False
+Riqueza Especies,mean_species_richness,Deficit Gobernanza,idx_governance_risk,-0.2026481296914888,2.0962825959237386e-07,645,False
+Deficit Gobernanza,idx_governance_risk,Riqueza Especies,mean_species_richness,-0.20264812969148877,2.0962825959237463e-07,645,False
+% Poblacion Indigena,pct_indigena,Riesgo Biodiversidad,idx_biodiv_risk,-0.19607299125421862,5.200279057260771e-07,645,False
+Riesgo Biodiversidad,idx_biodiv_risk,% Poblacion Indigena,pct_indigena,-0.1960729912542186,5.200279057260771e-07,645,False
+Incidencia Dengue,incidence_dengue,% Poblacion Negra,pct_preta,-0.1862940846145659,0.010684868303187402,187,False
+Riesgo Seg. Alimentaria,idx_food_security_risk,UAI (Gobernanza),UAI_promedio,-0.18590796384551217,1.9960799194742782e-06,645,False
+Deficit Polinizacion,pol_deficit,UAI (Gobernanza),UAI_promedio,-0.18590796384551217,1.9960799194742782e-06,645,False
+UAI (Gobernanza),UAI_promedio,Deficit Polinizacion,pol_deficit,-0.18590796384551217,1.9960799194742782e-06,645,False
+UAI (Gobernanza),UAI_promedio,Riesgo Seg. Alimentaria,idx_food_security_risk,-0.18590796384551217,1.9960799194742782e-06,645,False
+Deficit Polinizacion,pol_deficit,Deficit Gobernanza,idx_governance_risk,0.185761262334862,2.0341380796089243e-06,645,False
+Deficit Gobernanza,idx_governance_risk,Riesgo Seg. Alimentaria,idx_food_security_risk,0.185761262334862,2.0341380796089243e-06,645,False
+Deficit Gobernanza,idx_governance_risk,Deficit Polinizacion,pol_deficit,0.185761262334862,2.0341380796089243e-06,645,False
+Riesgo Seg. Alimentaria,idx_food_security_risk,Deficit Gobernanza,idx_governance_risk,0.185761262334862,2.0341380796089243e-06,645,False
+Mortalidad Infantil,mort_infantil,UAI (Gobernanza),UAI_promedio,0.18521767193175695,2.1813125141136736e-06,645,False
+UAI (Gobernanza),UAI_promedio,Mortalidad Infantil,mort_infantil,0.18521767193175695,2.1813125141136736e-06,645,False
+Deficit Gobernanza,idx_governance_risk,Mortalidad Infantil,mort_infantil,-0.18499338484994698,2.2449641867374498e-06,645,False
+Mortalidad Infantil,mort_infantil,Deficit Gobernanza,idx_governance_risk,-0.18499338484994696,2.244964186737454e-06,645,False
+Incidencia Diarrea,incidence_diarrhea,Riesgo Vertebrados,Vert_rich_risk,0.17700259168655377,0.015375530877279895,187,False
+% Poblacion Negra,pct_preta,% Poblacion Indigena,pct_indigena,0.17640158737152178,6.583042910558528e-06,645,False
+% Poblacion Indigena,pct_indigena,% Poblacion Negra,pct_preta,0.17640158737152176,6.583042910558551e-06,645,False
+Riesgo Biodiversidad,idx_biodiv_risk,UAI (Gobernanza),UAI_promedio,-0.1702749818056227,1.374787157370872e-05,645,False
+UAI (Gobernanza),UAI_promedio,Riesgo Biodiversidad,idx_biodiv_risk,-0.1702749818056227,1.374787157370872e-05,645,False
+Deficit Gobernanza,idx_governance_risk,Riesgo Biodiversidad,idx_biodiv_risk,0.17013803745074754,1.3971976685890298e-05,645,False
+Riesgo Biodiversidad,idx_biodiv_risk,Deficit Gobernanza,idx_governance_risk,0.17013803745074754,1.3971976685890298e-05,645,False
+Riesgo Climatico,idx_climate_risk,Deficit Polinizacion,pol_deficit,-0.16739147390151246,1.927258013253127e-05,645,False
+Riesgo Climatico,idx_climate_risk,Riesgo Seg. Alimentaria,idx_food_security_risk,-0.16739147390151246,1.927258013253127e-05,645,False
+Riesgo Seg. Alimentaria,idx_food_security_risk,Riesgo Climatico,idx_climate_risk,-0.16739147390151246,1.927258013253127e-05,645,False
+Deficit Polinizacion,pol_deficit,Riesgo Climatico,idx_climate_risk,-0.16739147390151246,1.927258013253127e-05,645,False
+Cobertura Forestal,forest_cover,UAI (Gobernanza),UAI_promedio,0.16067430984575887,4.142777578367467e-05,645,False
+UAI (Gobernanza),UAI_promedio,Cobertura Forestal,forest_cover,0.16067430984575887,4.142777578367467e-05,645,False
+Cobertura Forestal,forest_cover,Deficit Gobernanza,idx_governance_risk,-0.16061033901629854,4.1724759440534746e-05,645,False
+Deficit Gobernanza,idx_governance_risk,Cobertura Forestal,forest_cover,-0.1606103390162985,4.172475944053491e-05,645,False
+Deficit Gobernanza,idx_governance_risk,% Poblacion Negra,pct_preta,-0.1603051411433331,4.316959050589703e-05,645,False
+% Poblacion Negra,pct_preta,Deficit Gobernanza,idx_governance_risk,-0.1603051411433331,4.316959050589703e-05,645,False
+UAI (Gobernanza),UAI_promedio,% Poblacion Negra,pct_preta,0.1602986070373681,4.320103515826365e-05,645,False
+% Poblacion Negra,pct_preta,UAI (Gobernanza),UAI_promedio,0.1602986070373681,4.320103515826365e-05,645,False
+% Rural,pct_rural,Cobertura Forestal,forest_cover,0.15991000884735845,4.511059342568899e-05,645,False
+Cobertura Forestal,forest_cover,% Rural,pct_rural,0.15991000884735845,4.511059342568899e-05,645,False
+Mortalidad Infantil,mort_infantil,Riesgo Climatico,idx_climate_risk,0.15896589491277724,5.008806253026585e-05,645,False
+Riesgo Climatico,idx_climate_risk,Mortalidad Infantil,mort_infantil,0.15896589491277724,5.008806253026585e-05,645,False
+Incidencia Dengue,incidence_dengue,Riesgo Vertebrados,Vert_rich_risk,0.15880161291123934,0.029945330669845862,187,False
+Mortalidad Infantil,mort_infantil,Riesgo Seg. Alimentaria,idx_food_security_risk,-0.15422838695697683,8.393688330998637e-05,645,False
+Riesgo Seg. Alimentaria,idx_food_security_risk,Mortalidad Infantil,mort_infantil,-0.15422838695697683,8.393688330998637e-05,645,False
+Deficit Polinizacion,pol_deficit,Mortalidad Infantil,mort_infantil,-0.15422838695697683,8.393688330998637e-05,645,False
+Mortalidad Infantil,mort_infantil,Deficit Polinizacion,pol_deficit,-0.15422838695697683,8.393688330998637e-05,645,False
+Mortalidad Infantil,mort_infantil,% Poblacion Indigena,pct_indigena,0.15284832826794342,9.728757096745961e-05,645,False
+% Poblacion Indigena,pct_indigena,Mortalidad Infantil,mort_infantil,0.1528483282679434,9.72875709674599e-05,645,False
+Riesgo Climatico,idx_climate_risk,% Poblacion Indigena,pct_indigena,0.14594754739125723,0.00019973495389728497,645,False
+% Poblacion Indigena,pct_indigena,Riesgo Climatico,idx_climate_risk,0.14594754739125723,0.00019973495389728497,645,False
+% Poblacion Indigena,pct_indigena,Riqueza Especies,mean_species_richness,0.14471302358015484,0.00022642016632555678,645,False
+Riqueza Especies,mean_species_richness,% Poblacion Indigena,pct_indigena,0.14471302358015484,0.00022642016632555678,645,False
+Mortalidad Infantil,mort_infantil,% Rural,pct_rural,-0.14190394215734978,0.00030007787563218687,645,False
+% Rural,pct_rural,Mortalidad Infantil,mort_infantil,-0.14190394215734975,0.00030007787563218785,645,False
+% Poblacion Indigena,pct_indigena,% Rural,pct_rural,-0.13361170269595476,0.000668948021423611,645,False
+% Rural,pct_rural,% Poblacion Indigena,pct_indigena,-0.13361170269595474,0.0006689480214236129,645,False
+Mortalidad Infantil,mort_infantil,% Poblacion Negra,pct_preta,0.1332078814030278,0.0006947957715208118,645,False
+% Poblacion Negra,pct_preta,Mortalidad Infantil,mort_infantil,0.1332078814030278,0.0006947957715208118,645,False
+% Poblacion Indigena,pct_indigena,Vulnerabilidad Social,idx_social_vuln,0.1323498482486882,0.0007528195989689501,645,False
+Vulnerabilidad Social,idx_social_vuln,% Poblacion Indigena,pct_indigena,0.1323498482486882,0.0007528195989689501,645,False
+Copersistencia,copersistence,Cobertura Forestal,forest_cover,0.12765225144021955,0.08167595805247471,187,False
+Incidencia Dengue,incidence_dengue,Mortalidad Infantil,mort_infantil,-0.12249536188554334,0.09488715731509804,187,False
+Mortalidad Infantil,mort_infantil,Riqueza Especies,mean_species_richness,0.12147489152901174,0.001997878203777357,645,False
+Riqueza Especies,mean_species_richness,Mortalidad Infantil,mort_infantil,0.12147489152901174,0.001997878203777357,645,False
+Copersistencia,copersistence,Riqueza Especies,mean_species_richness,0.1213984677281257,0.0979052165812379,187,False
+Cobertura Forestal,forest_cover,Mortalidad Infantil,mort_infantil,0.11902762346896403,0.002463138226353821,645,False
+Mortalidad Infantil,mort_infantil,Cobertura Forestal,forest_cover,0.11902762346896402,0.0024631382263538256,645,False
+Vulnerabilidad Social,idx_social_vuln,Riesgo Climatico,idx_climate_risk,0.11656848657376134,0.0030283727121144664,645,False
+Riesgo Climatico,idx_climate_risk,Vulnerabilidad Social,idx_social_vuln,0.11656848657376133,0.0030283727121144725,645,False
+Copersistencia,copersistence,Riesgo Vertebrados,Vert_rich_risk,0.1164288329408044,0.11254290519919327,187,False
+Riesgo Biodiversidad,idx_biodiv_risk,Mortalidad Infantil,mort_infantil,-0.11596224989215771,0.003184752730605387,645,False
+Mortalidad Infantil,mort_infantil,Riesgo Biodiversidad,idx_biodiv_risk,-0.11596224989215771,0.003184752730605387,645,False
+% Poblacion Negra,pct_preta,Riesgo Vertebrados,Vert_rich_risk,0.10497352624799199,0.007625864637252914,645,False
+Riesgo Vertebrados,Vert_rich_risk,% Poblacion Negra,pct_preta,0.10497352624799197,0.007625864637252917,645,False
+% Poblacion Negra,pct_preta,Deficit Polinizacion,pol_deficit,-0.09505805165668926,0.015736814021225003,645,False
+% Poblacion Negra,pct_preta,Riesgo Seg. Alimentaria,idx_food_security_risk,-0.09505805165668926,0.015736814021225003,645,False
+Deficit Polinizacion,pol_deficit,% Poblacion Negra,pct_preta,-0.09505805165668926,0.015736814021225003,645,False
+Riesgo Seg. Alimentaria,idx_food_security_risk,% Poblacion Negra,pct_preta,-0.09505805165668926,0.015736814021225003,645,False
+Incidencia Dengue,incidence_dengue,UAI (Gobernanza),UAI_promedio,-0.09309448896221212,0.20506021781815598,187,False
+Riesgo Climatico,idx_climate_risk,Riesgo Vertebrados,Vert_rich_risk,-0.09089347542195667,0.020959628406753566,645,False
+Riesgo Vertebrados,Vert_rich_risk,Riesgo Climatico,idx_climate_risk,-0.09089347542195667,0.020959628406753566,645,False
+% Rural,pct_rural,Vulnerabilidad Social,idx_social_vuln,-0.08880482741020287,0.024105362817265684,645,False
+Vulnerabilidad Social,idx_social_vuln,% Rural,pct_rural,-0.08880482741020287,0.024105362817265684,645,False
+Cobertura Forestal,forest_cover,Riesgo Climatico,idx_climate_risk,0.0850902365526956,0.03071448857548105,645,False
+Riesgo Climatico,idx_climate_risk,Cobertura Forestal,forest_cover,0.08509023655269558,0.030714488575481105,645,False
+Incidencia Dengue,incidence_dengue,% Rural,pct_rural,0.08481336270792923,0.24845532520000932,187,False
+UAI (Gobernanza),UAI_promedio,Vulnerabilidad Social,idx_social_vuln,0.08095625876904547,0.039838405395245476,645,False
+Vulnerabilidad Social,idx_social_vuln,UAI (Gobernanza),UAI_promedio,0.08095625876904547,0.039838405395245476,645,False
+Vulnerabilidad Social,idx_social_vuln,Deficit Gobernanza,idx_governance_risk,-0.08095553915435659,0.03984017441934819,645,False
+Deficit Gobernanza,idx_governance_risk,Vulnerabilidad Social,idx_social_vuln,-0.08095553915435659,0.03984017441934819,645,False
+Riesgo Biodiversidad,idx_biodiv_risk,% Rural,pct_rural,-0.07317789252723045,0.06325798900953915,645,False
+% Rural,pct_rural,Riesgo Biodiversidad,idx_biodiv_risk,-0.07317789252723045,0.06325798900953915,645,False
+Riesgo Vertebrados,Vert_rich_risk,% Rural,pct_rural,-0.06296541952312049,0.11013046531170033,645,False
+% Rural,pct_rural,Riesgo Vertebrados,Vert_rich_risk,-0.06296541952312049,0.11013046531170033,645,False
+% Poblacion Negra,pct_preta,Riqueza Especies,mean_species_richness,0.05875041198428176,0.13610101285624548,645,False
+Riqueza Especies,mean_species_richness,% Poblacion Negra,pct_preta,0.05875041198428176,0.13610101285624548,645,False
+Cobertura Forestal,forest_cover,% Poblacion Negra,pct_preta,0.05802105412664549,0.1410387216867784,645,False
+% Poblacion Negra,pct_preta,Cobertura Forestal,forest_cover,0.05802105412664549,0.1410387216867784,645,False
+% Rural,pct_rural,Riqueza Especies,mean_species_richness,-0.05145969441516012,0.1918097779958215,645,False
+Riqueza Especies,mean_species_richness,% Rural,pct_rural,-0.051459694415160115,0.19180977799582155,645,False
+Riesgo Seg. Alimentaria,idx_food_security_risk,% Rural,pct_rural,-0.049258590148638565,0.21153894591721395,645,False
+Deficit Polinizacion,pol_deficit,% Rural,pct_rural,-0.049258590148638565,0.21153894591721395,645,False
+% Rural,pct_rural,Deficit Polinizacion,pol_deficit,-0.04925859014863856,0.21153894591721403,645,False
+% Rural,pct_rural,Riesgo Seg. Alimentaria,idx_food_security_risk,-0.04925859014863856,0.21153894591721403,645,False
+Riesgo Vertebrados,Vert_rich_risk,Deficit Gobernanza,idx_governance_risk,-0.039325636370229324,0.31866949032202596,645,False
+Deficit Gobernanza,idx_governance_risk,Riesgo Vertebrados,Vert_rich_risk,-0.039325636370229324,0.31866949032202596,645,False
+UAI (Gobernanza),UAI_promedio,Riesgo Vertebrados,Vert_rich_risk,0.039130072348264155,0.32108389220062883,645,False
+Riesgo Vertebrados,Vert_rich_risk,UAI (Gobernanza),UAI_promedio,0.03913007234826415,0.32108389220062883,645,False
+% Poblacion Negra,pct_preta,Riesgo Biodiversidad,idx_biodiv_risk,-0.036978904168766646,0.3484259910393971,645,False
+Riesgo Biodiversidad,idx_biodiv_risk,% Poblacion Negra,pct_preta,-0.036978904168766646,0.3484259910393971,645,False
+Vulnerabilidad Social,idx_social_vuln,Riesgo Vertebrados,Vert_rich_risk,-0.03459553567717131,0.380391072877974,645,False
+Riesgo Vertebrados,Vert_rich_risk,Vulnerabilidad Social,idx_social_vuln,-0.03459553567717131,0.380391072877974,645,False
+Copersistencia,copersistence,Mortalidad Infantil,mort_infantil,0.03151245759963825,0.6685467826176876,187,False
+Riesgo Vertebrados,Vert_rich_risk,% Poblacion Indigena,pct_indigena,0.023269252230180205,0.555258175175949,645,False
+% Poblacion Indigena,pct_indigena,Riesgo Vertebrados,Vert_rich_risk,0.023269252230180205,0.555258175175949,645,False
+Riesgo Vertebrados,Vert_rich_risk,Mortalidad Infantil,mort_infantil,0.017429877038696463,0.6586057876019398,645,False
+Mortalidad Infantil,mort_infantil,Riesgo Vertebrados,Vert_rich_risk,0.017429877038696463,0.6586057876019398,645,False
+Incidencia Malaria,incidence_malaria,Riesgo Vertebrados,Vert_rich_risk,-0.015542111113096054,0.8327914128418374,187,False
