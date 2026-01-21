@@ -527,6 +527,43 @@ Nuevo script: `scripts/process_all_diseases_casos_provaveis.R`
 - `scripts/compare_old_new_health.py` - Comparación antes/después
 - `scripts/check_column_usage.R` - Verificación de columnas DBC
 
+#### Adición de Micro y Mesorregiões do IBGE
+
+Descargados de la API do IBGE (`servicodados.ibge.gov.br`) y agregados al dataset de salud.
+
+**15 Mesorregiões de São Paulo:**
+| Código | Nome | Municípios |
+|--------|------|------------|
+| 3501 | São José do Rio Preto | 109 |
+| 3502 | Ribeirão Preto | 66 |
+| 3503 | Araçatuba | 36 |
+| 3504 | Bauru | 56 |
+| 3505 | Araraquara | 21 |
+| 3506 | Piracicaba | 26 |
+| 3507 | Campinas | 49 |
+| 3508 | Presidente Prudente | 54 |
+| 3509 | Marília | 20 |
+| 3510 | Assis | 35 |
+| 3511 | Itapetininga | 36 |
+| 3512 | Macro Metropolitana Paulista | 36 |
+| 3513 | Vale do Paraíba Paulista | 39 |
+| 3514 | Litoral Sul Paulista | 17 |
+| 3515 | Metropolitana de São Paulo | 45 |
+
+**63 Microrregiões**: Listadas en el script `download_ibge_regioes.py`
+
+#### Archivos finales generados
+- `data/processed/health_casos_provaveis_SP_2010_2019_regioes.csv`
+  - **645 municipios** × 56 columnas
+  - Incluye: cod_ibge, nome_municipio, cod/nome_microrregiao, cod/nome_mesorregiao + datos de salud
+  - **100% match** con datos IBGE
+- `data/processed/municipios_regioes_SP.csv` - Tabla de referencia IBGE
+- `scripts/download_ibge_regioes.py` - Script de descarga y merge
+
+#### Git commit
+- Commit: `54a21d7` - "Add health data with IBGE regions and fix disease extraction"
+- Push: ✅ Completado a `origin/master`
+
 ---
 
 ### 2026-01-20 (Sesión 8 - Validación DATASUS vs Datos Adrian) - ✅ RESUELTO
@@ -706,6 +743,6 @@ Nuevo script: `scripts/process_all_diseases_casos_provaveis.R`
 
 ---
 
-*Última actualización: 2026-01-21 (Reprocesamiento TODAS las enfermedades - Casos Prováveis)*
+*Última actualización: 2026-01-21 (Micro/Mesorregiões IBGE + Casos Prováveis corregidos)*
 *Proyecto: Dr. Adrian David González Chaves*
 *DOI: 10.5281/zenodo.18303824*
