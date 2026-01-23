@@ -434,7 +434,10 @@ Top 10 con mayor brecha:
 4. [x] ~~**Integrar datos de calor con dataset principal**~~ - COMPLETADO 2026-01-23
    - Dataset v7 creado: `outputs/municipios_integrado_v7.csv`
    - 100 variables (70 v6 + 12 fuego + 18 salud-calor)
-5. [ ] Completar integración de variables climáticas extremas
+5. [x] ~~**Integrar datos de diarrea con dataset principal**~~ - COMPLETADO 2026-01-23
+   - Dataset v8 creado: `outputs/municipios_integrado_v8.csv`
+   - 104 variables (100 v7 + 4 diarrea)
+6. [ ] Completar integración de variables climáticas extremas
 5. [ ] Finalizar propuesta Branco Weiss (revisión final Adrian)
 6. [ ] Análisis de sensibilidad con diferentes umbrales
 7. [ ] Validación cruzada con datos independientes
@@ -510,6 +513,95 @@ Ver documento completo: `.claude/REFERENTES_CIENTIFICOS.md`
 ---
 
 ## Notas de Sesión
+
+### 2026-01-23 (Sesión 17 - Indicadores de Diarrea + Dataset v8) - ✅ COMPLETADO
+
+#### Solicitud
+Adrian identificó que las inundaciones (variable ya presente en el dataset) contribuyen a la contaminación del agua, lo que puede resultar en aumento de casos de diarrea y gastroenteritis. Solicitó procesar datos de hospitalizaciones por diarrea (CID-10 Capítulo A00-A09) para calcular indicadores epidemiológicos.
+
+#### Datos Procesados
+
+**Fuente**: `health_sp_Ju.csv` (DATASUS SIH/SUS)
+- 645 municipios de São Paulo
+- Periodo: 2010-2019
+- Columna: `diarrhea` (hospitalizaciones)
+
+#### Indicadores de Diarrea Calculados (4 variables)
+
+| Variable | Descripción | Media | Max |
+|----------|-------------|-------|-----|
+| `incidence_diarrhea_mean` | Incidencia media (por 100,000 hab) | 67.4 | 1,520 |
+| `incidence_diarrhea_max` | Incidencia máxima anual | 151.8 | 2,632 |
+| `total_cases_diarrhea` | Casos totales 2010-2019 | 216 | 4,424 |
+| `persist_diarrhea` | Persistencia (años con casos, 0-10) | 8.0 | 10 |
+
+#### Hallazgos Clave
+
+**Distribución:**
+- **139,207** hospitalizaciones totales por diarrea (2010-2019)
+- 643 municipios con al menos un caso (99.7%)
+- **319 municipios** (49%) tienen diarrea presente los 10 años (persistencia = 10)
+- Solo 2 municipios sin ningún caso
+
+**Persistencia por número de años:**
+- 0 años: 2 municipios
+- 1-5 años: 126 municipios
+- 6-9 años: 198 municipios
+- 10 años: **319 municipios** (casi la mitad)
+
+**Top 10 municipios mayor incidencia:**
+
+| Municipio | Incidencia Media | Casos Totales | Persistencia |
+|-----------|------------------|---------------|--------------|
+| Herculândia | 1,520 | 1,400 | 10 |
+| Aparecida d'Oeste | 1,094 | 480 | 10 |
+| Monte Azul Paulista | 954 | 1,820 | 10 |
+| Bastos | 909 | 1,890 | 10 |
+| Parapuã | 714 | 783 | 10 |
+| General Salgado | 537 | 580 | 10 |
+| Cardoso | 533 | 641 | 10 |
+| Cajobi | 505 | 514 | 10 |
+| Flórida Paulista | 497 | 683 | 10 |
+| Rinópolis | 434 | 434 | 10 |
+
+#### Dataset Integrado v8 Creado
+
+**Dimensiones**: 645 municipios × 104 variables (+4 respecto a v7)
+
+**Variables por categoría:**
+- Identificación: 2 variables
+- Demografía: 9 variables
+- UAI (Adaptación): 5 variables
+- Biodiversidad: 6 variables
+- Clima/Riesgo: 7 variables
+- Enfermedades vectoriales: 18 variables
+- **Diarrea (NUEVO)**: 4 variables
+- Fuego: 12 variables
+- Salud-Calor: 18 variables
+
+**Archivos generados:**
+
+| Archivo | Descripción |
+|---------|-------------|
+| `data/processed/diarrhea_indicators_SP_2010_2019.csv` | Indicadores diarrea por municipio |
+| `data/processed/diarrhea_annual_SP_2010_2019.csv` | Datos anuales de diarrea |
+| `outputs/municipios_integrado_v8.csv` | Dataset integrado completo |
+
+#### Scripts Creados
+
+| Script | Descripción |
+|--------|-------------|
+| `scripts/calculate_diarrhea_indicators.py` | Cálculo de indicadores de diarrea |
+| `scripts/create_integrated_dataset_v8.py` | Integración dataset v8 |
+
+#### Implicaciones para el Análisis
+
+1. **Nexo inundación-diarrea** listo para analizar: correlacionar `flooding_exposure`/`flooding_risks` con `incidence_diarrhea_*`
+2. **Persistencia alta** (49% con 10 años) sugiere problema endémico, no solo epidémico
+3. **Patrón geográfico**: Municipios del interior/noroeste con mayor incidencia
+4. **Vulnerabilidad social**: Analizar si `pct_pobreza` amplifica el efecto inundación→diarrea
+
+---
 
 ### 2026-01-23 (Sesión 16 - Indicadores de Fuego + Dataset v7) - ✅ COMPLETADO
 
@@ -1403,6 +1495,6 @@ Inspirado en `scripts/health_variables.R` de Julia. Se creó script para calcula
 
 ---
 
-*Última actualización: 2026-01-23 (Dataset v7: +30 variables fuego y salud-calor)*
+*Última actualización: 2026-01-23 (Dataset v8: +4 variables diarrea, total 104 variables)*
 *Proyecto: Dr. Adrian David González Chaves*
 *DOI: 10.5281/zenodo.18303824*
