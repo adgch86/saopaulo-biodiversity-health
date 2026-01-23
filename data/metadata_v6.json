@@ -1,0 +1,1316 @@
+{
+  "@context": {
+    "dcterms": "http://purl.org/dc/terms/",
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "schema": "https://schema.org/"
+  },
+  "title": {
+    "en": "São Paulo Biodiversity-Health-Governance Integrated Dataset v6",
+    "es": "Dataset Integrado de Biodiversidad-Salud-Gobernanza de São Paulo v6",
+    "pt": "Dataset Integrado de Biodiversidade-Saúde-Governança de São Paulo v6"
+  },
+  "description": {
+    "en": "Integrated dataset with 645 municipalities of São Paulo State, Brazil, containing variables on biodiversity, climate risks, governance (UAI), public health (2010-2019), and socioeconomic vulnerability. Supports research on the dilution effect, conservation-poverty paradox, and governance gaps.",
+    "es": "Dataset integrado con 645 municipios del Estado de São Paulo, Brasil, conteniendo variables de biodiversidad, riesgos climáticos, gobernanza (UAI), salud pública (2010-2019) y vulnerabilidad socioeconómica. Apoya investigaciones sobre el efecto dilución, la paradoja conservación-pobreza y las brechas de gobernanza.",
+    "pt": "Dataset integrado com 645 municípios do Estado de São Paulo, Brasil, contendo variáveis de biodiversidade, riscos climáticos, governança (UAI), saúde pública (2010-2019) e vulnerabilidade socioeconômica. Apoia pesquisas sobre o efeito diluição, o paradoxo conservação-pobreza e as lacunas de governança."
+  },
+  "version": "6.0.0",
+  "dateCreated": "2026-01-21",
+  "dateModified": "2026-01-21",
+  "license": "MIT",
+  "licenseUrl": "https://opensource.org/licenses/MIT",
+  "creator": {
+    "name": "Adrian David González Chaves",
+    "orcid": "https://orcid.org/0000-0002-5233-8957",
+    "affiliation": "University of São Paulo (USP)",
+    "email": "adgch86@gmail.com"
+  },
+  "spatialCoverage": {
+    "name": {
+      "en": "São Paulo State, Brazil",
+      "es": "Estado de São Paulo, Brasil",
+      "pt": "Estado de São Paulo, Brasil"
+    },
+    "geo": {
+      "type": "GeoShape",
+      "box": "-25.31 -53.11 -19.78 -44.16"
+    },
+    "municipalities": 645,
+    "microregions": 63,
+    "mesoregions": 15
+  },
+  "temporalCoverage": {
+    "healthData": "2010-2019",
+    "uaiData": "2020-2024",
+    "biodiversityData": "circa 2015"
+  },
+  "keywords": {
+    "en": ["biodiversity", "public health", "planetary health", "dilution effect", "climate change", "environmental governance", "São Paulo", "Brazil", "epidemiology", "dengue", "malaria", "leishmaniasis", "leptospirosis"],
+    "es": ["biodiversidad", "salud pública", "salud planetaria", "efecto dilución", "cambio climático", "gobernanza ambiental", "São Paulo", "Brasil", "epidemiología", "dengue", "malaria", "leishmaniasis", "leptospirosis"],
+    "pt": ["biodiversidade", "saúde pública", "saúde planetária", "efeito diluição", "mudança climática", "governança ambiental", "São Paulo", "Brasil", "epidemiologia", "dengue", "malária", "leishmaniose", "leptospirose"]
+  },
+  "dataFile": {
+    "name": "municipios_integrado_v6.csv",
+    "format": "text/csv",
+    "records": 645,
+    "columns": 70,
+    "encoding": "UTF-8"
+  },
+  "variables": [
+    {
+      "name": "cod_ibge",
+      "category": "ID",
+      "type": "integer",
+      "label": {
+        "en": "IBGE Municipality Code",
+        "es": "Código IBGE del Municipio",
+        "pt": "Código IBGE do Município"
+      },
+      "description": {
+        "en": "Official 6-digit IBGE code for Brazilian municipalities",
+        "es": "Código oficial de 6 dígitos del IBGE para municipios brasileños",
+        "pt": "Código oficial de 6 dígitos do IBGE para municípios brasileiros"
+      },
+      "source": "IBGE"
+    },
+    {
+      "name": "Municipio",
+      "category": "ID",
+      "type": "string",
+      "label": {
+        "en": "Municipality Name",
+        "es": "Nombre del Municipio",
+        "pt": "Nome do Município"
+      },
+      "description": {
+        "en": "Official municipality name",
+        "es": "Nombre oficial del municipio",
+        "pt": "Nome oficial do município"
+      },
+      "source": "IBGE"
+    },
+    {
+      "name": "cod_microrregiao",
+      "category": "ID",
+      "type": "integer",
+      "label": {
+        "en": "Microregion Code",
+        "es": "Código de Microrregión",
+        "pt": "Código da Microrregião"
+      },
+      "description": {
+        "en": "IBGE code for microregion (63 microregions in São Paulo)",
+        "es": "Código IBGE de la microrregión (63 microrregiones en São Paulo)",
+        "pt": "Código IBGE da microrregião (63 microrregiões em São Paulo)"
+      },
+      "source": "IBGE"
+    },
+    {
+      "name": "nome_microrregiao",
+      "category": "ID",
+      "type": "string",
+      "label": {
+        "en": "Microregion Name",
+        "es": "Nombre de Microrregión",
+        "pt": "Nome da Microrregião"
+      },
+      "description": {
+        "en": "Official microregion name according to IBGE",
+        "es": "Nombre oficial de la microrregión según IBGE",
+        "pt": "Nome oficial da microrregião segundo IBGE"
+      },
+      "source": "IBGE"
+    },
+    {
+      "name": "cod_mesorregiao",
+      "category": "ID",
+      "type": "integer",
+      "label": {
+        "en": "Mesoregion Code",
+        "es": "Código de Mesorregión",
+        "pt": "Código da Mesorregião"
+      },
+      "description": {
+        "en": "IBGE code for mesoregion (15 mesoregions in São Paulo)",
+        "es": "Código IBGE de la mesorregión (15 mesorregiones en São Paulo)",
+        "pt": "Código IBGE da mesorregião (15 mesorregiões em São Paulo)"
+      },
+      "source": "IBGE"
+    },
+    {
+      "name": "nome_mesorregiao",
+      "category": "ID",
+      "type": "string",
+      "label": {
+        "en": "Mesoregion Name",
+        "es": "Nombre de Mesorregión",
+        "pt": "Nome da Mesorregião"
+      },
+      "description": {
+        "en": "Official mesoregion name according to IBGE",
+        "es": "Nombre oficial de la mesorregión según IBGE",
+        "pt": "Nome oficial da mesorregião segundo IBGE"
+      },
+      "source": "IBGE"
+    },
+    {
+      "name": "population",
+      "category": "VULNERABILITY",
+      "type": "numeric",
+      "unit": "inhabitants",
+      "label": {
+        "en": "Total Population",
+        "es": "Población Total",
+        "pt": "População Total"
+      },
+      "description": {
+        "en": "Estimated total population of the municipality",
+        "es": "Población total estimada del municipio",
+        "pt": "População total estimada do município"
+      },
+      "source": "IBGE"
+    },
+    {
+      "name": "pct_rural",
+      "category": "VULNERABILITY",
+      "type": "numeric",
+      "unit": "percent",
+      "label": {
+        "en": "Rural Population Percentage",
+        "es": "Porcentaje de Población Rural",
+        "pt": "Percentual de População Rural"
+      },
+      "description": {
+        "en": "Percentage of population living in rural areas",
+        "es": "Porcentaje de la población que vive en áreas rurales",
+        "pt": "Percentual da população que vive em áreas rurais"
+      },
+      "source": "IBGE"
+    },
+    {
+      "name": "pct_urbana",
+      "category": "VULNERABILITY",
+      "type": "numeric",
+      "unit": "percent",
+      "label": {
+        "en": "Urban Population Percentage",
+        "es": "Porcentaje de Población Urbana",
+        "pt": "Percentual de População Urbana"
+      },
+      "description": {
+        "en": "Percentage of population living in urban areas",
+        "es": "Porcentaje de la población que vive en áreas urbanas",
+        "pt": "Percentual da população que vive em áreas urbanas"
+      },
+      "source": "IBGE"
+    },
+    {
+      "name": "population_preta",
+      "category": "VULNERABILITY",
+      "type": "numeric",
+      "unit": "inhabitants",
+      "label": {
+        "en": "Black Population",
+        "es": "Población Negra",
+        "pt": "População Preta"
+      },
+      "description": {
+        "en": "Number of inhabitants self-declared as Black",
+        "es": "Número de habitantes autodeclarados como negros",
+        "pt": "Número de habitantes autodeclarados como pretos"
+      },
+      "source": "IBGE Census"
+    },
+    {
+      "name": "population_branca",
+      "category": "VULNERABILITY",
+      "type": "numeric",
+      "unit": "inhabitants",
+      "label": {
+        "en": "White Population",
+        "es": "Población Blanca",
+        "pt": "População Branca"
+      },
+      "description": {
+        "en": "Number of inhabitants self-declared as White",
+        "es": "Número de habitantes autodeclarados como blancos",
+        "pt": "Número de habitantes autodeclarados como brancos"
+      },
+      "source": "IBGE Census"
+    },
+    {
+      "name": "population_indigena",
+      "category": "VULNERABILITY",
+      "type": "numeric",
+      "unit": "inhabitants",
+      "label": {
+        "en": "Indigenous Population",
+        "es": "Población Indígena",
+        "pt": "População Indígena"
+      },
+      "description": {
+        "en": "Number of inhabitants self-declared as Indigenous",
+        "es": "Número de habitantes autodeclarados como indígenas",
+        "pt": "Número de habitantes autodeclarados como indígenas"
+      },
+      "source": "IBGE Census"
+    },
+    {
+      "name": "pct_pobreza",
+      "category": "VULNERABILITY",
+      "type": "numeric",
+      "unit": "percent",
+      "label": {
+        "en": "Poverty Rate",
+        "es": "Tasa de Pobreza",
+        "pt": "Taxa de Pobreza"
+      },
+      "description": {
+        "en": "Percentage of population in extreme poverty",
+        "es": "Porcentaje de la población en pobreza extrema",
+        "pt": "Percentual da população em pobreza extrema"
+      },
+      "source": "Derived from n_pessoas_pobreza/population"
+    },
+    {
+      "name": "pct_preta",
+      "category": "VULNERABILITY",
+      "type": "numeric",
+      "unit": "percent",
+      "label": {
+        "en": "Black Population Percentage",
+        "es": "Porcentaje de Población Negra",
+        "pt": "Percentual de População Preta"
+      },
+      "description": {
+        "en": "Percentage of Black population",
+        "es": "Porcentaje de población negra",
+        "pt": "Percentual de população preta"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "pct_indigena",
+      "category": "VULNERABILITY",
+      "type": "numeric",
+      "unit": "percent",
+      "label": {
+        "en": "Indigenous Population Percentage",
+        "es": "Porcentaje de Población Indígena",
+        "pt": "Percentual de População Indígena"
+      },
+      "description": {
+        "en": "Percentage of Indigenous population",
+        "es": "Porcentaje de población indígena",
+        "pt": "Percentual de população indígena"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "n_pessoas_pobreza",
+      "category": "VULNERABILITY",
+      "type": "numeric",
+      "unit": "inhabitants",
+      "label": {
+        "en": "People in Extreme Poverty",
+        "es": "Personas en Pobreza Extrema",
+        "pt": "Pessoas em Pobreza Extrema"
+      },
+      "description": {
+        "en": "Number of people in extreme poverty (Bolsa Família registry)",
+        "es": "Número de personas en pobreza extrema (registro Bolsa Família)",
+        "pt": "Número de pessoas em pobreza extrema (cadastro Bolsa Família)"
+      },
+      "source": "CadÚnico/Bolsa Família"
+    },
+    {
+      "name": "n_familias_rua",
+      "category": "VULNERABILITY",
+      "type": "integer",
+      "unit": "families",
+      "label": {
+        "en": "Homeless Families",
+        "es": "Familias en Situación de Calle",
+        "pt": "Famílias em Situação de Rua"
+      },
+      "description": {
+        "en": "Number of families in homelessness situation",
+        "es": "Número de familias en situación de calle",
+        "pt": "Número de famílias em situação de rua"
+      },
+      "source": "CadÚnico"
+    },
+    {
+      "name": "mort_infantil",
+      "category": "VULNERABILITY",
+      "type": "numeric",
+      "unit": "per 1,000 live births",
+      "label": {
+        "en": "Infant Mortality Rate",
+        "es": "Tasa de Mortalidad Infantil",
+        "pt": "Taxa de Mortalidade Infantil"
+      },
+      "description": {
+        "en": "Deaths under 1 year per 1,000 live births",
+        "es": "Muertes menores de 1 año por cada 1,000 nacidos vivos",
+        "pt": "Óbitos menores de 1 ano por 1.000 nascidos vivos"
+      },
+      "source": "DATASUS/SIM"
+    },
+    {
+      "name": "IDESP_ensino_medio",
+      "category": "VULNERABILITY",
+      "type": "numeric",
+      "unit": "index",
+      "label": {
+        "en": "High School Education Index",
+        "es": "Índice de Educación Secundaria",
+        "pt": "Índice IDESP Ensino Médio"
+      },
+      "description": {
+        "en": "São Paulo State education performance index for high school",
+        "es": "Índice de desempeño educativo del estado de São Paulo para secundaria",
+        "pt": "Índice de Desenvolvimento da Educação do Estado de São Paulo para ensino médio"
+      },
+      "source": "SEADE"
+    },
+    {
+      "name": "esgoto_tratado",
+      "category": "VULNERABILITY",
+      "type": "numeric",
+      "unit": "percent",
+      "label": {
+        "en": "Sewage Treatment Coverage",
+        "es": "Cobertura de Tratamiento de Aguas Residuales",
+        "pt": "Cobertura de Tratamento de Esgoto"
+      },
+      "description": {
+        "en": "Percentage of population with sewage treatment",
+        "es": "Porcentaje de la población con tratamiento de aguas residuales",
+        "pt": "Percentual da população com tratamento de esgoto"
+      },
+      "source": "SNIS"
+    },
+    {
+      "name": "UAI_housing",
+      "category": "GOVERNANCE",
+      "type": "numeric",
+      "unit": "index (0-1)",
+      "label": {
+        "en": "UAI - Housing",
+        "es": "UAI - Vivienda",
+        "pt": "UAI - Habitação"
+      },
+      "description": {
+        "en": "Universal Access Index component for housing quality and access",
+        "es": "Componente del Índice de Acceso Universal para calidad y acceso a vivienda",
+        "pt": "Componente do Índice de Acesso Universal para qualidade e acesso à habitação"
+      },
+      "source": "AdaptaBrasil MCTI"
+    },
+    {
+      "name": "UAI_env",
+      "category": "GOVERNANCE",
+      "type": "numeric",
+      "unit": "index (0-1)",
+      "label": {
+        "en": "UAI - Environment",
+        "es": "UAI - Medio Ambiente",
+        "pt": "UAI - Meio Ambiente"
+      },
+      "description": {
+        "en": "Universal Access Index component for environmental services",
+        "es": "Componente del UAI para servicios ambientales",
+        "pt": "Componente do UAI para serviços ambientais"
+      },
+      "source": "AdaptaBrasil MCTI"
+    },
+    {
+      "name": "UAI_food",
+      "category": "GOVERNANCE",
+      "type": "numeric",
+      "unit": "index (0-1)",
+      "label": {
+        "en": "UAI - Food Security",
+        "es": "UAI - Seguridad Alimentaria",
+        "pt": "UAI - Segurança Alimentar"
+      },
+      "description": {
+        "en": "Universal Access Index component for food access and security",
+        "es": "Componente del UAI para acceso y seguridad alimentaria",
+        "pt": "Componente do UAI para acesso e segurança alimentar"
+      },
+      "source": "AdaptaBrasil MCTI"
+    },
+    {
+      "name": "UAI_mob",
+      "category": "GOVERNANCE",
+      "type": "numeric",
+      "unit": "index (0-1)",
+      "label": {
+        "en": "UAI - Mobility",
+        "es": "UAI - Movilidad",
+        "pt": "UAI - Mobilidade"
+      },
+      "description": {
+        "en": "Universal Access Index component for transportation and mobility",
+        "es": "Componente del UAI para transporte y movilidad",
+        "pt": "Componente do UAI para transporte e mobilidade"
+      },
+      "source": "AdaptaBrasil MCTI"
+    },
+    {
+      "name": "UAI_Crisk",
+      "category": "GOVERNANCE",
+      "type": "numeric",
+      "unit": "index (0-1)",
+      "label": {
+        "en": "UAI - Climate Risk",
+        "es": "UAI - Riesgo Climático",
+        "pt": "UAI - Risco Climático"
+      },
+      "description": {
+        "en": "Universal Access Index component for climate risk preparedness",
+        "es": "Componente del UAI para preparación ante riesgo climático",
+        "pt": "Componente do UAI para preparação ao risco climático"
+      },
+      "source": "AdaptaBrasil MCTI"
+    },
+    {
+      "name": "idx_gobernanza",
+      "category": "INDEX",
+      "type": "numeric",
+      "unit": "index (0-1)",
+      "label": {
+        "en": "Governance Index",
+        "es": "Índice de Gobernanza",
+        "pt": "Índice de Governança"
+      },
+      "description": {
+        "en": "Composite governance index (mean of 5 UAI components)",
+        "es": "Índice compuesto de gobernanza (promedio de 5 componentes UAI)",
+        "pt": "Índice composto de governança (média dos 5 componentes UAI)"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "idx_gobernanza_100",
+      "category": "INDEX",
+      "type": "numeric",
+      "unit": "index (0-100)",
+      "label": {
+        "en": "Governance Index (0-100)",
+        "es": "Índice de Gobernanza (0-100)",
+        "pt": "Índice de Governança (0-100)"
+      },
+      "description": {
+        "en": "Governance index rescaled to 0-100",
+        "es": "Índice de gobernanza reescalado a 0-100",
+        "pt": "Índice de governança reescalado para 0-100"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "mean_species_richness",
+      "category": "BIODIVERSITY",
+      "type": "numeric",
+      "unit": "species count",
+      "label": {
+        "en": "Mean Species Richness",
+        "es": "Riqueza Media de Especies",
+        "pt": "Riqueza Média de Espécies"
+      },
+      "description": {
+        "en": "Average number of vertebrate species per cell in the municipality",
+        "es": "Número promedio de especies de vertebrados por celda en el municipio",
+        "pt": "Número médio de espécies de vertebrados por célula no município"
+      },
+      "source": "Species occurrence models"
+    },
+    {
+      "name": "max_species_richness",
+      "category": "BIODIVERSITY",
+      "type": "integer",
+      "unit": "species count",
+      "label": {
+        "en": "Maximum Species Richness",
+        "es": "Riqueza Máxima de Especies",
+        "pt": "Riqueza Máxima de Espécies"
+      },
+      "description": {
+        "en": "Maximum number of vertebrate species in any cell of the municipality",
+        "es": "Número máximo de especies de vertebrados en cualquier celda del municipio",
+        "pt": "Número máximo de espécies de vertebrados em qualquer célula do município"
+      },
+      "source": "Species occurrence models"
+    },
+    {
+      "name": "Vert_rich_risk",
+      "category": "BIODIVERSITY",
+      "type": "numeric",
+      "unit": "index",
+      "label": {
+        "en": "Vertebrate Richness Risk",
+        "es": "Riesgo de Riqueza de Vertebrados",
+        "pt": "Risco de Riqueza de Vertebrados"
+      },
+      "description": {
+        "en": "Risk index for vertebrate species richness loss",
+        "es": "Índice de riesgo de pérdida de riqueza de especies de vertebrados",
+        "pt": "Índice de risco de perda de riqueza de espécies de vertebrados"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "forest_cover",
+      "category": "BIODIVERSITY",
+      "type": "numeric",
+      "unit": "percent",
+      "label": {
+        "en": "Forest Cover",
+        "es": "Cobertura Forestal",
+        "pt": "Cobertura Florestal"
+      },
+      "description": {
+        "en": "Percentage of municipality area covered by native forest",
+        "es": "Porcentaje del área municipal cubierta por bosque nativo",
+        "pt": "Percentual da área municipal coberta por floresta nativa"
+      },
+      "source": "MapBiomas"
+    },
+    {
+      "name": "pol_deficit",
+      "category": "BIODIVERSITY",
+      "type": "numeric",
+      "unit": "index (0-1)",
+      "label": {
+        "en": "Pollination Deficit",
+        "es": "Déficit de Polinización",
+        "pt": "Déficit de Polinização"
+      },
+      "description": {
+        "en": "Index of pollination service deficit (proxy for nutritional vulnerability)",
+        "es": "Índice de déficit de servicio de polinización (proxy de vulnerabilidad nutricional)",
+        "pt": "Índice de déficit de serviço de polinização (proxy de vulnerabilidade nutricional)"
+      },
+      "source": "Pollination models"
+    },
+    {
+      "name": "idx_biodiv",
+      "category": "INDEX",
+      "type": "numeric",
+      "unit": "index (0-100)",
+      "label": {
+        "en": "Biodiversity Index",
+        "es": "Índice de Biodiversidad",
+        "pt": "Índice de Biodiversidade"
+      },
+      "description": {
+        "en": "Normalized biodiversity index based on species richness (0-100)",
+        "es": "Índice de biodiversidad normalizado basado en riqueza de especies (0-100)",
+        "pt": "Índice de biodiversidade normalizado baseado em riqueza de espécies (0-100)"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "flooding_exposure",
+      "category": "CLIMATE",
+      "type": "numeric",
+      "unit": "index (0-1)",
+      "label": {
+        "en": "Flood Exposure",
+        "es": "Exposición a Inundaciones",
+        "pt": "Exposição a Inundações"
+      },
+      "description": {
+        "en": "Index of exposure to flooding events",
+        "es": "Índice de exposición a eventos de inundación",
+        "pt": "Índice de exposição a eventos de inundação"
+      },
+      "source": "AdaptaBrasil MCTI"
+    },
+    {
+      "name": "flooding_risks",
+      "category": "CLIMATE",
+      "type": "numeric",
+      "unit": "index (0-1)",
+      "label": {
+        "en": "Flood Risk",
+        "es": "Riesgo de Inundación",
+        "pt": "Risco de Inundação"
+      },
+      "description": {
+        "en": "Overall flood risk assessment combining exposure and vulnerability",
+        "es": "Evaluación general de riesgo de inundación combinando exposición y vulnerabilidad",
+        "pt": "Avaliação geral de risco de inundação combinando exposição e vulnerabilidade"
+      },
+      "source": "AdaptaBrasil MCTI"
+    },
+    {
+      "name": "hydric_stress_exp",
+      "category": "CLIMATE",
+      "type": "numeric",
+      "unit": "index (0-1)",
+      "label": {
+        "en": "Water Stress Exposure",
+        "es": "Exposición a Estrés Hídrico",
+        "pt": "Exposição a Estresse Hídrico"
+      },
+      "description": {
+        "en": "Index of exposure to water scarcity and drought conditions",
+        "es": "Índice de exposición a escasez de agua y condiciones de sequía",
+        "pt": "Índice de exposição a escassez de água e condições de seca"
+      },
+      "source": "AdaptaBrasil MCTI"
+    },
+    {
+      "name": "hydric_stress_risk",
+      "category": "CLIMATE",
+      "type": "numeric",
+      "unit": "index (0-1)",
+      "label": {
+        "en": "Water Stress Risk",
+        "es": "Riesgo de Estrés Hídrico",
+        "pt": "Risco de Estresse Hídrico"
+      },
+      "description": {
+        "en": "Overall water stress risk assessment",
+        "es": "Evaluación general de riesgo de estrés hídrico",
+        "pt": "Avaliação geral de risco de estresse hídrico"
+      },
+      "source": "AdaptaBrasil MCTI"
+    },
+    {
+      "name": "idx_clima",
+      "category": "INDEX",
+      "type": "numeric",
+      "unit": "index (0-100)",
+      "label": {
+        "en": "Climate Risk Index",
+        "es": "Índice de Riesgo Climático",
+        "pt": "Índice de Risco Climático"
+      },
+      "description": {
+        "en": "Composite climate risk index (mean of flood and drought risks, 0-100)",
+        "es": "Índice compuesto de riesgo climático (promedio de riesgos de inundación y sequía, 0-100)",
+        "pt": "Índice composto de risco climático (média dos riscos de inundação e seca, 0-100)"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "persist_dengue",
+      "category": "HEALTH",
+      "type": "integer",
+      "unit": "years (0-10)",
+      "label": {
+        "en": "Dengue Persistence",
+        "es": "Persistencia de Dengue",
+        "pt": "Persistência de Dengue"
+      },
+      "description": {
+        "en": "Number of years (2010-2019) with dengue cases detected",
+        "es": "Número de años (2010-2019) con casos de dengue detectados",
+        "pt": "Número de anos (2010-2019) com casos de dengue detectados"
+      },
+      "source": "DATASUS/SINAN (Casos Prováveis)"
+    },
+    {
+      "name": "persist_leishmaniose",
+      "category": "HEALTH",
+      "type": "integer",
+      "unit": "years (0-10)",
+      "label": {
+        "en": "Leishmaniasis Persistence",
+        "es": "Persistencia de Leishmaniasis",
+        "pt": "Persistência de Leishmaniose"
+      },
+      "description": {
+        "en": "Number of years with leishmaniasis cases (visceral + cutaneous combined)",
+        "es": "Número de años con casos de leishmaniasis (visceral + cutánea combinadas)",
+        "pt": "Número de anos com casos de leishmaniose (visceral + tegumentar combinadas)"
+      },
+      "source": "DATASUS/SINAN (Casos Prováveis)"
+    },
+    {
+      "name": "persist_leptospirose",
+      "category": "HEALTH",
+      "type": "integer",
+      "unit": "years (0-10)",
+      "label": {
+        "en": "Leptospirosis Persistence",
+        "es": "Persistencia de Leptospirosis",
+        "pt": "Persistência de Leptospirose"
+      },
+      "description": {
+        "en": "Number of years with leptospirosis cases detected",
+        "es": "Número de años con casos de leptospirosis detectados",
+        "pt": "Número de anos com casos de leptospirose detectados"
+      },
+      "source": "DATASUS/SINAN (Casos Prováveis)"
+    },
+    {
+      "name": "persist_malaria",
+      "category": "HEALTH",
+      "type": "integer",
+      "unit": "years (0-10)",
+      "label": {
+        "en": "Malaria Persistence",
+        "es": "Persistencia de Malaria",
+        "pt": "Persistência de Malária"
+      },
+      "description": {
+        "en": "Number of years with malaria cases detected",
+        "es": "Número de años con casos de malaria detectados",
+        "pt": "Número de anos com casos de malária detectados"
+      },
+      "source": "DATASUS/SINAN (Casos Prováveis)"
+    },
+    {
+      "name": "incidence_mean_dengue",
+      "category": "HEALTH",
+      "type": "numeric",
+      "unit": "cases per 100,000 pop/year",
+      "label": {
+        "en": "Dengue Mean Incidence",
+        "es": "Incidencia Media de Dengue",
+        "pt": "Incidência Média de Dengue"
+      },
+      "description": {
+        "en": "Average annual dengue incidence rate (2010-2019)",
+        "es": "Tasa de incidencia media anual de dengue (2010-2019)",
+        "pt": "Taxa de incidência média anual de dengue (2010-2019)"
+      },
+      "source": "DATASUS/SINAN + IBGE Population"
+    },
+    {
+      "name": "incidence_mean_leishmaniose",
+      "category": "HEALTH",
+      "type": "numeric",
+      "unit": "cases per 100,000 pop/year",
+      "label": {
+        "en": "Leishmaniasis Mean Incidence",
+        "es": "Incidencia Media de Leishmaniasis",
+        "pt": "Incidência Média de Leishmaniose"
+      },
+      "description": {
+        "en": "Average annual leishmaniasis incidence rate",
+        "es": "Tasa de incidencia media anual de leishmaniasis",
+        "pt": "Taxa de incidência média anual de leishmaniose"
+      },
+      "source": "DATASUS/SINAN + IBGE Population"
+    },
+    {
+      "name": "incidence_mean_leptospirose",
+      "category": "HEALTH",
+      "type": "numeric",
+      "unit": "cases per 100,000 pop/year",
+      "label": {
+        "en": "Leptospirosis Mean Incidence",
+        "es": "Incidencia Media de Leptospirosis",
+        "pt": "Incidência Média de Leptospirose"
+      },
+      "description": {
+        "en": "Average annual leptospirosis incidence rate",
+        "es": "Tasa de incidencia media anual de leptospirosis",
+        "pt": "Taxa de incidência média anual de leptospirose"
+      },
+      "source": "DATASUS/SINAN + IBGE Population"
+    },
+    {
+      "name": "incidence_mean_malaria",
+      "category": "HEALTH",
+      "type": "numeric",
+      "unit": "cases per 100,000 pop/year",
+      "label": {
+        "en": "Malaria Mean Incidence",
+        "es": "Incidencia Media de Malaria",
+        "pt": "Incidência Média de Malária"
+      },
+      "description": {
+        "en": "Average annual malaria incidence rate",
+        "es": "Tasa de incidencia media anual de malaria",
+        "pt": "Taxa de incidência média anual de malária"
+      },
+      "source": "DATASUS/SINAN + IBGE Population"
+    },
+    {
+      "name": "incidence_max_dengue",
+      "category": "HEALTH",
+      "type": "numeric",
+      "unit": "cases per 100,000 pop/year",
+      "label": {
+        "en": "Dengue Maximum Incidence",
+        "es": "Incidencia Máxima de Dengue",
+        "pt": "Incidência Máxima de Dengue"
+      },
+      "description": {
+        "en": "Peak annual dengue incidence in the period",
+        "es": "Pico de incidencia anual de dengue en el período",
+        "pt": "Pico de incidência anual de dengue no período"
+      },
+      "source": "DATASUS/SINAN + IBGE Population"
+    },
+    {
+      "name": "incidence_max_leishmaniose",
+      "category": "HEALTH",
+      "type": "numeric",
+      "unit": "cases per 100,000 pop/year",
+      "label": {
+        "en": "Leishmaniasis Maximum Incidence",
+        "es": "Incidencia Máxima de Leishmaniasis",
+        "pt": "Incidência Máxima de Leishmaniose"
+      },
+      "description": {
+        "en": "Peak annual leishmaniasis incidence in the period",
+        "es": "Pico de incidencia anual de leishmaniasis en el período",
+        "pt": "Pico de incidência anual de leishmaniose no período"
+      },
+      "source": "DATASUS/SINAN + IBGE Population"
+    },
+    {
+      "name": "incidence_max_leptospirose",
+      "category": "HEALTH",
+      "type": "numeric",
+      "unit": "cases per 100,000 pop/year",
+      "label": {
+        "en": "Leptospirosis Maximum Incidence",
+        "es": "Incidencia Máxima de Leptospirosis",
+        "pt": "Incidência Máxima de Leptospirose"
+      },
+      "description": {
+        "en": "Peak annual leptospirosis incidence in the period",
+        "es": "Pico de incidencia anual de leptospirosis en el período",
+        "pt": "Pico de incidência anual de leptospirose no período"
+      },
+      "source": "DATASUS/SINAN + IBGE Population"
+    },
+    {
+      "name": "incidence_max_malaria",
+      "category": "HEALTH",
+      "type": "numeric",
+      "unit": "cases per 100,000 pop/year",
+      "label": {
+        "en": "Malaria Maximum Incidence",
+        "es": "Incidencia Máxima de Malaria",
+        "pt": "Incidência Máxima de Malária"
+      },
+      "description": {
+        "en": "Peak annual malaria incidence in the period",
+        "es": "Pico de incidencia anual de malaria en el período",
+        "pt": "Pico de incidência anual de malária no período"
+      },
+      "source": "DATASUS/SINAN + IBGE Population"
+    },
+    {
+      "name": "total_cases_dengue",
+      "category": "HEALTH",
+      "type": "integer",
+      "unit": "cases",
+      "label": {
+        "en": "Dengue Total Cases",
+        "es": "Casos Totales de Dengue",
+        "pt": "Casos Totais de Dengue"
+      },
+      "description": {
+        "en": "Total probable dengue cases 2010-2019",
+        "es": "Total de casos probables de dengue 2010-2019",
+        "pt": "Total de casos prováveis de dengue 2010-2019"
+      },
+      "source": "DATASUS/SINAN"
+    },
+    {
+      "name": "total_cases_leishmaniose",
+      "category": "HEALTH",
+      "type": "integer",
+      "unit": "cases",
+      "label": {
+        "en": "Leishmaniasis Total Cases",
+        "es": "Casos Totales de Leishmaniasis",
+        "pt": "Casos Totais de Leishmaniose"
+      },
+      "description": {
+        "en": "Total probable leishmaniasis cases 2010-2019",
+        "es": "Total de casos probables de leishmaniasis 2010-2019",
+        "pt": "Total de casos prováveis de leishmaniose 2010-2019"
+      },
+      "source": "DATASUS/SINAN"
+    },
+    {
+      "name": "total_cases_leptospirose",
+      "category": "HEALTH",
+      "type": "integer",
+      "unit": "cases",
+      "label": {
+        "en": "Leptospirosis Total Cases",
+        "es": "Casos Totales de Leptospirosis",
+        "pt": "Casos Totais de Leptospirose"
+      },
+      "description": {
+        "en": "Total probable leptospirosis cases 2010-2019",
+        "es": "Total de casos probables de leptospirosis 2010-2019",
+        "pt": "Total de casos prováveis de leptospirose 2010-2019"
+      },
+      "source": "DATASUS/SINAN"
+    },
+    {
+      "name": "total_cases_malaria",
+      "category": "HEALTH",
+      "type": "integer",
+      "unit": "cases",
+      "label": {
+        "en": "Malaria Total Cases",
+        "es": "Casos Totales de Malaria",
+        "pt": "Casos Totais de Malária"
+      },
+      "description": {
+        "en": "Total probable malaria cases 2010-2019",
+        "es": "Total de casos probables de malaria 2010-2019",
+        "pt": "Total de casos prováveis de malária 2010-2019"
+      },
+      "source": "DATASUS/SINAN"
+    },
+    {
+      "name": "copresence_years",
+      "category": "HEALTH",
+      "type": "integer",
+      "unit": "years (0-10)",
+      "label": {
+        "en": "Co-presence Years (2+ diseases)",
+        "es": "Años de Co-presencia (2+ enfermedades)",
+        "pt": "Anos de Co-presença (2+ doenças)"
+      },
+      "description": {
+        "en": "Number of years with 2 or more diseases present simultaneously",
+        "es": "Número de años con 2 o más enfermedades presentes simultáneamente",
+        "pt": "Número de anos com 2 ou mais doenças presentes simultaneamente"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "copresence_3plus",
+      "category": "HEALTH",
+      "type": "integer",
+      "unit": "years (0-10)",
+      "label": {
+        "en": "Co-presence Years (3+ diseases)",
+        "es": "Años de Co-presencia (3+ enfermedades)",
+        "pt": "Anos de Co-presença (3+ doenças)"
+      },
+      "description": {
+        "en": "Number of years with 3 or more diseases present simultaneously",
+        "es": "Número de años con 3 o más enfermedades presentes simultáneamente",
+        "pt": "Número de anos com 3 ou mais doenças presentes simultaneamente"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "copresence_all4",
+      "category": "HEALTH",
+      "type": "integer",
+      "unit": "years (0-10)",
+      "label": {
+        "en": "Co-presence Years (all 4 diseases)",
+        "es": "Años de Co-presencia (4 enfermedades)",
+        "pt": "Anos de Co-presença (4 doenças)"
+      },
+      "description": {
+        "en": "Number of years with all 4 diseases present simultaneously",
+        "es": "Número de años con las 4 enfermedades presentes simultáneamente",
+        "pt": "Número de anos com todas as 4 doenças presentes simultaneamente"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "dengue_leptospirose",
+      "category": "HEALTH",
+      "type": "integer",
+      "unit": "years (0-10)",
+      "label": {
+        "en": "Dengue-Leptospirosis Co-presence",
+        "es": "Co-presencia Dengue-Leptospirosis",
+        "pt": "Co-presença Dengue-Leptospirose"
+      },
+      "description": {
+        "en": "Years with both dengue and leptospirosis",
+        "es": "Años con dengue y leptospirosis simultáneamente",
+        "pt": "Anos com dengue e leptospirose simultaneamente"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "dengue_malaria",
+      "category": "HEALTH",
+      "type": "integer",
+      "unit": "years (0-10)",
+      "label": {
+        "en": "Dengue-Malaria Co-presence",
+        "es": "Co-presencia Dengue-Malaria",
+        "pt": "Co-presença Dengue-Malária"
+      },
+      "description": {
+        "en": "Years with both dengue and malaria",
+        "es": "Años con dengue y malaria simultáneamente",
+        "pt": "Anos com dengue e malária simultaneamente"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "dengue_leishmaniose",
+      "category": "HEALTH",
+      "type": "integer",
+      "unit": "years (0-10)",
+      "label": {
+        "en": "Dengue-Leishmaniasis Co-presence",
+        "es": "Co-presencia Dengue-Leishmaniasis",
+        "pt": "Co-presença Dengue-Leishmaniose"
+      },
+      "description": {
+        "en": "Years with both dengue and leishmaniasis",
+        "es": "Años con dengue y leishmaniasis simultáneamente",
+        "pt": "Anos com dengue e leishmaniose simultaneamente"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "leptospirose_malaria",
+      "category": "HEALTH",
+      "type": "integer",
+      "unit": "years (0-10)",
+      "label": {
+        "en": "Leptospirosis-Malaria Co-presence",
+        "es": "Co-presencia Leptospirosis-Malaria",
+        "pt": "Co-presença Leptospirose-Malária"
+      },
+      "description": {
+        "en": "Years with both leptospirosis and malaria",
+        "es": "Años con leptospirosis y malaria simultáneamente",
+        "pt": "Anos com leptospirose e malária simultaneamente"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "leptospirose_leishmaniose",
+      "category": "HEALTH",
+      "type": "integer",
+      "unit": "years (0-10)",
+      "label": {
+        "en": "Leptospirosis-Leishmaniasis Co-presence",
+        "es": "Co-presencia Leptospirosis-Leishmaniasis",
+        "pt": "Co-presença Leptospirose-Leishmaniose"
+      },
+      "description": {
+        "en": "Years with both leptospirosis and leishmaniasis",
+        "es": "Años con leptospirosis y leishmaniasis simultáneamente",
+        "pt": "Anos com leptospirose e leishmaniose simultaneamente"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "malaria_leishmaniose",
+      "category": "HEALTH",
+      "type": "integer",
+      "unit": "years (0-10)",
+      "label": {
+        "en": "Malaria-Leishmaniasis Co-presence",
+        "es": "Co-presencia Malaria-Leishmaniasis",
+        "pt": "Co-presença Malária-Leishmaniose"
+      },
+      "description": {
+        "en": "Years with both malaria and leishmaniasis",
+        "es": "Años con malaria y leishmaniasis simultáneamente",
+        "pt": "Anos com malária e leishmaniose simultaneamente"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "idx_vulnerabilidad",
+      "category": "INDEX",
+      "type": "numeric",
+      "unit": "index (0-100)",
+      "label": {
+        "en": "Socioeconomic Vulnerability Index",
+        "es": "Índice de Vulnerabilidad Socioeconómica",
+        "pt": "Índice de Vulnerabilidade Socioeconômica"
+      },
+      "description": {
+        "en": "Composite index: 25% rural + 35% poverty + 25% Black pop + 15% Indigenous pop",
+        "es": "Índice compuesto: 25% rural + 35% pobreza + 25% pob. negra + 15% pob. indígena",
+        "pt": "Índice composto: 25% rural + 35% pobreza + 25% pop. preta + 15% pop. indígena"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "idx_carga_enfermedad",
+      "category": "INDEX",
+      "type": "numeric",
+      "unit": "index (0-100)",
+      "label": {
+        "en": "Disease Burden Index",
+        "es": "Índice de Carga de Enfermedad",
+        "pt": "Índice de Carga de Doença"
+      },
+      "description": {
+        "en": "Composite index based on normalized mean incidence of 4 diseases",
+        "es": "Índice compuesto basado en incidencia media normalizada de 4 enfermedades",
+        "pt": "Índice composto baseado na incidência média normalizada de 4 doenças"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "tercil_biodiv",
+      "category": "CLASSIFICATION",
+      "type": "categorical",
+      "values": ["Baja", "Media", "Alta"],
+      "label": {
+        "en": "Biodiversity Tertile",
+        "es": "Tercil de Biodiversidad",
+        "pt": "Tercil de Biodiversidade"
+      },
+      "description": {
+        "en": "Classification in tertiles based on biodiversity index",
+        "es": "Clasificación en terciles basada en el índice de biodiversidad",
+        "pt": "Classificação em tercis baseada no índice de biodiversidade"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "tercil_clima",
+      "category": "CLASSIFICATION",
+      "type": "categorical",
+      "values": ["Bajo", "Medio", "Alto"],
+      "label": {
+        "en": "Climate Risk Tertile",
+        "es": "Tercil de Riesgo Climático",
+        "pt": "Tercil de Risco Climático"
+      },
+      "description": {
+        "en": "Classification in tertiles based on climate risk index",
+        "es": "Clasificación en terciles basada en el índice de riesgo climático",
+        "pt": "Classificação em tercis baseada no índice de risco climático"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "tercil_vuln",
+      "category": "CLASSIFICATION",
+      "type": "categorical",
+      "values": ["Baja", "Media", "Alta"],
+      "label": {
+        "en": "Vulnerability Tertile",
+        "es": "Tercil de Vulnerabilidad",
+        "pt": "Tercil de Vulnerabilidade"
+      },
+      "description": {
+        "en": "Classification in tertiles based on vulnerability index",
+        "es": "Clasificación en terciles basada en el índice de vulnerabilidad",
+        "pt": "Classificação em tercis baseada no índice de vulnerabilidade"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "grupo_clima_biodiv",
+      "category": "CLASSIFICATION",
+      "type": "categorical",
+      "label": {
+        "en": "Climate-Biodiversity Group",
+        "es": "Grupo Clima-Biodiversidad",
+        "pt": "Grupo Clima-Biodiversidade"
+      },
+      "description": {
+        "en": "Combined classification of climate risk and biodiversity tertiles",
+        "es": "Clasificación combinada de terciles de riesgo climático y biodiversidad",
+        "pt": "Classificação combinada de tercis de risco climático e biodiversidade"
+      },
+      "source": "Derived"
+    },
+    {
+      "name": "cuadrante",
+      "category": "CLASSIFICATION",
+      "type": "categorical",
+      "values": ["Q1_Modelo", "Q2_Conservar", "Q3_Vulnerable", "Q4_Desarrollo"],
+      "label": {
+        "en": "Governance-Vulnerability Quadrant",
+        "es": "Cuadrante Gobernanza-Vulnerabilidad",
+        "pt": "Quadrante Governança-Vulnerabilidade"
+      },
+      "description": {
+        "en": "Classification based on median split of governance (UAI) and vulnerability indices. Q1=High governance/Low vulnerability; Q2=Low governance/Low vulnerability; Q3=Low governance/High vulnerability (priority); Q4=High governance/High vulnerability",
+        "es": "Clasificación basada en corte mediano de índices de gobernanza (UAI) y vulnerabilidad. Q1=Alta gobernanza/Baja vulnerabilidad; Q2=Baja gobernanza/Baja vulnerabilidad; Q3=Baja gobernanza/Alta vulnerabilidad (prioridad); Q4=Alta gobernanza/Alta vulnerabilidad",
+        "pt": "Classificação baseada em corte mediano dos índices de governança (UAI) e vulnerabilidade. Q1=Alta governança/Baixa vulnerabilidade; Q2=Baixa governança/Baixa vulnerabilidade; Q3=Baixa governança/Alta vulnerabilidade (prioridade); Q4=Alta governança/Alta vulnerabilidade"
+      },
+      "source": "Derived"
+    }
+  ],
+  "variableCategories": {
+    "ID": {
+      "en": "Identification",
+      "es": "Identificación",
+      "pt": "Identificação",
+      "count": 6
+    },
+    "VULNERABILITY": {
+      "en": "Socioeconomic Vulnerability",
+      "es": "Vulnerabilidad Socioeconómica",
+      "pt": "Vulnerabilidade Socioeconômica",
+      "count": 14
+    },
+    "GOVERNANCE": {
+      "en": "Governance (UAI)",
+      "es": "Gobernanza (UAI)",
+      "pt": "Governança (UAI)",
+      "count": 5
+    },
+    "BIODIVERSITY": {
+      "en": "Biodiversity",
+      "es": "Biodiversidad",
+      "pt": "Biodiversidade",
+      "count": 5
+    },
+    "CLIMATE": {
+      "en": "Climate Risk",
+      "es": "Riesgo Climático",
+      "pt": "Risco Climático",
+      "count": 4
+    },
+    "HEALTH": {
+      "en": "Public Health",
+      "es": "Salud Pública",
+      "pt": "Saúde Pública",
+      "count": 25
+    },
+    "INDEX": {
+      "en": "Derived Indices",
+      "es": "Índices Derivados",
+      "pt": "Índices Derivados",
+      "count": 6
+    },
+    "CLASSIFICATION": {
+      "en": "Classifications",
+      "es": "Clasificaciones",
+      "pt": "Classificações",
+      "count": 5
+    }
+  },
+  "methodology": {
+    "healthDataProcessing": {
+      "en": "Health data extracted from DATASUS/SINAN using 'Casos Prováveis' filter (excludes discarded cases, CLASSI_FIN ≠ 5). Municipality of residence (ID_MN_RESI) used instead of notification municipality.",
+      "es": "Datos de salud extraídos de DATASUS/SINAN usando filtro 'Casos Prováveis' (excluye casos descartados, CLASSI_FIN ≠ 5). Se usa municipio de residencia (ID_MN_RESI) en lugar de municipio de notificación.",
+      "pt": "Dados de saúde extraídos do DATASUS/SINAN usando filtro 'Casos Prováveis' (exclui casos descartados, CLASSI_FIN ≠ 5). Usado município de residência (ID_MN_RESI) ao invés de município de notificação."
+    },
+    "incidenceCalculation": {
+      "en": "Incidence = (cases / population) × 100,000. Population from IBGE SIDRA estimates 2010-2019.",
+      "es": "Incidencia = (casos / población) × 100,000. Población de estimaciones IBGE SIDRA 2010-2019.",
+      "pt": "Incidência = (casos / população) × 100.000. População das estimativas IBGE SIDRA 2010-2019."
+    },
+    "leishmaniasisCombination": {
+      "en": "Leishmaniasis combines visceral (leiv) and cutaneous/tegumentary (ltan) forms.",
+      "es": "Leishmaniasis combina formas visceral (leiv) y cutánea/tegumentar (ltan).",
+      "pt": "Leishmaniose combina formas visceral (leiv) e tegumentar (ltan)."
+    }
+  },
+  "qualityAssurance": {
+    "coverage": "645/645 municipalities (100%)",
+    "validation": ["IBGE municipality codes verified", "Incidence rates validated against TABNET", "Cross-validation with published epidemiological statistics"],
+    "lastValidation": "2026-01-21"
+  }
+}
