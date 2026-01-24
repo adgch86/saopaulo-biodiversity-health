@@ -1537,6 +1537,95 @@ Inspirado en `scripts/health_variables.R` de Julia. Se creó script para calcula
 
 ---
 
-*Última actualización: 2026-01-23 (Validación datos salud: Dengue y Diarrea confirmados r=1.0)*
+---
+
+### 2026-01-23 (Sesión 19 - Análisis Nexus Gobernanza-Biodiversidad-Bienestar) - ✅ COMPLETADO
+
+#### Solicitud
+Adrian solicitó un análisis estadístico completo del nexo entre Gobernanza, Biodiversidad y Bienestar Humano, incluyendo:
+- Prueba de hipótesis H1 (Gobernanza → Riesgos) y H2 (Biodiversidad → Riesgos)
+- Modelos mixtos con mesorregión como efecto aleatorio
+- Análisis de efectos moduladores por variables socioeconómicas
+- Ranking de municipios prioritarios
+- Acciones PEARC por cuadrante
+
+#### Resultados Principales
+
+**HIPÓTESIS H1: Gobernanza → Reducción de Riesgos**
+
+| Relación | r | Interpretación |
+|----------|---|----------------|
+| Gobernanza → Carga Enfermedad | -0.005 | REDUCE (débil) |
+| Gobernanza → Riesgo Climático | +0.289 | NO reduce |
+| Gobernanza → Riesgo Fuego | +0.187 | NO reduce |
+
+**HIPÓTESIS H2: Biodiversidad → Reducción de Riesgos**
+
+| Relación | r | Interpretación |
+|----------|---|----------------|
+| Biodiversidad → Carga Enfermedad | **-0.407** | **REDUCE (fuerte)** |
+| Biodiversidad → Riesgo Climático | +0.326 | NO reduce |
+| Biodiversidad → Riesgo Fuego | -0.037 | REDUCE (débil) |
+
+**Hallazgo clave**: La biodiversidad reduce significativamente la carga de enfermedad (r=-0.407, p<0.001).
+
+#### Mejores Predictores por Dimensión
+
+| Variable Riesgo | Mejor Gobernanza | r | Mejor Biodiv | r |
+|-----------------|------------------|---|--------------|---|
+| Carga enfermedad | UAI_Crisk | -0.05 | max_species_richness | **-0.42** |
+| Incidencia dengue | UAI_Crisk | -0.08 | max_species_richness | **-0.45** |
+| Incidencia diarrea | UAI_mob | -0.20 | max_species_richness | **-0.45** |
+| Persistencia leptospirosis | UAI_mob | **+0.65** | max_species_richness | +0.52 |
+
+#### Efectos Moduladores Más Fuertes
+
+| Relación | Modulador | Efecto | Diff |
+|----------|-----------|--------|------|
+| Gobernanza→Clima | % Pobreza | ATENÚA | -0.36 |
+| Biodiv→Enfermedades | % Pob. Negra | Amplifica | +0.32 |
+| Cobertura forestal→Clima | % Pob. Indígena | Amplifica | +0.32 |
+
+#### Análisis por Cuadrantes
+
+| Cuadrante | N | Riesgo | Vuln | Estrategia |
+|-----------|---|--------|------|------------|
+| Q1_Modelo | 212 | 0.36 | 11.0 | MANTENER Y EXPANDIR |
+| Q2_Conservar | 110 | 0.34 | 12.5 | FORTALECER GOBERNANZA |
+| Q3_Vulnerable | 210 | 0.28 | **24.1** | **INTERVENCIÓN URGENTE** |
+| Q4_Desarrollo | 113 | 0.31 | 22.4 | RESTAURACIÓN ECOLÓGICA |
+
+#### Top 5 Municipios Prioritarios
+
+| Rank | Municipio | Cuadrante | Riesgo | Vulnerabilidad |
+|------|-----------|-----------|--------|----------------|
+| 1 | Iporanga | Q3_Vulnerable | 0.582 | 54.2 |
+| 2 | Eldorado | Q4_Desarrollo | 0.443 | 43.0 |
+| 3 | Colômbia | Q3_Vulnerable | 0.440 | 35.3 |
+| 4 | Paulo de Faria | Q4_Desarrollo | 0.441 | 30.0 |
+| 5 | Itaoca | Q4_Desarrollo | 0.408 | 40.2 |
+
+#### Archivos Generados
+
+**Tablas CSV:**
+- `outputs/correlaciones_nexus_completas.csv` - Matriz 37×37 variables
+- `outputs/seleccion_predictores_nexus.csv` - Mejores predictores por riesgo
+- `outputs/modelos_mixtos_nexus.csv` - 30 modelos mixtos con mesorregión
+- `outputs/efectos_moduladores_nexus.csv` - Análisis de interacciones
+- `outputs/ranking_municipios_prioritarios.csv` - Top 50 municipios
+- `outputs/acciones_pearc_por_cuadrante.csv` - Recomendaciones PEARC
+- `outputs/resumen_ejecutivo_nexus.txt` - Resumen textual
+
+**Figuras:**
+- `outputs/figures/heatmap_correlaciones_nexus.png`
+- `outputs/figures/hipotesis_h1_h2_nexus.png`
+- `outputs/figures/analisis_cuadrantes_nexus.png`
+
+**Script:**
+- `scripts/analisis_nexus_gobernanza_biodiversidad_v1.py` - Análisis completo
+
+---
+
+*Última actualización: 2026-01-23 (Análisis Nexus completo con modelos mixtos)*
 *Proyecto: Dr. Adrian David González Chaves*
 *DOI: 10.5281/zenodo.18303824*

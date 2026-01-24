@@ -1,0 +1,43 @@
+relacion,y_var,x_var,modulador,modulador_nombre,r_bajo,r_medio,r_alto,diff_alto_bajo,efecto_modulador
+Biodiv->Enfermedades,idx_carga_enfermedad,idx_biodiv,pct_rural,% Poblacion rural,-0.3735456060276751,-0.35610133062860727,-0.4767296964428023,-0.10318409041512716,Atenúa
+Biodiv->Enfermedades,idx_carga_enfermedad,idx_biodiv,pct_preta,% Poblacion negra,-0.5956688159578836,-0.36077905769277213,-0.2767031321693352,0.3189656837885484,Amplifica
+Biodiv->Enfermedades,idx_carga_enfermedad,idx_biodiv,pct_indigena,% Poblacion indígena,-0.414584993600425,-0.36221111352604507,-0.420040329396991,-0.0054553357965659854,Neutro
+Biodiv->Enfermedades,idx_carga_enfermedad,idx_biodiv,pct_pobreza,% Pobreza,-0.43159699582216426,-0.413588833345408,-0.39852326788862324,0.03307372793354102,Neutro
+Biodiv->Enfermedades,idx_carga_enfermedad,idx_biodiv,n_pessoas_pobreza,N personas pobreza,-0.3746226665700693,-0.37523002245888576,-0.2545618102344901,0.12006085633557922,Amplifica
+Biodiv->Enfermedades,idx_carga_enfermedad,idx_biodiv,mort_infantil,Mortalidad infantil,-0.4923869207177184,-0.3487563090149484,-0.3786713033398537,0.11371561737786468,Amplifica
+Biodiv->Enfermedades,idx_carga_enfermedad,idx_biodiv,idx_vulnerabilidad,Indice Vulnerabilidad,-0.4589195585500736,-0.35181482286459465,-0.44286870004105383,0.016050858509019772,Neutro
+Gobernanza->Enfermedades,idx_carga_enfermedad,idx_gobernanza,pct_rural,% Poblacion rural,0.061001446023350246,-0.15920966961857114,0.012631777467091794,-0.048369668556258454,Neutro
+Gobernanza->Enfermedades,idx_carga_enfermedad,idx_gobernanza,pct_preta,% Poblacion negra,0.014064092226775574,-0.09379524768243262,0.027143622308385868,0.013079530081610294,Neutro
+Gobernanza->Enfermedades,idx_carga_enfermedad,idx_gobernanza,pct_indigena,% Poblacion indígena,0.016036432686171893,-0.024628952191856866,0.03762341094785335,0.021586978261681454,Neutro
+Gobernanza->Enfermedades,idx_carga_enfermedad,idx_gobernanza,pct_pobreza,% Pobreza,0.0726922543895325,-0.05322756613998855,0.0754296330508119,0.002737378661279405,Neutro
+Gobernanza->Enfermedades,idx_carga_enfermedad,idx_gobernanza,n_pessoas_pobreza,N personas pobreza,-0.02054342299942812,0.02388856157721673,0.10614156834665414,0.12668499134608227,Amplifica
+Gobernanza->Enfermedades,idx_carga_enfermedad,idx_gobernanza,mort_infantil,Mortalidad infantil,0.002955329252094196,0.07686040164554367,-0.04191656196554037,-0.04487189121763456,Neutro
+Gobernanza->Enfermedades,idx_carga_enfermedad,idx_gobernanza,idx_vulnerabilidad,Indice Vulnerabilidad,0.0489587777798201,-0.09856588447118161,0.00380190949367413,-0.04515686828614597,Neutro
+Cobertura forestal->Clima,idx_clima,forest_cover,pct_rural,% Poblacion rural,0.25964659045647454,0.3076601910872273,0.3327154973415586,0.07306890688508405,Neutro
+Cobertura forestal->Clima,idx_clima,forest_cover,pct_preta,% Poblacion negra,0.11467876958008058,0.21553618482220166,0.25130129024910114,0.13662252066902056,Amplifica
+Cobertura forestal->Clima,idx_clima,forest_cover,pct_indigena,% Poblacion indígena,0.0419725727843968,0.12130879957652435,0.3602746248330855,0.31830205204868867,Amplifica
+Cobertura forestal->Clima,idx_clima,forest_cover,pct_pobreza,% Pobreza,0.2927133231378598,0.07237959219599406,0.12435483832755904,-0.16835848481030075,Atenúa
+Cobertura forestal->Clima,idx_clima,forest_cover,n_pessoas_pobreza,N personas pobreza,0.07428453304193604,0.058948468781802696,0.3357100045392923,0.26142547149735623,Amplifica
+Cobertura forestal->Clima,idx_clima,forest_cover,mort_infantil,Mortalidad infantil,0.07921179293065746,0.24605593858543745,0.1902800176113661,0.11106822468070864,Amplifica
+Cobertura forestal->Clima,idx_clima,forest_cover,idx_vulnerabilidad,Indice Vulnerabilidad,0.22786234984174894,0.23481309311851092,0.26524453000985987,0.03738218016811093,Neutro
+Gobernanza->Clima,idx_clima,idx_gobernanza,pct_rural,% Poblacion rural,0.26238842974003435,0.12553282702565563,0.08653603216840333,-0.17585239757163101,Atenúa
+Gobernanza->Clima,idx_clima,idx_gobernanza,pct_preta,% Poblacion negra,0.17056939817177158,0.21629265371496345,0.40670102305904643,0.23613162488727485,Amplifica
+Gobernanza->Clima,idx_clima,idx_gobernanza,pct_indigena,% Poblacion indígena,0.09849427911286136,0.2718009654760513,0.3809313206372712,0.28243704152440985,Amplifica
+Gobernanza->Clima,idx_clima,idx_gobernanza,pct_pobreza,% Pobreza,0.16140668147079404,-0.03306314671011454,-0.2009931234188153,-0.3623998048896093,Atenúa
+Gobernanza->Clima,idx_clima,idx_gobernanza,n_pessoas_pobreza,N personas pobreza,0.14622927671019614,0.29781148276431785,0.31198608556093743,0.1657568088507413,Amplifica
+Gobernanza->Clima,idx_clima,idx_gobernanza,mort_infantil,Mortalidad infantil,-0.049152199206223185,0.2745296915379209,0.2938209755929211,0.34297317479914424,Amplifica
+Gobernanza->Clima,idx_clima,idx_gobernanza,idx_vulnerabilidad,Indice Vulnerabilidad,0.22462137560281742,0.2405444272101512,-0.012365776732139656,-0.23698715233495707,Atenúa
+Biodiv->Fuego,fire_risk_index,idx_biodiv,pct_rural,% Poblacion rural,-0.0994427506281896,0.05803631397652767,-0.12269917167765461,-0.023256421049465015,Neutro
+Biodiv->Fuego,fire_risk_index,idx_biodiv,pct_preta,% Poblacion negra,-0.06440993033215607,0.041934120601801544,-0.1490845039680999,-0.08467457363594384,Neutro
+Biodiv->Fuego,fire_risk_index,idx_biodiv,pct_indigena,% Poblacion indígena,-0.08772069106978686,-0.015159148723451126,-0.012493698512754989,0.07522699255703187,Neutro
+Biodiv->Fuego,fire_risk_index,idx_biodiv,pct_pobreza,% Pobreza,-0.23422102816860588,-0.3266934724335289,-0.0393248319506094,0.19489619621799648,Amplifica
+Biodiv->Fuego,fire_risk_index,idx_biodiv,n_pessoas_pobreza,N personas pobreza,0.00042442477010578444,-0.08718601990555043,-0.0972977182791582,-0.097722143049264,Neutro
+Biodiv->Fuego,fire_risk_index,idx_biodiv,mort_infantil,Mortalidad infantil,-0.01622596081283128,-0.19362336690091525,-0.09932291084987793,-0.08309695003704665,Neutro
+Biodiv->Fuego,fire_risk_index,idx_biodiv,idx_vulnerabilidad,Indice Vulnerabilidad,-0.15778091719191478,-0.049001572730706766,-0.1044073805301306,0.05337353666178418,Neutro
+Inundacion->Diarrea,incidence_diarrhea_mean,flooding_risks,pct_rural,% Poblacion rural,-0.18315589760870582,-0.17057116827814023,-0.16714917567855286,0.016006721930152956,Neutro
+Inundacion->Diarrea,incidence_diarrhea_mean,flooding_risks,pct_preta,% Poblacion negra,-0.05331197902680658,-0.19776003702492304,-0.22236997261778493,-0.16905799359097834,Atenúa
+Inundacion->Diarrea,incidence_diarrhea_mean,flooding_risks,pct_indigena,% Poblacion indígena,-0.04066240859911569,-0.03576084453809326,-0.2715583947717925,-0.23089598617267681,Atenúa
+Inundacion->Diarrea,incidence_diarrhea_mean,flooding_risks,pct_pobreza,% Pobreza,-0.22353138271851977,-0.10902228176263676,-0.09839106409006368,0.1251403186284561,Amplifica
+Inundacion->Diarrea,incidence_diarrhea_mean,flooding_risks,n_pessoas_pobreza,N personas pobreza,-0.09780883715500027,-0.14892345350855657,-0.16044372677921834,-0.06263488962421807,Neutro
+Inundacion->Diarrea,incidence_diarrhea_mean,flooding_risks,mort_infantil,Mortalidad infantil,-0.10272466384707388,-0.22913568579098137,-0.12579873614800083,-0.02307407230092695,Neutro
+Inundacion->Diarrea,incidence_diarrhea_mean,flooding_risks,idx_vulnerabilidad,Indice Vulnerabilidad,-0.21293258791697245,-0.12335323714682947,-0.2130855475534138,-0.00015295963644135213,Neutro

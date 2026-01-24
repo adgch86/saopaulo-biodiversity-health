@@ -1,0 +1,31 @@
+RESUMEN EJECUTIVO: ANÁLISIS NEXUS GOBERNANZA-BIODIVERSIDAD-BIENESTAR
+======================================================================
+
+Fecha: 2026-01-23 21:53:37.869696
+Municipios analizados: 645
+
+HALLAZGOS PRINCIPALES:
+  • H1: Gobernanza no reduce idx_clima (r=0.289)
+  • H1: Gobernanza reduce idx_carga_enfermedad (r=-0.005)
+  • H1: Gobernanza no reduce fire_risk_index (r=0.187)
+  • H2: Biodiversidad no reduce idx_clima (r=0.326)
+  • H2: Biodiversidad reduce idx_carga_enfermedad (r=-0.407)
+  • H2: Biodiversidad reduce fire_risk_index (r=-0.037)
+  • Modulador: Mortalidad infantil amplifica Gobernanza->Clima
+  • Modulador: % Poblacion negra amplifica Biodiv->Enfermedades
+  • Modulador: % Poblacion indígena amplifica Cobertura forestal->Clima
+  • Modulador: % Poblacion indígena amplifica Gobernanza->Clima
+  • Modulador: N personas pobreza amplifica Cobertura forestal->Clima
+
+
+MUNICIPIOS PRIORITARIOS:
+  Iporanga (Q3_Vulnerable): Riesgo=0.582, Vuln=54.243
+  Eldorado (Q4_Desarrollo): Riesgo=0.443, Vuln=43.017
+  Colômbia (Q3_Vulnerable): Riesgo=0.440, Vuln=35.271
+  Paulo de Faria (Q4_Desarrollo): Riesgo=0.441, Vuln=29.953
+  Itaoca (Q4_Desarrollo): Riesgo=0.408, Vuln=40.221
+  Onda Verde (Q3_Vulnerable): Riesgo=0.516, Vuln=24.940
+  Ribeira (Q4_Desarrollo): Riesgo=0.403, Vuln=34.283
+  Florínea (Q4_Desarrollo): Riesgo=0.407, Vuln=30.813
+  Guará (Q4_Desarrollo): Riesgo=0.444, Vuln=25.197
+  Barra do Turvo (Q4_Desarrollo): Riesgo=0.388, Vuln=34.308
