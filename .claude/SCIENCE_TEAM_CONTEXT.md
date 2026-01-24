@@ -514,6 +514,48 @@ Ver documento completo: `.claude/REFERENTES_CIENTIFICOS.md`
 
 ## Notas de Sesión
 
+### 2026-01-23 (Sesión 18 - Validación de Datos de Salud) - ✅ COMPLETADO
+
+#### Solicitud
+Adrian solicitó validar los datos de salud comparando con datos descargados manualmente por Ju desde TABNET/DATASUS para el mismo periodo (2010-2019).
+
+#### Resultados de Validación
+
+| Enfermedad | Correlación | Total Ju | Total Procesado | Ratio | Estado |
+|------------|-------------|----------|-----------------|-------|--------|
+| **Dengue** | **1.0000** | 2,221,035 | 2,221,108 | 1.0x | ✅ VALIDADO |
+| **Diarrhea** | **1.0000** | 139,187 | 139,207 | 1.0x | ✅ VALIDADO |
+| Leptospirose | 0.9674 | 7,253 | 44,806 | 6.2x | ⚠️ Criterio diferente |
+| Malaria | 0.7909 | 1,403 | 3,400 | 2.4x | ⚠️ Criterio diferente |
+| Leishmaniasis | 0.7566 | 2,609 | 8,082 | 3.1x | ⚠️ Criterio diferente |
+
+#### Conclusiones
+
+**VALIDADOS (r > 0.99):**
+- **Dengue**: Prácticamente idénticos (73 casos de diferencia en 2.2M)
+- **Diarrhea**: Prácticamente idénticos (20 casos de diferencia en 139K)
+- Los índices calculados para estas enfermedades son **confiables**
+
+**DISCREPANCIAS SISTEMÁTICAS:**
+
+Las diferencias en leptospirose, malaria y leishmaniasis son **sistemáticas** (ratio constante), indicando criterios de clasificación diferentes:
+
+- **Hipótesis**: Ju descargó casos **CONFIRMADOS** (laboratorio), nosotros usamos **PROVÁVEIS** (confirmados + en investigación)
+- Leptospirose: ratio 6.2x (confirmación laboratorial difícil)
+- Malaria: ratio 2.4x (muchos casos sin confirmación en área no endémica)
+- Leishmaniasis: Ju probablemente solo descargó Visceral (2,609 ≈ 4,611/1.77)
+
+**Verificación pendiente**: Preguntar a Ju qué criterio usó en TABNET
+
+#### Scripts Creados
+
+| Script | Descripción |
+|--------|-------------|
+| `scripts/compare_health_data_ju.py` | Comparación inicial por enfermedad |
+| `scripts/compare_health_data_ju_v2.py` | Comparación detallada con leishmaniasis combinada |
+
+---
+
 ### 2026-01-23 (Sesión 17 - Indicadores de Diarrea + Dataset v8) - ✅ COMPLETADO
 
 #### Solicitud
@@ -1495,6 +1537,6 @@ Inspirado en `scripts/health_variables.R` de Julia. Se creó script para calcula
 
 ---
 
-*Última actualización: 2026-01-23 (Dataset v8: +4 variables diarrea, total 104 variables)*
+*Última actualización: 2026-01-23 (Validación datos salud: Dengue y Diarrea confirmados r=1.0)*
 *Proyecto: Dr. Adrian David González Chaves*
 *DOI: 10.5281/zenodo.18303824*
