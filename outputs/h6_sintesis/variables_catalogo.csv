@@ -1,0 +1,31 @@
+variable,label,dimension_nexus,source,unit,formula,risk_component
+UAI_housing,UAI Vivienda,Gobernanza,Neder et al. 2021,0-1,,VULNERABILITY/Adaptive_Capacity_Institutional
+UAI_env,UAI Ambiental,Gobernanza,Neder et al. 2021,0-1,,VULNERABILITY/Adaptive_Capacity_Institutional
+UAI_food,UAI Alimentacion,Gobernanza,Neder et al. 2021,0-1,,VULNERABILITY/Adaptive_Capacity_Institutional
+UAI_mob,UAI Movilidad,Gobernanza,Neder et al. 2021,0-1,,VULNERABILITY/Adaptive_Capacity_Institutional
+UAI_Crisk,UAI Riesgo Climatico,Gobernanza,Neder et al. 2021,0-1,,VULNERABILITY/Adaptive_Capacity_Institutional
+idx_gobernanza,Indice Gobernanza,Gobernanza,Calculado,0-1,"mean(UAI_housing, UAI_env, UAI_food, UAI_mob, UAI_Crisk)",
+forest_cover,Cobertura Forestal,Biodiversidad,MapBiomas,%,,VULNERABILITY/Adaptive_Capacity_Natural
+mean_species_richness,Riqueza Especies,Biodiversidad,Biodiversity data,n especies,,VULNERABILITY/Adaptive_Capacity_Natural
+max_species_richness,Riqueza Max Especies,Biodiversidad,Biodiversity data,n especies,,
+pol_deficit,Deficit Polinizacion,Biodiversidad,Calculated,0-1,,
+idx_biodiv,Indice Biodiversidad,Biodiversidad,Calculado,0-100,normalized(forest_cover + mean_species_richness - pol_deficit),
+flooding_risks,Riesgo Inundacion,Riesgo_Climatico,CEMADEN,0-1,,
+flooding_exposure,Exposicion Inundacion,Riesgo_Climatico,CEMADEN,0-1,,HAZARD
+fire_risk_index,Riesgo Fuego,Riesgo_Climatico,INPE Queimadas,0-100,,HAZARD
+fire_incidence_mean,Incidencia Fuego,Riesgo_Climatico,INPE Queimadas,focos/ano,,HAZARD
+hydric_stress_risk,Estres Hidrico,Riesgo_Climatico,ANA,0-1,,
+idx_clima,Indice Riesgo Clima,Riesgo_Climatico,Calculado,0-100,normalized(flooding_risks + fire_risk_index + hydric_stress_risk),
+incidence_mean_dengue,Incidencia Dengue,Riesgo_Salud,DATASUS SINAN,casos/100k/ano,,
+incidence_mean_malaria,Incidencia Malaria,Riesgo_Salud,DATASUS SINAN,casos/100k/ano,,
+incidence_mean_leishmaniose,Incidencia Leishmaniasis,Riesgo_Salud,DATASUS SINAN,casos/100k/ano,,
+incidence_mean_leptospirose,Incidencia Leptospirosis,Riesgo_Salud,DATASUS SINAN,casos/100k/ano,,
+incidence_diarrhea_mean,Incidencia Diarrea,Riesgo_Salud,DATASUS SIH,casos/100k/ano,,
+health_death_circ_mean,Mortalidad Cardiovascular,Riesgo_Salud,DATASUS SIM,muertes/100k/ano,,
+health_hosp_resp_mean,Hospitalizacion Respiratoria,Riesgo_Salud,DATASUS SIH,hosp/100k/ano,,
+idx_carga_enfermedad,Indice Carga Enfermedad,Riesgo_Salud,Calculado,0-100,,
+pct_pobreza,% Pobreza,Vulnerabilidad_Social,IBGE Censo,%,,VULNERABILITY/Sensitivity
+pct_rural,% Rural,Vulnerabilidad_Social,IBGE Censo,%,,EXPOSURE
+pct_preta,% Poblacion Negra,Vulnerabilidad_Social,IBGE Censo,%,,VULNERABILITY/Sensitivity
+pct_indigena,% Poblacion Indigena,Vulnerabilidad_Social,IBGE Censo,%,,VULNERABILITY/Sensitivity
+idx_vulnerabilidad,Indice Vulnerabilidad,Vulnerabilidad_Social,Calculado,0-100,normalized(pct_pobreza + pct_rural + pct_preta + pct_indigena),

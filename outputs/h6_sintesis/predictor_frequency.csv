@@ -1,0 +1,16 @@
+variable,frequency
+pct_pobreza,7
+pol_deficit,6
+forest_cover,4
+fire_risk_index,3
+incidence_mean_dengue,2
+flooding_risks,2
+pct_preta,2
+incidence_mean_leptospirose,1
+idx_vulnerabilidad,1
+incidence_mean_leishmaniose,1
+health_hosp_resp_mean,1
+idx_clima,1
+incidence_mean_malaria,1
+pct_rural,1
+hydric_stress_risk,1

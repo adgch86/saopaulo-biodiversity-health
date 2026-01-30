@@ -1,0 +1,9 @@
+variable,label,dimension_nexus,source,unit,formula,risk_component
+incidence_mean_dengue,Incidencia Dengue,Riesgo_Salud,DATASUS SINAN,casos/100k/ano,,
+incidence_mean_malaria,Incidencia Malaria,Riesgo_Salud,DATASUS SINAN,casos/100k/ano,,
+incidence_mean_leishmaniose,Incidencia Leishmaniasis,Riesgo_Salud,DATASUS SINAN,casos/100k/ano,,
+incidence_mean_leptospirose,Incidencia Leptospirosis,Riesgo_Salud,DATASUS SINAN,casos/100k/ano,,
+incidence_diarrhea_mean,Incidencia Diarrea,Riesgo_Salud,DATASUS SIH,casos/100k/ano,,
+health_death_circ_mean,Mortalidad Cardiovascular,Riesgo_Salud,DATASUS SIM,muertes/100k/ano,,
+health_hosp_resp_mean,Hospitalizacion Respiratoria,Riesgo_Salud,DATASUS SIH,hosp/100k/ano,,
+idx_carga_enfermedad,Indice Carga Enfermedad,Riesgo_Salud,Calculado,0-100,,

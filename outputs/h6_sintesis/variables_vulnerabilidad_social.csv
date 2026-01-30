@@ -1,0 +1,6 @@
+variable,label,dimension_nexus,source,unit,formula,risk_component
+pct_pobreza,% Pobreza,Vulnerabilidad_Social,IBGE Censo,%,,VULNERABILITY/Sensitivity
+pct_rural,% Rural,Vulnerabilidad_Social,IBGE Censo,%,,EXPOSURE
+pct_preta,% Poblacion Negra,Vulnerabilidad_Social,IBGE Censo,%,,VULNERABILITY/Sensitivity
+pct_indigena,% Poblacion Indigena,Vulnerabilidad_Social,IBGE Censo,%,,VULNERABILITY/Sensitivity
+idx_vulnerabilidad,Indice Vulnerabilidad,Vulnerabilidad_Social,Calculado,0-100,normalized(pct_pobreza + pct_rural + pct_preta + pct_indigena),

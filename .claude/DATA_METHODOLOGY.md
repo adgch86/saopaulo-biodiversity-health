@@ -106,6 +106,40 @@ data/
 - **Variables:** fire_incidence_mean, fire_frp_mean, fire_risk_index
 - **Período:** 2010-2019
 
+### 8. Estrés Térmico (Xavier/BR-DWGD v3) - NUEVO v9
+
+- **Fuente:** Xavier et al. (2022). Brazilian Daily Weather Gridded Data v3
+- **Resolución:** 0.1° x 0.1° (~11 km) para Tmax/Tmin
+- **Período:** 2010-2019 (diario)
+- **Variables:**
+  - heat_persistence_mean: Días/año con Tmax > 34.7°C (promedio decadal)
+  - heat_persistence_sd: Desviación estándar interanual
+  - heat_HAAT_mean: Grados-día acumulados sobre 34.7°C (promedio anual)
+  - heat_HAAT_sd: Desviación estándar interanual
+  - mmt_days_mean: Días/año con Tmedia > 22.3°C (promedio decadal)
+  - mmt_days_sd: Desviación estándar interanual
+- **Referencia:** Xavier et al. (2022), Int J Climatol. DOI: 10.1002/joc.7731
+- **Acceso:** GEE Community Catalog (`projects/br-dwgd/assets/`)
+- **Licencia:** CC BY 4.0
+- **Umbrales:**
+  - 34.7°C: Valverde (2023) → media ondas de calor SP = 34.9°C
+  - 22.3°C: Nascimento et al. (2019) → MMT para IAM región SE
+
+### 9. Temperatura de Superficie (MODIS LST) - NUEVO v9
+
+- **Fuente:** MODIS/061/MOD11A2 (Terra) + MYD11A2 (Aqua)
+- **Resolución:** 1 km
+- **Período:** 2010-2019 (compuesto 8 días)
+- **Variables:**
+  - lst_day_mean: LST diurna media (°C, promedio decadal)
+  - lst_night_mean: LST nocturna media (°C, promedio decadal)
+  - lst_day_p95: Percentil 95 LST diurna
+  - lst_day_sd: Desviación estándar LST diurna
+  - lst_amplitude: Amplitud térmica día-noche
+- **Referencia:** Monteiro et al. (2021), Wu et al. (2019)
+- **Acceso:** GEE (`MODIS/061/MOD11A2`)
+- **Nota:** LST mide temperatura de superficie, no aire. Es la métrica directa para islas de calor urbano (SUHI). SP tiene SUHI diurna de 6.60°C
+
 ---
 
 ## Indicadores Calculados
@@ -201,4 +235,149 @@ data/
 
 ---
 
-*Última actualización: 2026-01-23*
+---
+
+## Clasificación de Variables por Dimensión del Nexus
+
+El dataset contiene **104 variables** organizadas en 5 dimensiones principales:
+
+### Conteo por Dimensión
+
+| Dimensión | # Variables |
+|-----------|-------------|
+| Identificadores | 6 |
+| **Gobernanza** | 9 |
+| **Biodiversidad** | 7 |
+| **Riesgo Climático** | 18 |
+| **Riesgo Salud** | 49 |
+| **Vulnerabilidad Social** | 13 |
+| Clasificaciones | 2 |
+| **TOTAL** | 104 |
+
+### Diagrama del Nexus
+
+```
+         Gobernanza ←→ Biodiversidad
+              ↓              ↓
+         Riesgo Salud ←→ Riesgo Climático
+                  ↘    ↙
+              Vulnerabilidad Social
+                  (central)
+```
+
+---
+
+## Clasificación por Componentes de Riesgo (IPCC)
+
+| Componente | # Variables | Descripción |
+|------------|-------------|-------------|
+| **HAZARD** | 31 | Amenazas físicas (fuego, inundación, patógenos) |
+| **EXPOSURE** | 32 | Población expuesta, morbilidad, mortalidad |
+| **VULNERABILITY** | 19 | Sensibilidad (6) + Cap. Natural (4) + Cap. Institucional (9) |
+| **RISK INDICES** | 5 | Índices compuestos H×E×V |
+
+### Diagrama IPCC
+
+```
+       HAZARD ←──────→ EXPOSURE
+           ↘              ↙
+              RISK
+           ↙              ↘
+    VULNERABILITY ←→ VULNERABILITY
+    (Sensibilidad)   (Cap. Adaptativa)
+```
+
+---
+
+## Catálogo Completo de Variables
+
+### Variables de Gobernanza
+
+| Variable | Descripción | Fuente | Escala |
+|----------|-------------|--------|--------|
+| `UAI_housing` | Capacidad adaptativa vivienda | Neder et al. 2021 | 0-1 |
+| `UAI_env` | Gestión ambiental | Neder et al. 2021 | 0-1 |
+| `UAI_food` | Seguridad alimentaria | Neder et al. 2021 | 0-1 |
+| `UAI_mob` | Movilidad urbana | Neder et al. 2021 | 0-1 |
+| `UAI_Crisk` | Gestión riesgo climático | Neder et al. 2021 | 0-1 |
+| `idx_gobernanza` | mean(UAI_*) | Calculado | 0-1 |
+| `idx_gobernanza_100` | Gobernanza escalada | Calculado | 0-100 |
+| `esgoto_tratado` | % esgoto tratado | SNIS | % |
+| `IDESP_ensino_medio` | Índice educación | SEADE | index |
+
+### Variables de Biodiversidad
+
+| Variable | Descripción | Fuente | Escala |
+|----------|-------------|--------|--------|
+| `forest_cover` | Cobertura forestal | MapBiomas | % |
+| `mean_species_richness` | Riqueza especies vertebrados | Pre-procesado | count |
+| `max_species_richness` | Riqueza máxima vertebrados | Pre-procesado | count |
+| `pol_deficit` | Déficit polinización | Pre-procesado | index |
+| `Vert_rich_risk` | Riesgo pérdida riqueza | Calculado | index |
+| `idx_biodiv` | Índice biodiversidad | Calculado | 0-100 |
+| `tercil_biodiv` | Tercil biodiversidad | Calculado | 1-3 |
+
+### Variables de Riesgo Climático
+
+| Variable | Descripción | Fuente | Escala |
+|----------|-------------|--------|--------|
+| `flooding_exposure` | Exposición inundaciones | MapBiomas/INPE | index |
+| `flooding_risks` | Riesgo inundación | Calculado | index |
+| `hydric_stress_exp` | Exposición estrés hídrico | ANA | index |
+| `hydric_stress_risk` | Riesgo estrés hídrico | Calculado | index |
+| `fire_incidence_mean` | Incidencia media fuego | INPE | rate |
+| `fire_risk_index` | Riesgo compuesto fuego | Calculado | index |
+| `idx_clima` | Índice riesgo climático | Calculado | 0-100 |
+
+### Variables de Vulnerabilidad Social
+
+| Variable | Descripción | Fuente | Escala |
+|----------|-------------|--------|--------|
+| `population` | Población total | IBGE SIDRA | count |
+| `pct_rural` | % población rural | IBGE Censo | % |
+| `pct_pobreza` | % en pobreza | CadÚnico | % |
+| `pct_preta` | % población negra | IBGE Censo | % |
+| `pct_indigena` | % población indígena | IBGE Censo | % |
+| `idx_vulnerabilidad` | Índice vulnerabilidad | Calculado | 0-100 |
+
+### Variables de Riesgo Salud (principales)
+
+| Variable | Descripción | Fuente | Escala |
+|----------|-------------|--------|--------|
+| `incidence_mean_dengue` | Incidencia dengue | DATASUS/SINAN | por 100k/año |
+| `incidence_mean_malaria` | Incidencia malaria | DATASUS/SINAN | por 100k/año |
+| `incidence_mean_leishmaniose` | Incidencia leishmaniasis | DATASUS/SINAN | por 100k/año |
+| `incidence_mean_leptospirose` | Incidencia leptospirosis | DATASUS/SINAN | por 100k/año |
+| `incidence_diarrhea_mean` | Incidencia diarrea | DATASUS/SINAN | por 100k/año |
+| `health_hosp_resp_mean` | Hosp. respiratorias | DATASUS/SIH | rate |
+| `health_death_circ_mean` | Mort. cardiovascular | DATASUS/SIM | rate |
+| `persist_*` | Años con casos (0-10) | Calculado | count |
+| `copresence_*` | Co-ocurrencia enfermedades | Calculado | count |
+
+---
+
+## Hallazgos Principales del Análisis (H1-H5)
+
+### H1: ¿Qué predice gobernanza?
+- **Mejor predictor**: `pct_pobreza` (β = -0.43, R²m = 27%)
+- **Hallazgo**: Gobernanza es **reactiva** a riesgos (más riesgo → más gobernanza)
+
+### H2: ¿Vulnerabilidad modula?
+- **Interacción más fuerte**: Pobreza × Estrés Hídrico (ΔAIC = -55.8)
+- **Hallazgo**: Pobreza **anula** la respuesta reactiva a riesgos
+
+### H3: ¿Clima × Salud interactúan?
+- **Interacción inesperada**: Hosp.Resp × Estrés Hídrico (p = 0.002)
+- **Hallazgo**: Efectos mixtos (sinergias positivas y negativas)
+
+### H4: ¿Qué predice salud?
+- **Mejor predictor dengue**: `pct_rural` (β = -0.22, R²m = 43%)
+- **Hallazgo**: Efecto bosque-dengue está **confundido** por urbanización (36% cambio con controles)
+
+### H5: ¿Qué predice riesgo climático?
+- **Mejor predictor fuego**: `pct_pobreza` (β = -5.55, negativo)
+- **Hallazgo**: Desarrollo económico → **mayor** riesgo climático (paradoja)
+
+---
+
+*Última actualización: 2026-01-29 (+ Análisis H1-H6 completo)*

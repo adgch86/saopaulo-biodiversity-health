@@ -151,59 +151,116 @@ def load_and_prepare_data():
 # MIXED MODEL FITTING
 # ============================================================
 
-def fit_mixed_model_logit(df, outcome_logit, predictor, group_var='cod_microrregiao'):
+def fit_mixed_model_logit(df, outcome_logit, predictor, structure='best'):
     """
-    Fit mixed model: logit(UAI) ~ predictor + (1|group)
+    Fit mixed model: logit(UAI) ~ predictor + random effects
+    Compares 3 structures and selects best by AIC:
+    1. micro_only: (1|microrregiao)
+    2. crossed: (1|microrregiao) + (1|mesorregiao)
+    3. nested: (1|mesorregiao/microrregiao) - approximated via vc
+
     Uses ML for AIC comparison.
     """
-    data = df[[outcome_logit, predictor, group_var]].dropna()
+    required_cols = [outcome_logit, predictor, 'cod_microrregiao', 'cod_mesorregiao']
+    if not all(c in df.columns for c in required_cols):
+        return None
+
+    data = df[required_cols].dropna()
     if len(data) < 50:
         return None
 
     # Sanitize names
     data = data.rename(columns={outcome_logit: 'y', predictor: 'x'})
 
+    results_by_structure = {}
+
+    # Structure 1: Only microrregiao
     try:
-        model = smf.mixedlm('y ~ x', data, groups=data[group_var])
-        result = model.fit(reml=False, method='powell')
+        model1 = smf.mixedlm('y ~ x', data, groups=data['cod_microrregiao'])
+        result1 = model1.fit(reml=False, method='powell')
+        if result1.converged:
+            k1 = len(result1.params) + 1
+            aic1 = -2 * result1.llf + 2 * k1
+            results_by_structure['micro_only'] = {'result': result1, 'aic': aic1, 'k': k1}
+    except:
+        pass
 
-        if not result.converged:
-            return None
+    # Structure 2: Crossed - micro + meso as variance components
+    try:
+        vc = {'meso': '0 + C(cod_mesorregiao)'}
+        model2 = smf.mixedlm('y ~ x', data, groups=data['cod_microrregiao'], vc_formula=vc)
+        result2 = model2.fit(reml=False, method='powell')
+        if result2.converged:
+            k2 = len(result2.params) + 2  # +2 for both random effects
+            aic2 = -2 * result2.llf + 2 * k2
+            results_by_structure['crossed'] = {'result': result2, 'aic': aic2, 'k': k2}
+    except:
+        pass
 
-        # Compute metrics
-        k = len(result.params) + 1  # params + random effect variance
-        n = len(data)
-        aic = -2 * result.llf + 2 * k
-        bic = -2 * result.llf + k * np.log(n)
-        aicc = aic + (2 * k * (k + 1)) / (n - k - 1) if n > k + 1 else np.inf
+    # Structure 3: Nested - meso as groups, micro as vc within meso
+    try:
+        vc3 = {'micro': '0 + C(cod_microrregiao)'}
+        model3 = smf.mixedlm('y ~ x', data, groups=data['cod_mesorregiao'], vc_formula=vc3)
+        result3 = model3.fit(reml=False, method='powell')
+        if result3.converged:
+            k3 = len(result3.params) + 2
+            aic3 = -2 * result3.llf + 2 * k3
+            results_by_structure['nested'] = {'result': result3, 'aic': aic3, 'k': k3}
+    except:
+        pass
 
-        # Marginal R2 (Nakagawa & Schielzeth 2013)
-        var_fixed = np.var(result.fittedvalues)
-        var_random = float(result.cov_re.iloc[0, 0]) if hasattr(result.cov_re, 'iloc') else float(result.cov_re)
-        var_resid = result.scale
-        r2_marginal = var_fixed / (var_fixed + var_random + var_resid)
-        r2_conditional = (var_fixed + var_random) / (var_fixed + var_random + var_resid)
-
-        return {
-            'aic': aic,
-            'bic': bic,
-            'aicc': aicc,
-            'llf': result.llf,
-            'coef': result.params['x'],
-            'se': result.bse['x'],
-            'p_value': result.pvalues['x'],
-            'r2_marginal': r2_marginal,
-            'r2_conditional': r2_conditional,
-            'n': n,
-            'converged': True
-        }
-    except Exception as e:
+    if not results_by_structure:
         return None
+
+    # Select best structure by AIC
+    best_structure = min(results_by_structure.keys(), key=lambda x: results_by_structure[x]['aic'])
+    best = results_by_structure[best_structure]
+    result = best['result']
+    k = best['k']
+    n = len(data)
+    aic = best['aic']
+    bic = -2 * result.llf + k * np.log(n)
+    aicc = aic + (2 * k * (k + 1)) / (n - k - 1) if n > k + 1 else np.inf
+
+    # Marginal R2 (Nakagawa & Schielzeth 2013)
+    var_fixed = np.var(result.fittedvalues)
+    # Handle different cov_re structures
+    if hasattr(result.cov_re, 'iloc'):
+        var_random = float(result.cov_re.iloc[0, 0])
+    elif hasattr(result.cov_re, 'values'):
+        var_random = float(result.cov_re.values[0, 0]) if result.cov_re.size > 0 else 0
+    else:
+        var_random = float(result.cov_re) if result.cov_re else 0
+    var_resid = result.scale
+    r2_marginal = var_fixed / (var_fixed + var_random + var_resid)
+    r2_conditional = (var_fixed + var_random) / (var_fixed + var_random + var_resid)
+
+    # Collect AICs for all structures
+    all_aics = {s: results_by_structure[s]['aic'] for s in results_by_structure}
+
+    return {
+        'aic': aic,
+        'bic': bic,
+        'aicc': aicc,
+        'llf': result.llf,
+        'coef': result.params['x'],
+        'se': result.bse['x'],
+        'p_value': result.pvalues['x'],
+        'r2_marginal': r2_marginal,
+        'r2_conditional': r2_conditional,
+        'n': n,
+        'converged': True,
+        'best_structure': best_structure,
+        'aic_micro': all_aics.get('micro_only', np.nan),
+        'aic_crossed': all_aics.get('crossed', np.nan),
+        'aic_nested': all_aics.get('nested', np.nan)
+    }
 
 
 def run_model_selection(df, outcome_var, dimension_key):
     """
     Compare all predictors within a dimension for a given outcome.
+    Automatically selects best hierarchical structure (micro, crossed, nested) by AIC.
     Returns sorted results by AIC with delta AIC.
     """
     dim = DIMENSIONS[dimension_key]
@@ -244,6 +301,56 @@ def run_model_selection(df, outcome_var, dimension_key):
     results_df['aic_weight'] = results_df['aic_weight'] / results_df['aic_weight'].sum()
 
     return results_df
+
+
+def compare_random_structures(df):
+    """
+    Compare the 3 random effect structures across all outcomes/predictors.
+    Returns summary of which structure wins most often.
+    """
+    print("\n" + "=" * 70)
+    print("COMPARACION DE ESTRUCTURAS JERARQUICAS")
+    print("1. micro_only: (1|microrregiao)")
+    print("2. crossed: (1|micro) + (1|meso)")
+    print("3. nested: (1|meso/micro)")
+    print("=" * 70)
+
+    structure_wins = {'micro_only': 0, 'crossed': 0, 'nested': 0}
+    structure_details = []
+
+    for outcome_var in GOVERNANCE_VARS.keys():
+        outcome_logit = f'{outcome_var}_logit'
+        if outcome_logit not in df.columns:
+            continue
+
+        for dim_key, dim in DIMENSIONS.items():
+            for predictor in dim['vars']:
+                if predictor not in df.columns:
+                    continue
+
+                predictor_z = f'{predictor}_z' if f'{predictor}_z' in df.columns else predictor
+                result = fit_mixed_model_logit(df, outcome_logit, predictor_z)
+
+                if result and 'best_structure' in result:
+                    structure_wins[result['best_structure']] += 1
+                    structure_details.append({
+                        'outcome': outcome_var,
+                        'predictor': predictor,
+                        'dimension': dim['label'],
+                        'best_structure': result['best_structure'],
+                        'aic_micro': result.get('aic_micro', np.nan),
+                        'aic_crossed': result.get('aic_crossed', np.nan),
+                        'aic_nested': result.get('aic_nested', np.nan)
+                    })
+
+    total = sum(structure_wins.values())
+    print(f"\n  Estructura ganadora (por AIC) en {total} modelos:")
+    for struct, wins in sorted(structure_wins.items(), key=lambda x: -x[1]):
+        pct = wins / total * 100 if total > 0 else 0
+        print(f"    {struct:<15}: {wins:>4} ({pct:>5.1f}%)")
+
+    details_df = pd.DataFrame(structure_details)
+    return details_df, structure_wins
 
 
 # ============================================================
@@ -503,11 +610,22 @@ def main():
     print("Invirtiendo la logica causal del nexus")
     print("Solicitud: Dr. Adrian David Gonzalez Chaves (29/01/2026)")
     print("=" * 70)
+    print("\nModelo: logit(UAI) ~ predictor + efectos aleatorios")
+    print("Comparando 3 estructuras jerarquicas:")
+    print("  1. micro_only: (1|microrregiao)")
+    print("  2. crossed: (1|micro) + (1|meso)")
+    print("  3. nested: (1|meso/micro)")
+    print("Seleccion automatica por AIC")
 
     # Load data
     df = load_and_prepare_data()
 
-    # Run analysis
+    # Compare random effect structures
+    structure_details, structure_wins = compare_random_structures(df)
+    structure_details.to_csv(os.path.join(OUTPUT_DIR, 'h1_structure_comparison.csv'), index=False)
+    print(f"\n  [SAVED] h1_structure_comparison.csv")
+
+    # Run analysis (now uses best structure per model)
     all_results, best_results = run_h1_analysis(df)
 
     # Save results

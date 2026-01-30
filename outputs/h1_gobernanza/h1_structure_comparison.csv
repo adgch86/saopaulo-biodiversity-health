@@ -1,0 +1,121 @@
+outcome,predictor,dimension,best_structure,aic_micro,aic_crossed,aic_nested
+UAI_housing,forest_cover,Biodiversidad,micro_only,4848.2636732135525,4850.2636732135525,4850.2636732135525
+UAI_housing,mean_species_richness,Biodiversidad,micro_only,4849.327009566756,4851.327009566756,4851.327009566756
+UAI_housing,pol_deficit,Biodiversidad,micro_only,4838.952957872267,4840.952957872267,4840.952957872267
+UAI_housing,idx_biodiv,Biodiversidad,micro_only,4849.327009566756,4851.327009566756,4851.327009566756
+UAI_housing,incidence_mean_dengue,Riesgo Salud,micro_only,4839.708752365805,4841.708752365805,4841.708752365805
+UAI_housing,incidence_mean_malaria,Riesgo Salud,micro_only,4849.376696260097,4851.376696260097,4851.376696260097
+UAI_housing,incidence_mean_leishmaniose,Riesgo Salud,micro_only,4848.6766855049245,4850.6766855049245,4850.6766855049245
+UAI_housing,incidence_mean_leptospirose,Riesgo Salud,micro_only,4848.944167205382,4850.944167205382,4850.944167205382
+UAI_housing,incidence_diarrhea_mean,Riesgo Salud,micro_only,4847.857509520305,4849.857509520305,4849.857509520305
+UAI_housing,health_death_circ_mean,Riesgo Salud,micro_only,4847.224388407418,4849.224388407418,4849.224388407418
+UAI_housing,health_hosp_resp_mean,Riesgo Salud,micro_only,4846.084984115421,4848.084984115421,4848.084984115423
+UAI_housing,flooding_risks,Riesgo Climatico,micro_only,4819.417090378976,4821.417090378976,4821.417090378978
+UAI_housing,fire_risk_index,Riesgo Climatico,micro_only,4798.017412522851,4800.017412522851,4800.017412522851
+UAI_housing,hydric_stress_risk,Riesgo Climatico,micro_only,4828.2806470059295,4830.2806470059295,4830.280647005928
+UAI_housing,idx_clima,Riesgo Climatico,micro_only,4802.122411704306,4804.122411704306,4804.122411704306
+UAI_housing,pct_pobreza,Vulnerabilidad,micro_only,4742.957885435459,4744.957885435459,4744.957885435459
+UAI_housing,pct_rural,Vulnerabilidad,micro_only,4783.953187605777,4785.953187605777,4785.953187605777
+UAI_housing,pct_preta,Vulnerabilidad,micro_only,4839.987925162051,4841.987925162051,4841.987925162051
+UAI_housing,pct_indigena,Vulnerabilidad,micro_only,4848.591090790074,4850.591090790074,4850.591090790074
+UAI_housing,idx_vulnerabilidad,Vulnerabilidad,micro_only,4768.076193741124,4770.076193741124,4770.076193741124
+UAI_env,forest_cover,Biodiversidad,micro_only,3312.784173981913,3314.784173981913,3314.784173981913
+UAI_env,mean_species_richness,Biodiversidad,micro_only,3312.802766415796,3314.802766415796,3314.802766415797
+UAI_env,pol_deficit,Biodiversidad,micro_only,3312.796727275887,3314.796727275887,3314.796727275887
+UAI_env,idx_biodiv,Biodiversidad,micro_only,3312.802766415796,3314.802766415796,3314.802766415797
+UAI_env,incidence_mean_dengue,Riesgo Salud,micro_only,3312.700994631551,3314.700994631551,3314.700994631551
+UAI_env,incidence_mean_malaria,Riesgo Salud,micro_only,3311.2941646393,3313.2941646393,3313.2941646393
+UAI_env,incidence_mean_leishmaniose,Riesgo Salud,micro_only,3312.504372719728,3314.504372719728,3314.504372719727
+UAI_env,incidence_mean_leptospirose,Riesgo Salud,micro_only,3310.9581713162843,3312.9581713162843,3312.9581713162843
+UAI_env,incidence_diarrhea_mean,Riesgo Salud,micro_only,3312.6819874817456,3314.6819874817456,3314.6819874817456
+UAI_env,health_death_circ_mean,Riesgo Salud,micro_only,3312.7834883133937,3314.7834883133937,3314.7834883133937
+UAI_env,health_hosp_resp_mean,Riesgo Salud,micro_only,3311.8648467384655,3313.8648467384655,3313.8648467384646
+UAI_env,flooding_risks,Riesgo Climatico,micro_only,3303.978064696279,3305.978064696279,3305.978064696279
+UAI_env,fire_risk_index,Riesgo Climatico,micro_only,3305.3131908916357,3307.3131908916357,3307.3131908916357
+UAI_env,hydric_stress_risk,Riesgo Climatico,micro_only,3312.224912684688,3314.224912684688,3314.224912684688
+UAI_env,idx_clima,Riesgo Climatico,micro_only,3304.8940553601533,3306.8940553601533,3306.8940553601533
+UAI_env,pct_pobreza,Vulnerabilidad,micro_only,3304.629663682371,3306.629663682371,3306.629663682371
+UAI_env,pct_rural,Vulnerabilidad,micro_only,3301.544953837386,3303.544953837386,3303.544953837386
+UAI_env,pct_preta,Vulnerabilidad,micro_only,3312.7902799220046,3314.7902799220046,3314.7902799220046
+UAI_env,pct_indigena,Vulnerabilidad,micro_only,3312.7412180242263,3314.7412180242263,3314.7412180242263
+UAI_env,idx_vulnerabilidad,Vulnerabilidad,micro_only,3300.4860317278526,3302.4860317278526,3302.4860317278535
+UAI_food,forest_cover,Biodiversidad,micro_only,4288.678239867271,4290.678239867271,4290.678239867272
+UAI_food,mean_species_richness,Biodiversidad,micro_only,4287.986677976835,4289.986677976835,4289.986677976835
+UAI_food,pol_deficit,Biodiversidad,micro_only,4280.838173486762,4282.838173486762,4282.838173486762
+UAI_food,idx_biodiv,Biodiversidad,micro_only,4287.986677976835,4289.986677976835,4289.986677976835
+UAI_food,incidence_mean_dengue,Riesgo Salud,micro_only,4287.554054671113,4289.554054671113,4289.554054671113
+UAI_food,incidence_mean_malaria,Riesgo Salud,micro_only,4288.673540739654,4290.673540739654,4290.6735407396545
+UAI_food,incidence_mean_leishmaniose,Riesgo Salud,micro_only,4285.975258489159,4287.975258489159,4287.975258489159
+UAI_food,incidence_mean_leptospirose,Riesgo Salud,micro_only,4288.629715859721,4290.629715859721,4290.629715859721
+UAI_food,incidence_diarrhea_mean,Riesgo Salud,micro_only,4287.962643943017,4289.962643943017,4289.962643943017
+UAI_food,health_death_circ_mean,Riesgo Salud,micro_only,4286.597627076108,4288.597627076108,4288.597627076108
+UAI_food,health_hosp_resp_mean,Riesgo Salud,micro_only,4287.496464050654,4289.496464050654,4289.496464050654
+UAI_food,flooding_risks,Riesgo Climatico,micro_only,4287.582408747601,4289.582408747601,4289.582408747602
+UAI_food,fire_risk_index,Riesgo Climatico,micro_only,4280.441328481937,4282.441328481937,4282.441328481937
+UAI_food,hydric_stress_risk,Riesgo Climatico,micro_only,4288.272259138823,4290.272259138823,4290.272259138823
+UAI_food,idx_clima,Riesgo Climatico,micro_only,4287.278839322776,4289.278839322776,4289.278839322777
+UAI_food,pct_pobreza,Vulnerabilidad,micro_only,4284.004110172133,4286.004110172133,4286.004110172132
+UAI_food,pct_rural,Vulnerabilidad,micro_only,4283.455691760564,4285.455691760564,4285.455691760564
+UAI_food,pct_preta,Vulnerabilidad,micro_only,4278.330045580114,4280.330045580114,4280.330045580114
+UAI_food,pct_indigena,Vulnerabilidad,micro_only,4287.749753897402,4289.749753897402,4289.749753897402
+UAI_food,idx_vulnerabilidad,Vulnerabilidad,micro_only,4285.433605261737,4287.433605261737,4287.433605261737
+UAI_mob,forest_cover,Biodiversidad,micro_only,3787.327436528876,3789.327436528876,3789.327436528876
+UAI_mob,mean_species_richness,Biodiversidad,micro_only,3789.2543708816347,3791.2543708816347,3791.2543708816356
+UAI_mob,pol_deficit,Biodiversidad,micro_only,3779.5571907053754,3781.5571907053754,3781.5571907053754
+UAI_mob,idx_biodiv,Biodiversidad,micro_only,3789.2543708816347,3791.2543708816347,3791.2543708816356
+UAI_mob,incidence_mean_dengue,Riesgo Salud,micro_only,3789.4928795545975,3791.4928795545975,3791.4928795545966
+UAI_mob,incidence_mean_malaria,Riesgo Salud,micro_only,3790.9391285989695,3792.9391285989695,3792.9391285989695
+UAI_mob,incidence_mean_leishmaniose,Riesgo Salud,micro_only,3791.6853379211734,3793.6853379211734,3793.6853379211725
+UAI_mob,incidence_mean_leptospirose,Riesgo Salud,micro_only,3791.75877508759,3793.75877508759,3793.75877508759
+UAI_mob,incidence_diarrhea_mean,Riesgo Salud,micro_only,3790.829500479844,3792.829500479844,3792.829500479844
+UAI_mob,health_death_circ_mean,Riesgo Salud,micro_only,3790.1924048296178,3792.1924048296178,3792.1924048296178
+UAI_mob,health_hosp_resp_mean,Riesgo Salud,micro_only,3787.3062994680213,3789.3062994680213,3789.3062994680213
+UAI_mob,flooding_risks,Riesgo Climatico,micro_only,3775.0986921263484,3777.0986921263484,3777.0986921263484
+UAI_mob,fire_risk_index,Riesgo Climatico,micro_only,3770.3865991935663,3772.3865991935663,3772.3865991935663
+UAI_mob,hydric_stress_risk,Riesgo Climatico,micro_only,3771.971188024312,3773.971188024312,3773.971188024312
+UAI_mob,idx_clima,Riesgo Climatico,micro_only,3760.058843961473,3762.058843961473,3762.058843961473
+UAI_mob,pct_pobreza,Vulnerabilidad,micro_only,3707.147463422182,3709.147463422182,3709.1474634221813
+UAI_mob,pct_rural,Vulnerabilidad,micro_only,3752.3408186263905,3754.3408186263905,3754.3408186263896
+UAI_mob,pct_preta,Vulnerabilidad,micro_only,3782.5389806949306,3784.5389806949306,3784.5389806949315
+UAI_mob,pct_indigena,Vulnerabilidad,micro_only,3791.829890926704,3793.829890926704,3793.829890926704
+UAI_mob,idx_vulnerabilidad,Vulnerabilidad,micro_only,3739.089659790474,3741.089659790474,3741.089659790474
+UAI_Crisk,forest_cover,Biodiversidad,micro_only,3864.7664966052807,3866.7664966052807,3866.7664966052807
+UAI_Crisk,mean_species_richness,Biodiversidad,micro_only,3866.0433119352483,3868.0433119352483,3868.0433119352483
+UAI_Crisk,pol_deficit,Biodiversidad,micro_only,3861.294190306303,3863.294190306303,3863.294190306303
+UAI_Crisk,idx_biodiv,Biodiversidad,micro_only,3866.0433119352483,3868.0433119352483,3868.0433119352483
+UAI_Crisk,incidence_mean_dengue,Riesgo Salud,micro_only,3870.222563961309,3872.222563961309,3872.222563961308
+UAI_Crisk,incidence_mean_malaria,Riesgo Salud,micro_only,3863.1469840106156,3865.1469840106156,3865.1469840106156
+UAI_Crisk,incidence_mean_leishmaniose,Riesgo Salud,micro_only,3873.373339764882,3875.373339764882,3875.373339764882
+UAI_Crisk,incidence_mean_leptospirose,Riesgo Salud,micro_only,3873.344428060078,3875.344428060078,3875.344428060078
+UAI_Crisk,incidence_diarrhea_mean,Riesgo Salud,micro_only,3873.0982459565175,3875.0982459565175,3875.0982459565175
+UAI_Crisk,health_death_circ_mean,Riesgo Salud,micro_only,3871.5590827199676,3873.5590827199676,3873.5590827199667
+UAI_Crisk,health_hosp_resp_mean,Riesgo Salud,micro_only,3869.310086658619,3871.310086658619,3871.310086658619
+UAI_Crisk,flooding_risks,Riesgo Climatico,micro_only,3849.3372267999102,3851.3372267999102,3851.3372267999102
+UAI_Crisk,fire_risk_index,Riesgo Climatico,micro_only,3870.0536941182563,3872.0536941182563,3872.0536941182554
+UAI_Crisk,hydric_stress_risk,Riesgo Climatico,micro_only,3871.940876622164,3873.940876622164,3873.940876622164
+UAI_Crisk,idx_clima,Riesgo Climatico,micro_only,3852.154612903779,3854.154612903779,3854.154612903779
+UAI_Crisk,pct_pobreza,Vulnerabilidad,micro_only,3829.4098562033496,3831.4098562033496,3831.4098562033505
+UAI_Crisk,pct_rural,Vulnerabilidad,micro_only,3860.5671795471508,3862.5671795471508,3862.5671795471508
+UAI_Crisk,pct_preta,Vulnerabilidad,micro_only,3868.0991785381966,3870.0991785381966,3870.0991785381975
+UAI_Crisk,pct_indigena,Vulnerabilidad,micro_only,3873.412631551212,3875.412631551212,3875.412631551212
+UAI_Crisk,idx_vulnerabilidad,Vulnerabilidad,micro_only,3849.8263139245964,3851.8263139245964,3851.8263139245964
+idx_gobernanza,forest_cover,Biodiversidad,micro_only,1662.3884831303258,1664.3884831303258,1664.3884831303249
+idx_gobernanza,mean_species_richness,Biodiversidad,micro_only,1664.3002265920231,1666.3002265920231,1666.3002265920231
+idx_gobernanza,pol_deficit,Biodiversidad,micro_only,1658.910686861369,1660.910686861369,1660.910686861368
+idx_gobernanza,idx_biodiv,Biodiversidad,micro_only,1664.3002265920231,1666.3002265920231,1666.3002265920231
+idx_gobernanza,incidence_mean_dengue,Riesgo Salud,micro_only,1659.037312228279,1661.037312228279,1661.037312228279
+idx_gobernanza,incidence_mean_malaria,Riesgo Salud,micro_only,1665.5058102541852,1667.5058102541852,1667.5058102541852
+idx_gobernanza,incidence_mean_leishmaniose,Riesgo Salud,micro_only,1665.7315810079172,1667.7315810079172,1667.7315810079172
+idx_gobernanza,incidence_mean_leptospirose,Riesgo Salud,micro_only,1664.939198821191,1666.939198821191,1666.93919882119
+idx_gobernanza,incidence_diarrhea_mean,Riesgo Salud,micro_only,1665.0943020264158,1667.0943020264158,1667.0943020264149
+idx_gobernanza,health_death_circ_mean,Riesgo Salud,micro_only,1664.4811567737506,1666.4811567737506,1666.4811567737497
+idx_gobernanza,health_hosp_resp_mean,Riesgo Salud,micro_only,1661.132435555387,1663.132435555387,1663.132435555387
+idx_gobernanza,flooding_risks,Riesgo Climatico,micro_only,1636.3897666722696,1638.3897666722696,1638.3897666722696
+idx_gobernanza,fire_risk_index,Riesgo Climatico,micro_only,1603.4814430407669,1605.4814430407669,1605.4814430407678
+idx_gobernanza,hydric_stress_risk,Riesgo Climatico,micro_only,1646.0153440465583,1648.0153440465583,1648.0153440465583
+idx_gobernanza,idx_clima,Riesgo Climatico,micro_only,1620.3884769001197,1622.3884769001197,1622.3884769001197
+idx_gobernanza,pct_pobreza,Vulnerabilidad,micro_only,1519.9514440515723,1521.9514440515723,1521.9514440515723
+idx_gobernanza,pct_rural,Vulnerabilidad,micro_only,1609.0404395073429,1611.0404395073429,1611.0404395073429
+idx_gobernanza,pct_preta,Vulnerabilidad,micro_only,1662.4716590214148,1664.4716590214148,1664.4716590214148
+idx_gobernanza,pct_indigena,Vulnerabilidad,micro_only,1665.0698428499672,1667.0698428499672,1667.0698428499663
+idx_gobernanza,idx_vulnerabilidad,Vulnerabilidad,micro_only,1558.4066034457792,1560.4066034457792,1560.4066034457792

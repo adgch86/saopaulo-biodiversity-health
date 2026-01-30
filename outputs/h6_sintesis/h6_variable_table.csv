@@ -1,0 +1,105 @@
+variable,dimension_nexus,descripcion,fuente,tipo,min,max,mean,na_count
+cod_ibge,Identificadores,Codigo IBGE del municipio (7 digitos),IBGE,ID,350010.0,355730.0,352869.3348837209,0
+Municipio,Identificadores,Nombre del municipio,IBGE,ID,,,,0
+cod_microrregiao,Identificadores,Codigo de la microrregion,IBGE,ID,35001.0,35063.0,35028.95503875969,0
+nome_microrregiao,Identificadores,Nombre de la microrregion,IBGE,ID,,,,0
+cod_mesorregiao,Identificadores,Codigo de la mesorregion,IBGE,ID,3501.0,3515.0,3506.8015503875968,0
+nome_mesorregiao,Identificadores,Nombre de la mesorregion,IBGE,ID,,,,0
+population,Vulnerabilidad_Social,Poblacion total del municipio (promedio 2010-2019),IBGE SIDRA,count,856.0,11352751.0,66413.51705426356,0
+pct_rural,Vulnerabilidad_Social,Porcentaje de poblacion rural,IBGE Censo,%,0.0,73.0,13.469767441860466,0
+pct_urbana,Vulnerabilidad_Social,Porcentaje de poblacion urbana,IBGE Censo,%,27.0,100.0,86.53023255813953,0
+population_preta,Vulnerabilidad_Social,Poblacion que se autodeclara negra,IBGE Censo,count,23.5,948078.0,4514.981395348837,0
+population_branca,Vulnerabilidad_Social,Poblacion que se autodeclara blanca,IBGE Censo,count,492.5,6519545.0,40336.127131782945,0
+population_indigena,Vulnerabilidad_Social,Poblacion que se autodeclara indigena,IBGE Censo,count,0.0,15352.0,71.56744186046511,0
+pct_pobreza,Vulnerabilidad_Social,Porcentaje de poblacion en situacion de pobreza,IBGE/CadUnico,%,0.0005707867634901,5.782710280373832,0.8081616282870425,0
+pct_preta,Vulnerabilidad_Social,Porcentaje de poblacion negra,IBGE Censo,%,1.3111888111888113,13.229478729778313,5.062494572148302,0
+pct_indigena,Vulnerabilidad_Social,Porcentaje de poblacion indigena,IBGE Censo,%,0.0,13.048083033255669,0.12730518022397722,0
+n_pessoas_pobreza,Sin clasificar,,,,38.0,87.9,65.69736434108528,0
+n_familias_rua,Vulnerabilidad_Social,Numero de familias en situacion de calle,CadUnico,count,0.0,61299.0,159.8186046511628,0
+mort_infantil,Riesgo_Salud,Tasa de mortalidad infantil (por 1000 nacidos vivos),DATASUS/SIM,rate,0.0,80.0,10.85627906976744,0
+IDESP_ensino_medio,Gobernanza,Indice de Desarrollo de la Educacion (ensenanza media),SEADE,index,0.4,5.5,2.1055900621118013,1
+esgoto_tratado,Gobernanza,Porcentaje de esgoto tratado,SNIS,%,0.0,100.0,77.8778125,5
+UAI_housing,Gobernanza,Indice de Adaptacion Urbana - Vivienda (0-1),Neder et al. 2021,index,0.0,1.0,0.34421705426356586,0
+UAI_env,Gobernanza,Indice de Adaptacion Urbana - Ambiental (0-1),Neder et al. 2021,index,0.0,1.0,0.48666666666666664,0
+UAI_food,Gobernanza,Indice de Adaptacion Urbana - Alimentacion (0-1),Neder et al. 2021,index,0.0,1.0,0.4050387596899225,0
+UAI_mob,Gobernanza,Indice de Adaptacion Urbana - Movilidad (0-1),Neder et al. 2021,index,0.0,1.0,0.4111627906976745,0
+UAI_Crisk,Gobernanza,Indice de Adaptacion Urbana - Riesgo Climatico (0-1),Neder et al. 2021,index,0.0,1.0,0.3156589147286822,0
+idx_gobernanza,Gobernanza,Indice compuesto de gobernanza = mean(UAI_*) (0-1),Calculado,index,0.04,0.96,0.3925488372093023,0
+idx_gobernanza_100,Gobernanza,Indice de gobernanza escalado 0-100,Calculado,index,4.0,96.0,39.25488372093024,0
+mean_species_richness,Biodiversidad,Riqueza media de especies de vertebrados,Datos pre-procesados,count,252.258620689655,757.166666666667,623.2825871374673,0
+max_species_richness,Biodiversidad,Riqueza maxima de especies de vertebrados,Datos pre-procesados,count,309.0,807.0,689.2232558139535,0
+Vert_rich_risk,Biodiversidad,Riesgo por perdida de riqueza de vertebrados,Calculado,index,0.0,43.66,9.757503875968993,0
+forest_cover,Biodiversidad,Porcentaje de cobertura forestal,MapBiomas,%,1.6,94.1,20.4968992248062,0
+pol_deficit,Biodiversidad,Deficit de polinizacion (indicador de degradacion),Datos pre-procesados,index,0.0,0.997893528116,0.8784174036180403,0
+idx_biodiv,Biodiversidad,Indice compuesto de biodiversidad (0-100),Calculado,index,0.0,100.0,73.48347276381186,0
+flooding_exposure,Riesgo_Climatico,Exposicion a inundaciones (area inundable),MapBiomas/INPE,index,0.07,0.94,0.5241860465116279,0
+flooding_risks,Riesgo_Climatico,Indice de riesgo de inundacion,Calculado,index,0.0,1.0,0.07672868217054264,0
+hydric_stress_exp,Riesgo_Climatico,Exposicion a estres hidrico,ANA,index,0.06,1.0,0.5950542635658915,0
+hydric_stress_risk,Riesgo_Climatico,Indice de riesgo de estres hidrico,Calculado,index,0.0,0.77,0.48990697674418604,0
+idx_clima,Riesgo_Climatico,Indice compuesto de riesgo climatico (0-100),Calculado,index,0.0,87.5,28.331782945736435,0
+persist_dengue,Riesgo_Salud,Anos con casos de dengue (0-10),DATASUS/SINAN,count,0.0,10.0,8.865116279069767,0
+persist_leishmaniose,Riesgo_Salud,Anos con casos de leishmaniasis (0-10),DATASUS/SINAN,count,0.0,10.0,3.786046511627907,0
+persist_leptospirose,Riesgo_Salud,Anos con casos de leptospirosis (0-10),DATASUS/SINAN,count,0.0,10.0,5.27906976744186,0
+persist_malaria,Riesgo_Salud,Anos con casos de malaria (0-10),DATASUS/SINAN,count,0.0,10.0,1.4325581395348836,0
+incidence_mean_dengue,Riesgo_Salud,Incidencia media de dengue (por 100k hab/ano),DATASUS/SINAN,rate,0.0,2816.2130494731,673.5033216979085,0
+incidence_mean_leishmaniose,Riesgo_Salud,Incidencia media de leishmaniasis (por 100k hab/ano),DATASUS/SINAN,rate,0.0,209.725225357693,6.273359295816629,0
+incidence_mean_leptospirose,Riesgo_Salud,Incidencia media de leptospirosis (por 100k hab/ano),DATASUS/SINAN,rate,0.0,179.61206277943,8.924510290565346,0
+incidence_mean_malaria,Riesgo_Salud,Incidencia media de malaria (por 100k hab/ano),DATASUS/SINAN,rate,0.0,74.7888851384424,0.9068184920506804,0
+incidence_max_dengue,Riesgo_Salud,Incidencia maxima de dengue en un ano,DATASUS/SINAN,rate,0.0,17913.9938227608,3150.262604440927,0
+incidence_max_leishmaniose,Riesgo_Salud,Incidencia maxima de leishmaniasis en un ano,DATASUS/SINAN,rate,0.0,450.45045045045,21.978787045858397,0
+incidence_max_leptospirose,Riesgo_Salud,Incidencia maxima de leptospirosis en un ano,DATASUS/SINAN,rate,0.0,963.166807790009,30.32695281147521,0
+incidence_max_malaria,Riesgo_Salud,Incidencia maxima de malaria en un ano,DATASUS/SINAN,rate,0.0,304.150763358779,5.614727355851465,0
+total_cases_dengue,Riesgo_Salud,Total casos de dengue 2010-2019,DATASUS/SINAN,count,0.0,154590.0,3443.5782945736432,0
+total_cases_leishmaniose,Riesgo_Salud,Total casos de leishmaniasis 2010-2019,DATASUS/SINAN,count,0.0,520.0,12.530232558139534,0
+total_cases_leptospirose,Riesgo_Salud,Total casos de leptospirosis 2010-2019,DATASUS/SINAN,count,0.0,11127.0,69.46666666666667,0
+total_cases_malaria,Riesgo_Salud,Total casos de malaria 2010-2019,DATASUS/SINAN,count,0.0,940.0,5.271317829457364,0
+copresence_years,Riesgo_Salud,Anos con 2+ enfermedades vectoriales simultaneas,Calculado,count,0.0,10.0,6.207751937984496,0
+copresence_3plus,Riesgo_Salud,Anos con 3+ enfermedades vectoriales,Calculado,count,0.0,10.0,3.021705426356589,0
+copresence_all4,Riesgo_Salud,Anos con las 4 enfermedades vectoriales,Calculado,count,0.0,10.0,0.7984496124031008,0
+dengue_leptospirose,Riesgo_Salud,Co-ocurrencia dengue-leptospirosis,Calculado,binary,0.0,10.0,4.992248062015504,0
+dengue_malaria,Riesgo_Salud,Co-ocurrencia dengue-malaria,Calculado,binary,0.0,10.0,1.4062015503875969,0
+dengue_leishmaniose,Riesgo_Salud,Co-ocurrencia dengue-leishmaniasis,Calculado,binary,0.0,10.0,3.551937984496124,0
+leptospirose_malaria,Riesgo_Salud,Co-ocurrencia leptospirosis-malaria,Calculado,binary,0.0,10.0,1.2217054263565892,0
+leptospirose_leishmaniose,Riesgo_Salud,Co-ocurrencia leptospirosis-leishmaniasis,Calculado,binary,0.0,10.0,2.5689922480620155,0
+malaria_leishmaniose,Riesgo_Salud,Co-ocurrencia malaria-leishmaniasis,Calculado,binary,0.0,10.0,0.9054263565891473,0
+idx_vulnerabilidad,Vulnerabilidad_Social,Indice de vulnerabilidad socioeconomica (0-100),Calculado,index,3.797281843974258,54.24252630607085,17.516530188284733,0
+idx_carga_enfermedad,Riesgo_Salud,Indice de carga de enfermedad (0-100),Calculado,index,0.1281069936729918,34.156636716775715,8.27192855043408,0
+tercil_biodiv,Biodiversidad,"Tercil de biodiversidad (1=bajo, 2=medio, 3=alto)",Calculado,category,,,,0
+tercil_clima,Riesgo_Climatico,"Tercil de riesgo climatico (1=bajo, 2=medio, 3=alto)",Calculado,category,,,,0
+tercil_vuln,Vulnerabilidad_Social,"Tercil de vulnerabilidad (1=bajo, 2=medio, 3=alto)",Calculado,category,,,,0
+grupo_clima_biodiv,Clasificaciones,Grupo combinado clima-biodiversidad,Calculado,category,,,,0
+cuadrante,Clasificaciones,Cuadrante gobernanza-vulnerabilidad,Calculado,category,,,,0
+fire_incidence_mean,Riesgo_Climatico,Incidencia media anual de focos de fuego,INPE Queimadas,rate,0.0,51.7,6.269919404454288,0
+fire_incidence_max,Riesgo_Climatico,Incidencia maxima anual de focos de fuego,INPE Queimadas,rate,0.0,132.0,14.758139534883721,0
+fire_frp_mean,Riesgo_Climatico,Potencia radiativa del fuego (FRP) media,INPE Queimadas,value,0.0,180.92166666666668,38.5624868540109,0
+fire_frp_max,Riesgo_Climatico,FRP maxima registrada,INPE Queimadas,value,0.0,3661.5,346.7472868217055,0
+fire_total_foci,Riesgo_Climatico,Total de focos de fuego 2010-2019,INPE Queimadas,count,0.0,517.0,55.8062015503876,0
+fire_frp_total,Riesgo_Climatico,FRP total acumulada,INPE Queimadas,value,0.0,54654.9,3187.0031007751936,0
+fire_years_with_fire,Riesgo_Climatico,Anos con registro de fuego (0-10),INPE Queimadas,count,0.0,10.0,7.575193798449613,0
+fire_recurrence,Riesgo_Climatico,Recurrencia de fuego (proporcion de anos),Calculado,proportion,0.0,1.0,0.7575193798449613,0
+fire_cv,Riesgo_Climatico,Coeficiente de variacion de incidencia de fuego,Calculado,value,0.0,1.6169510234527509,0.6827524614904948,19
+fire_dry_season_pct,Riesgo_Climatico,Porcentaje de focos en epoca seca,INPE Queimadas,%,0.0,1.0,0.7920593115084857,0
+fire_max_consecutive_years,Riesgo_Climatico,Anos consecutivos maximos con fuego,Calculado,count,0.0,10.0,5.919379844961241,0
+fire_risk_index,Riesgo_Climatico,Indice compuesto de riesgo de fuego,Calculado,index,0.0,84.15334546075286,33.97092262333247,0
+health_hosp_circ_mean,Riesgo_Salud,Tasa media de hospitalizacion por enf. circulatorias,DATASUS/SIH,rate,275.8001004786177,3004.8934467443287,826.0056433431076,0
+health_hosp_resp_mean,Riesgo_Salud,Tasa media de hospitalizacion por enf. respiratorias,DATASUS/SIH,rate,157.76102425674387,3128.204936567592,815.3839864339126,0
+health_hosp_heat_mean,Riesgo_Salud,Tasa media de hospitalizacion por efectos del calor,DATASUS/SIH,rate,0.0,3.328894806924102,0.01766421040281017,0
+health_hosp_circ_max,Riesgo_Salud,Tasa maxima de hospitalizacion circulatoria,DATASUS/SIH,rate,332.3471000689012,3855.970829535096,1106.9873993864078,0
+health_hosp_resp_max,Riesgo_Salud,Tasa maxima de hospitalizacion respiratoria,DATASUS/SIH,rate,272.35986645580743,4691.977985746532,1145.6996999527412,0
+health_hosp_heat_max,Riesgo_Salud,Tasa maxima de hospitalizacion por calor,DATASUS/SIH,rate,0.0,33.288948069241016,0.17469903889625973,0
+health_death_circ_mean,Riesgo_Salud,Tasa media de mortalidad por enf. circulatorias,DATASUS/SIM,rate,82.81898252589313,481.140741810301,200.30286913062707,0
+health_death_resp_mean,Riesgo_Salud,Tasa media de mortalidad por enf. respiratorias,DATASUS/SIM,rate,41.27297182067352,207.2847285806331,96.61749109795639,0
+health_death_heat_mean,Riesgo_Salud,Tasa media de mortalidad por efectos del calor,DATASUS/SIM,rate,0.0,0.0,0.0,0
+health_death_circ_max,Riesgo_Salud,Tasa maxima de mortalidad circulatoria,DATASUS/SIM,rate,118.83258864911112,650.9357200976403,278.34059214161056,0
+health_death_resp_max,Riesgo_Salud,Tasa maxima de mortalidad respiratoria,DATASUS/SIM,rate,54.229934924078094,546.448087431694,155.0158042897846,0
+health_death_heat_max,Riesgo_Salud,Tasa maxima de mortalidad por calor,DATASUS/SIM,rate,0.0,0.0,0.0,0
+health_total_hosp_circ,Riesgo_Salud,Total hospitalizaciones circulatorias 2010-2019,DATASUS/SIH,count,71.0,662788.0,4142.471317829458,0
+health_total_hosp_resp,Riesgo_Salud,Total hospitalizaciones respiratorias 2010-2019,DATASUS/SIH,count,74.0,549402.0,3707.412403100775,0
+health_total_hosp_heat,Riesgo_Salud,Total hospitalizaciones por calor 2010-2019,DATASUS/SIH,count,0.0,7.0,0.04806201550387597,0
+health_total_death_circ,Riesgo_Salud,Total obitos circulatorios 2010-2019,DATASUS/SIM,count,12.0,237528.0,1309.0015503875968,0
+health_total_death_resp,Riesgo_Salud,Total obitos respiratorios 2010-2019,DATASUS/SIM,count,8.0,100161.0,587.9286821705426,0
+health_total_death_heat,Riesgo_Salud,Total obitos por calor 2010-2019,DATASUS/SIM,count,0.0,0.0,0.0,0
+incidence_diarrhea_mean,Riesgo_Salud,Incidencia media de diarrea (por 100k hab/ano),DATASUS/SINAN,rate,0.0,1520.0912024784109,67.39266488068021,0
+incidence_diarrhea_max,Riesgo_Salud,Incidencia maxima de diarrea en un ano,DATASUS/SINAN,rate,0.0,2632.2596003085464,151.77085033905334,0
+total_cases_diarrhea,Riesgo_Salud,Total casos de diarrea 2010-2019,DATASUS/SINAN,count,0.0,30528.0,215.8248062015504,0
+persist_diarrhea,Riesgo_Salud,Anos con casos de diarrea (0-10),DATASUS/SINAN,count,0.0,10.0,8.031007751937985,0

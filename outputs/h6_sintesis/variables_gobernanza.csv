@@ -1,0 +1,7 @@
+variable,label,dimension_nexus,source,unit,formula,risk_component
+UAI_housing,UAI Vivienda,Gobernanza,Neder et al. 2021,0-1,,VULNERABILITY/Adaptive_Capacity_Institutional
+UAI_env,UAI Ambiental,Gobernanza,Neder et al. 2021,0-1,,VULNERABILITY/Adaptive_Capacity_Institutional
+UAI_food,UAI Alimentacion,Gobernanza,Neder et al. 2021,0-1,,VULNERABILITY/Adaptive_Capacity_Institutional
+UAI_mob,UAI Movilidad,Gobernanza,Neder et al. 2021,0-1,,VULNERABILITY/Adaptive_Capacity_Institutional
+UAI_Crisk,UAI Riesgo Climatico,Gobernanza,Neder et al. 2021,0-1,,VULNERABILITY/Adaptive_Capacity_Institutional
+idx_gobernanza,Indice Gobernanza,Gobernanza,Calculado,0-1,"mean(UAI_housing, UAI_env, UAI_food, UAI_mob, UAI_Crisk)",

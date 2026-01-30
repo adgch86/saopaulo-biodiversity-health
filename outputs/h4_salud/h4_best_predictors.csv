@@ -1,0 +1,8 @@
+outcome,outcome_label,best_predictor,best_predictor_label,dimension,coef,p_value,aic,r2_marginal,n_equivalent,equivalent_vars
+incidence_mean_dengue,Dengue,pct_rural,% Rural,Vulnerabilidad,-0.2249491299311332,2.479577320529867e-11,1447.3427205793178,0.4328778945129449,1,pct_rural
+incidence_mean_malaria,Malaria,forest_cover,Cobertura Forestal,Biodiversidad,0.11786828609758328,3.083641451465096e-05,1005.2315925301773,0.13402010772303033,1,forest_cover
+incidence_mean_leishmaniose,Leishmaniasis,hydric_stress_risk,Estres Hidrico,Clima,-0.07983310262496326,0.0102630563354039,1525.8852438192862,0.33774568862285703,3,"hydric_stress_risk, pct_rural, mean_species_richness"
+incidence_mean_leptospirose,Leptospirosis,pct_pobreza,% Pobreza,Vulnerabilidad,-0.07372452273132861,0.01910993305406488,1471.15859678374,0.29572798779723825,4,"pct_pobreza, hydric_stress_risk, mean_species_richness, forest_cover"
+incidence_diarrhea_mean,Diarrea,forest_cover,Cobertura Forestal,Biodiversidad,-0.34170001256103083,3.2637983398232006e-07,1956.4047472054472,0.2517971121938723,1,forest_cover
+health_death_circ_mean,Mort. Cardiovasc.,pct_preta,% Pob. Negra,Vulnerabilidad,-0.07498385861409973,1.1147986788058998e-16,-229.70284061411985,0.2539893672192557,1,pct_preta
+health_hosp_resp_mean,Hosp. Respiratoria,forest_cover,Cobertura Forestal,Biodiversidad,-0.14450278717503443,2.6925462016757497e-07,770.2925218750834,0.29935692929648305,1,forest_cover

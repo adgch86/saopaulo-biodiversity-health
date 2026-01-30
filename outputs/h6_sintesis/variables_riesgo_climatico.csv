@@ -1,0 +1,7 @@
+variable,label,dimension_nexus,source,unit,formula,risk_component
+flooding_risks,Riesgo Inundacion,Riesgo_Climatico,CEMADEN,0-1,,
+flooding_exposure,Exposicion Inundacion,Riesgo_Climatico,CEMADEN,0-1,,HAZARD
+fire_risk_index,Riesgo Fuego,Riesgo_Climatico,INPE Queimadas,0-100,,HAZARD
+fire_incidence_mean,Incidencia Fuego,Riesgo_Climatico,INPE Queimadas,focos/ano,,HAZARD
+hydric_stress_risk,Estres Hidrico,Riesgo_Climatico,ANA,0-1,,
+idx_clima,Indice Riesgo Clima,Riesgo_Climatico,Calculado,0-100,normalized(flooding_risks + fire_risk_index + hydric_stress_risk),

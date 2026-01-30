@@ -1,0 +1,4 @@
+outcome,outcome_label,best_predictor,best_predictor_label,dimension,coef,p_value,aic,r2_marginal,n_equivalent,equivalent_vars
+flooding_risks,Riesgo Inundacion,pol_deficit,Deficit Polinizacion,Biodiversidad,-0.07246478570396218,3.15393791962548e-11,-292.5491860640427,0.26315808426251913,1,pol_deficit
+fire_risk_index,Riesgo Fuego,pct_pobreza,% Pobreza,Vulnerabilidad,-5.547330544320453,1.264518173823816e-39,4823.320761605028,0.31003759242137835,1,pct_pobreza
+hydric_stress_risk,Estres Hidrico,pct_pobreza,% Pobreza,Vulnerabilidad,-0.06146787375771315,3.274333697817094e-39,-983.4130888816867,0.2604537293744242,1,pct_pobreza

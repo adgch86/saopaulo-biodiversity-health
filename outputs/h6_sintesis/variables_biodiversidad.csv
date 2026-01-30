@@ -1,0 +1,6 @@
+variable,label,dimension_nexus,source,unit,formula,risk_component
+forest_cover,Cobertura Forestal,Biodiversidad,MapBiomas,%,,VULNERABILITY/Adaptive_Capacity_Natural
+mean_species_richness,Riqueza Especies,Biodiversidad,Biodiversity data,n especies,,VULNERABILITY/Adaptive_Capacity_Natural
+max_species_richness,Riqueza Max Especies,Biodiversidad,Biodiversity data,n especies,,
+pol_deficit,Deficit Polinizacion,Biodiversidad,Calculated,0-1,,
+idx_biodiv,Indice Biodiversidad,Biodiversidad,Calculado,0-100,normalized(forest_cover + mean_species_richness - pol_deficit),
