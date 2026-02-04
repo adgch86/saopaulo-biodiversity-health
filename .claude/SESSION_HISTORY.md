@@ -1,11 +1,634 @@
 # Historial de Sesiones - Science Team
 
 > Este archivo contiene el registro detallado de todas las sesiones de trabajo.
-> Para contexto actual del proyecto: 
+> Para contexto actual del proyecto:
 
 ---
 
 ## Notas de Sesión
+
+### 2026-02-04 (Sesión 32 - TerraRisk Workshop Platform MVP) - ✅ COMPLETADO
+
+#### Solicitud
+Implementar la plataforma web interactiva TerraRisk Workshop según el plan aprobado:
+- Frontend Next.js 14 con TypeScript
+- Backend FastAPI con sistema de créditos
+- Mapas Leaflet con overlays PNG
+- Panel admin para Dr. Adrian
+
+#### Archivos Creados
+
+**Frontend (Next.js 14 + shadcn/ui):**
+- `terrarisk-workshop/frontend/src/app/page.tsx` — Landing page (crear/unirse grupo)
+- `terrarisk-workshop/frontend/src/app/workshop/page.tsx` — Interfaz principal del mapa
+- `terrarisk-workshop/frontend/src/app/admin/page.tsx` — Panel administración
+- `terrarisk-workshop/frontend/src/components/map/MapViewer.tsx` — Componente Leaflet
+- `terrarisk-workshop/frontend/src/components/panels/LayerSelector.tsx` — Selector de capas
+- `terrarisk-workshop/frontend/src/components/panels/CreditDisplay.tsx` — Barra de créditos
+- `terrarisk-workshop/frontend/src/components/panels/ActiveLayers.tsx` — Capas activas + bivariado
+- `terrarisk-workshop/frontend/src/components/panels/MunicipalityInfo.tsx` — Info municipio
+- `terrarisk-workshop/frontend/src/components/layout/Header.tsx` — Header con grupo/créditos
+- `terrarisk-workshop/frontend/src/components/layout/Sidebar.tsx` — Panel lateral
+- `terrarisk-workshop/frontend/src/lib/store.ts` — Zustand store
+- `terrarisk-workshop/frontend/src/lib/api.ts` — API client
+- `terrarisk-workshop/frontend/src/lib/types.ts` — TypeScript types
+
+**Backend (FastAPI + SQLite):**
+- `terrarisk-workshop/backend/main.py` — App FastAPI
+- `terrarisk-workshop/backend/api/groups.py` — CRUD grupos + compras
+- `terrarisk-workshop/backend/api/layers.py` — 16 capas configuradas
+- `terrarisk-workshop/backend/api/municipalities.py` — 645 municipios
+- `terrarisk-workshop/backend/api/bivariate.py` — Mapas bivariados
+- `terrarisk-workshop/backend/api/admin.py` — Estadísticas admin
+- `terrarisk-workshop/backend/core/config.py` — Configuración capas
+- `terrarisk-workshop/backend/core/database.py` — SQLite operations
+
+**Datos:**
+- `terrarisk-workshop/frontend/public/geojson/sp_simplified.json` — GeoJSON 385KB (simplificado)
+- `terrarisk-workshop/backend/data/maps/` — 21 PNGs (16 capas + 2 bivariados + extras)
+- `terrarisk-workshop/backend/data/municipios.csv` — 645 municipios × 104 variables
+
+**Deploy:**
+- `terrarisk-workshop/docker-compose.yml` — Orquestación Docker
+- `terrarisk-workshop/nginx.conf` — Reverse proxy
+- `terrarisk-workshop/backend/Dockerfile`
+- `terrarisk-workshop/frontend/Dockerfile`
+
+#### Features Implementados
+1. ✅ Landing page para crear/unirse a grupos
+2. ✅ Sistema de créditos (10 iniciales, 1 por capa)
+3. ✅ 16 capas temáticas con candados
+4. ✅ 2 capas gratuitas (Gobernanza General, Vulnerabilidad)
+5. ✅ GeoJSON interactivo (hover/click municipios)
+6. ✅ PNG overlays para visualización
+7. ✅ Panel info municipio con 104 variables
+8. ✅ Control de opacidad por capa
+9. ✅ Botón generar mapa bivariado
+10. ✅ Panel admin con stats y reset créditos
+11. ✅ Tecla F para fullscreen
+12. ✅ Persistencia con Zustand
+
+#### Próximos Pasos
+- Deploy en Contabo (terrarisk.arlexperalta.com)
+- Testing con múltiples grupos simultáneos
+- Generar más mapas bivariados on-demand
+
+---
+
+### 2026-02-03 (Sesión 31 - Bug Fix Mapas + Sincronización Drive) - ✅ COMPLETADO
+
+#### Solicitud
+1. Investigar por qué los mapas bivariados de Sesión 27 estaban vacíos
+2. Configurar sincronización automática con Google Drive
+3. Crear mapa de gobernanza con 10 municipios del workshop
+4. Crear mapa de microrregiones de SP
+5. Análisis de cuadrantes para 4 combinaciones de variables
+6. Documentar metodología de índices compuestos
+
+#### Problema Identificado: Mapas Vacíos
+
+**Causa raíz**: Incompatibilidad en códigos IBGE entre shapefile y CSV.
+- Shapefile IBGE: 7 dígitos con verificador (ej: 3500105)
+- CSV datos: 6 dígitos sin verificador (ej: 350010)
+
+**Solución**: Truncar a 6 dígitos antes del merge:
+```python
+# ANTES (fallaba - 0 matches):
+gdf['cod_ibge'] = gdf['CD_MUN'].astype(int)
+
+# DESPUÉS (funciona - 645 matches):
+gdf['cod_ibge'] = gdf['CD_MUN'].astype(str).str[:6].astype(int)
+```
+
+**Scripts corregidos**:
+- `scripts/analisis_h1_model_selection.py` (líneas 745-756)
+- `scripts/analisis_h5_clima_predictors.py` (línea 456)
+
+#### Sincronización Automática con Google Drive
+
+**Scripts creados**:
+- `scripts/sync_to_drive.ps1` — Sincronización con robocopy /MIR
+- `scripts/create_task_hourly.ps1` — Tarea programada Windows
+
+**Configuración**:
+- Origen: `C:\Users\arlex\Documents\Adrian David\`
+- Destino: `G:\My Drive\Adrian David\Outputs_Science_Team\`
+- Frecuencia: Cada hora automáticamente
+- Nombre tarea: "SyncAdrianDavidToDrive"
+
+**Carpetas sincronizadas**: figures/, h1-h6/, docs/, notebooks/, CSVs
+
+#### Análisis de Cuadrantes - 4 Combinaciones
+
+**Script**: `scripts/analisis_cuadrantes_4combinaciones.py`
+
+**Combinaciones analizadas**:
+1. Gobernanza vs Biodiversidad
+2. Gobernanza vs Carga de Enfermedad
+3. Gobernanza vs Riesgo Climático
+4. Biodiversidad vs Vulnerabilidad
+
+**Outputs**:
+- `outputs/analisis_cuadrantes_4combinaciones.csv`
+- 4 mapas con scatter plots (`cuadrantes_*.png`)
+
+**Metodología**: Medianas para dividir cuadrantes, incluye n_municipios y población_total por cuadrante.
+
+#### Documentación Metodología Índices
+
+Revisado `scripts/create_integrated_dataset_v6.py` para documentar cálculo de índices:
+
+| Índice | Variables | Método | Pesos |
+|--------|-----------|--------|-------|
+| `idx_vulnerabilidad` | rural, pobreza, preta, indígena | Promedio ponderado | 25%, 35%, 25%, 15% |
+| `idx_biodiv` | mean_species_richness | Min-max | - |
+| `idx_clima` | flooding, hydric_stress | Promedio × 100 | - |
+| `idx_carga_enfermedad` | dengue, malaria, lepto, leish | Promedio normalizado | - |
+
+**Nota**: fire_risk_index, forest_cover, diarrea, mort_cv, hosp_resp NO están incluidos en los índices.
+
+**Solicitud creada**: `docs/SOLICITUD_METODOLOGIA_INDICES.md` — Adrian debe confirmar metodología
+
+#### Organización de Outputs
+
+Nueva estructura con carpetas por fecha:
+- `outputs/figures/2026-02-03/` — Figuras de esta sesión
+
+#### Archivos Generados
+
+**Figuras**:
+- `mapa_workshop_10municipios.png`
+- `mapa_microrregiones_sp.png`
+- `cuadrantes_Gobernanza_vs_Biodiversidad.png`
+- `cuadrantes_Gobernanza_vs_Salud.png`
+- `cuadrantes_Gobernanza_vs_Clima.png`
+- `cuadrantes_Biodiversidad_vs_Vulnerabilidad.png`
+
+**Datos**:
+- `outputs/analisis_cuadrantes_4combinaciones.csv`
+
+**Scripts**:
+- `scripts/analisis_cuadrantes_4combinaciones.py`
+- `scripts/sync_to_drive.ps1`
+- `scripts/create_task_hourly.ps1`
+
+**Documentación**:
+- `docs/SOLICITUD_METODOLOGIA_INDICES.md`
+
+#### Configuración Google Earth Engine
+
+**Problema inicial**: Datos de estrés térmico (MODIS LST) nunca fueron extraídos. El análisis H3 usó `fire_risk_index` como proxy inadecuado.
+
+**Solución**: Configuración completa de GEE para extracción futura.
+
+**Pasos completados**:
+1. Instalación earthengine-api verificada
+2. Autenticación GEE completada (`ee.Authenticate()`)
+3. Registro en Earth Engine (plan Community, institución USP)
+4. Creación proyecto GCP: `earthengine-legacy-486401`
+5. Verificación funcionamiento: `ee.Number(1).add(1).getInfo() = 2` ✅
+
+**Archivos guardados**:
+- `scripts/gee_project.txt` — ID del proyecto GEE
+
+**Justificación MODIS > Xavier** (confirmado por Adrian):
+- Xavier: 0.1° (~11 km/píxel) → 40.8% municipios con <2 píxeles
+- MODIS: 1 km/píxel → mínimo 4 píxeles por municipio
+- Mediana: 2.3 vs 281 píxeles por municipio
+
+**⚠️ PENDIENTE para próxima sesión**:
+- Ejecutar `scripts/gee_extract_modis_lst.js` vía Python API
+- Descargar CSV a `data/processed/`
+- Ejecutar `scripts/create_integrated_dataset_v9.py`
+- Re-analizar H3 con datos reales de estrés térmico
+
+#### Workshop Layers - 16 Mapas
+
+**Solicitud**: Crear carpeta `workshop_layers` con 16 mapas (1 por variable del pool), divididos en 3 niveles (Low/Medium/High por terciles).
+
+**Script**: `scripts/create_workshop_layers.py`
+
+**Variables incluidas (16)**:
+1. UAI Climatic Risk
+2. UAI General
+3. Species Richness
+4. Vegetation Cover
+5. Pollination Deficit
+6. Flooding Risk
+7. Fire Risk Index
+8. Hydric Stress
+9. Dengue Incidence
+10. Diarrhea Incidence
+11. CV Mortality
+12. Resp Hospitalization
+13. Poverty %
+14. Vulnerability Index
+15. Rural Population
+16. Leishmaniasis Incidence (cambio: reemplazó mortalidad infantil y mortalidad por calor)
+
+**Nota**: `health_death_heat_mean` tiene todos valores en cero - no hay datos de mortalidad por calor.
+
+**Output**: `outputs/figures/workshop_layers/` (16 archivos PNG)
+
+#### Actividad 3 Workshop - Documento Actualizado
+
+**Solicitud**: Actualizar la Actividad 3 del workshop considerando los nuevos análisis H1-H6.
+
+**Cambios clave incorporados**:
+1. Dengue es URBANO, NO responde a cobertura forestal (confundido por urbanización)
+2. Malaria SÍ responde a bosque (más bosque = más malaria) - robusto
+3. Gobernanza es REACTIVA, no preventiva
+4. Pobreza domina todas las relaciones (27% varianza)
+5. Trade-offs reales entre conservación y salud
+
+**Archivos generados**:
+- `docs/WORKSHOP_ACTIVIDAD_3_ACTUALIZADA.md` — Versión Markdown
+- `docs/WORKSHOP_ACTIVIDAD_3_ACTUALIZADA.docx` — Versión Word
+
+**Contenido del documento**:
+- Parte 1: Presentación (15 min) - 5 hallazgos + cuadrantes
+- Parte 2: Discusión grupos (25 min) - 10 preguntas provocadoras
+- Parte 3: Síntesis (20 min) - Guía facilitador
+- Anexo: Comparación original vs actualizado
+
+#### Mapas Bivariados en Inglés
+
+**Script**: `scripts/create_bivariate_maps_EN.py`
+
+**Archivos generados** (en `workshop_layers/`):
+- `bivariate_Governance_vs_Vulnerability_EN.png` — X: Vulnerability, Y: Governance
+- `bivariate_ClimateRisk_vs_Vulnerability_EN.png` — X: Climate Risk, Y: Vulnerability
+
+**Formato**: Mapa choropleth (izq) + Scatter plot con medianas (der)
+
+**Resultados Governance vs Vulnerability**:
+- Q1 Optimal: 212 mun, 81.3% población
+- Q3 Critical: 210 mun, 3.1% población
+
+**Resultados Climate Risk vs Vulnerability**:
+- Q2 Risk: 214 mun, 73.4% población
+- Q1 Optimal: 108 mun, 12.8% población
+
+---
+
+### 2026-02-03 (Sesión 30 - Nuevo Proyecto Air Pollution) - ✅ COMPLETADO
+
+#### Solicitud
+Iniciar nuevo proyecto de consultoría para el meta-análisis global de polución atmosférica y redes de polinizadores. Crear propuesta económica y tabla de redes para que investigadores completen fechas de muestreo.
+
+#### Contexto del Proyecto
+- **Paper**: "The invisible threat: Air pollution rewires pollinator networks worldwide"
+- **PIs**: Dr. Luisa Carvalheiro & Dr. Ruben Alarcon
+- **Problema**: Paper rechazado de *Science* por críticas a datos de TROPOMI (columnas totales, no superficie)
+- **Solución**: Reemplazar TROPOMI con CAMS/EAC4 (datos de superficie, 0-10m)
+
+#### Trabajo Realizado
+
+1. **Lectura de documentos**:
+   - `REunião com Luísa e Ruben após rejeição da Science.docx` — Notas de reunión
+   - `aee2989_Blinded Review Report_seq1_v1.pdf` — Review de Science (3 reviewers)
+   - `SamplingDate_arlex_Aver.csv` — Metadata de 1,468 redes
+
+2. **Tabla Excel para investigadores**:
+   - Archivo: `Networks_Sampling_Dates_ToFill.xlsx`
+   - 1,468 redes con columnas para fechas de muestreo
+   - 3 hojas: datos, instrucciones, resumen estadístico
+   - Columnas en amarillo para llenar: `Sampling_Start_Date`, `Sampling_End_Date`, `Notes`
+
+3. **Propuesta económica formal**:
+   - Archivo: `Proposal_Data_Extraction_v1.docx`
+   - 9 secciones: Executive Summary, Background, Solution, Scope, Timeline, Budget, QA, Sources, Contact
+   - Presupuesto: $600 USD ($200/mes × 3 meses)
+   - Timeline: Feb (O3/NO2) → Mar (clima) → Abr (Human Footprint + integración)
+
+4. **Organización de carpeta**:
+   ```
+   Air pollution project/
+   ├── README.md
+   ├── docs/proposals/, docs/reviews/
+   ├── data/raw/, data/processed/
+   ├── scripts/R/, scripts/python/
+   └── outputs/tables/, outputs/figures/
+   ```
+
+#### Estadísticas de las Redes
+
+| Región | N |
+|--------|---|
+| Europe | 496 |
+| Africa | 297 |
+| S.America | 291 |
+| N.America | 266 |
+| Asia | 61 |
+| Oceania | 57 |
+
+**Top países**: Argentina (232), USA (195), Germany (187), Egypt (122), Spain (89)
+
+#### Variables a Extraer (5)
+
+| Variable | Fuente | Resolución |
+|----------|--------|------------|
+| O3 | CAMS/EAC4 | ~80km, 3h |
+| NO2 | CAMS/EAC4 | ~80km, 3h |
+| Temperatura | ERA5 | ~30km, 1h |
+| Precipitación | ERA5/CHIRPS | ~30km, diario |
+| Human Footprint | Williams et al. 2025 | 1km |
+
+#### Archivos Generados
+- `G:\My Drive\Adrian David\Air pollution project\README.md`
+- `G:\My Drive\Adrian David\Air pollution project\data\raw\Networks_Sampling_Dates_ToFill.xlsx`
+- `G:\My Drive\Adrian David\Air pollution project\docs\proposals\Proposal_Data_Extraction_v1.docx`
+
+#### Próximos Pasos
+1. Enviar propuesta + Excel a Luísa y Ruben
+2. Adrian configura cuenta Copernicus ADS
+3. Desarrollar script R para extracción CAMS
+4. Esperar fechas de muestreo de investigadores
+
+---
+
+### 2026-02-02 (Sesión 29 - Presentación PowerPoint Workshop Day 2) - ✅ COMPLETADO
+
+#### Solicitud
+Revisar archivos en `notebooks/02_02/` (PPT original y documento de reunión) y mejorar la presentación para fundamentar las actividades del workshop.
+
+#### Archivos Analizados
+- `Result summary.pptx` — PPT original del proyecto (13 MB)
+- `REunião com Luísa e Ruben após rejeição da Science.docx` — Notas de reunión (proyecto diferente: meta-análisis ozono-polinizadores)
+
+#### Trabajo Realizado
+
+1. **Análisis de la PPT existente**: Extraído contenido de 20+ slides sobre nexus gobernanza-biodiversidad-salud
+
+2. **Documento de mejoras**: Creado `SLIDES_MEJORADOS_WORKSHOP.md` con:
+   - Estructura reorganizada en 3 bloques (Problema/Hallazgos/Acción)
+   - 15 slides principales + 4 backup
+   - Notas del presentador para cada slide
+   - Paleta de colores y guía de implementación
+
+3. **Scripts Python para generación automática**:
+   - `create_workshop_pptx.py` — Versión 1 (texto solamente)
+   - `create_workshop_pptx_v2.py` — Versión 2 (con mapas y figuras)
+
+4. **Presentaciones generadas**:
+   - `Workshop_SEMIL_USP_Day2_MEJORADO.pptx` — 55 KB, 19 slides (sin imágenes)
+   - `Workshop_SEMIL_USP_Day2_v2_con_mapas.pptx` — 4 MB, 24 slides (con 12 mapas)
+
+#### Estructura Final (24 slides)
+
+| Bloque | Slides | Contenido |
+|--------|--------|-----------|
+| **A: El Problema** | 1-5 | Título, pregunta central, marco nexus, datos |
+| **B: Hallazgos** | 6-15 | 4 hallazgos clave, cuadrantes, 10 municipios, paradojas |
+| **C: Acción** | 16-18 | Actividades, sistema créditos, pregunta final |
+| **Backup** | 19-24 | Metodología, UAI, heatmaps, SEM, referencias |
+
+#### Mapas/Figuras Incluidos
+- `h1_FIG1_causal_panel.png` — Diagrama causal
+- `h1_MAP1-5_bivariate_*.png` — 5 mapas bivariados
+- `h1_scatter_forest_dengue_pobreza.png` — Modulación social
+- `h1_model_selection_heatmap.png` — Selección AIC
+- `h1_governance_*.png` — Gobernanza dimensiones
+- `h1_heatmap_nexus.png` — Correlaciones
+- `h1_sem_dengue.png` — Modelo SEM
+
+#### Nota Técnica
+Logos de USP y York no descargados (bloqueo de sitios). Se agregó texto placeholder "USP" / "YORK" en slides de título.
+
+#### Próximos Pasos
+- [ ] Agregar logos institucionales manualmente
+- [ ] Revisar con Adrian antes del workshop (24 Feb)
+- [ ] Preparar fichas impresas de municipios
+- [ ] Diseñar tokens de crédito para Activity 2.2
+
+---
+
+### 2026-01-29 (Sesión 28 - Framework 6 Hipótesis H1-H6 Completo) - ✅ COMPLETADO
+
+#### Solicitud
+Adrian planteó **invertir la lógica causal** del nexus:
+- **Antes**: Gobernanza → reduce riesgos
+- **Ahora**: Riesgos/Vulnerabilidad → genera gobernanza (sociedad reactiva)
+
+Se implementaron **6 hipótesis progresivas** según el documento `Prompt 29 janeiro - por partes.docx`.
+
+#### Scripts Creados (6 nuevos)
+
+| Script | Hipótesis | Descripción |
+|--------|-----------|-------------|
+| `analisis_h1_gobernanza_predictors.py` | H1 | ¿Qué predice gobernanza (UAI)? |
+| `analisis_h2_vulnerabilidad_interaccion.py` | H2 | Vulnerabilidad × otras dimensiones |
+| `analisis_h3_clima_salud_interaccion.py` | H3 | Clima × Salud → Gobernanza |
+| `analisis_h4_salud_predictors.py` | H4 | Predictores de riesgo de salud |
+| `analisis_h5_clima_predictors.py` | H5 | Predictores de riesgo climático |
+| `sintesis_h6_metadata.py` | H6 | Síntesis y actualización metadata |
+
+#### Hallazgos Clave por Hipótesis
+
+| Hipótesis | Hallazgo Principal |
+|-----------|-------------------|
+| **H1** | % Pobreza explica **27% varianza** en UAI_housing; Fire risk predice gobernanza (+) = respuesta reactiva |
+| **H2** | Pobreza **anula efecto reactivo**: en municipios pobres, la gobernanza no responde a riesgos |
+| **H3** | Interacción Dengue × Inundación significativa (β=+0.051); Malaria × Bosque marginal (β=+0.033) |
+| **H4** | Efecto bosque-dengue **confundido 36%** por urbanización; bosque-malaria **robusto** (3% cambio) |
+| **H5** | Pobreza predice riesgo fuego/hídrico (negativo); Déficit polinización → inundación |
+| **H6** | 104 variables clasificadas en **5 dimensiones Nexus** y **3 componentes IPCC** |
+
+#### Validación del Efecto Dilución (H4)
+
+Adrian planteó preocupación: "¿La relación bosque-dengue está mediada por tamaño poblacional?"
+
+| Enfermedad | Cambio en β con controles | Resultado |
+|------------|---------------------------|-----------|
+| **Dengue** | -36% | **CONFUNDIDO** (p pierde significancia) |
+| **Malaria** | +3.8% | **ROBUSTO** (efecto biológico real) |
+| **Leptospirosis** | +14% | **ROBUSTO** (se fortalece) |
+| **Leishmaniasis** | -19% | No significativo |
+
+#### Clasificación de Variables (H6)
+
+**Por Dimensión Nexus (5)**:
+| Dimensión | Variables |
+|-----------|-----------|
+| Gobernanza | 9 |
+| Biodiversidad | 7 |
+| Riesgo Climático | 18 |
+| Riesgo Salud | 49 |
+| Vulnerabilidad Social | 13 |
+| **Total** | **104** |
+
+**Por Componente IPCC (3)**:
+| Componente | Variables |
+|------------|-----------|
+| HAZARD | 31 |
+| EXPOSURE | 32 |
+| VULNERABILITY | 19 |
+| RISK_INDICES | 5 |
+
+#### Archivos Generados
+
+**Estructura de outputs:**
+```
+outputs/
+├── h1_gobernanza/    (22 archivos: informe + 15 figuras + 6 CSVs)
+├── h2_vulnerabilidad/ (8 archivos)
+├── h3_clima_salud/   (6 archivos)
+├── h4_salud/         (7 archivos)
+├── h5_clima/         (15 archivos)
+└── h6_sintesis/      (14 archivos)
+```
+
+**Metadata actualizado:**
+- `.claude/DATA_METHODOLOGY.md` - Catálogo completo de 104 variables con descripción, fuente, dimensión Nexus y componente IPCC
+
+#### Git Commit
+
+```
+Commit: db41759
+Files: 81 archivos
+Lines: +3,736 / -573
+Message: Add H1-H6 analysis reports for governance predictors framework
+```
+
+---
+
+### 2026-01-26 (Sesión 26 - Análisis H1 Nexus SEM + Síntesis Visual + Mapas Bivariados) - ✅ COMPLETADO
+
+#### Solicitud
+Tres tareas principales solicitadas por el usuario:
+1. Seleccionar municipios #4 y #5 para el workshop (balance de cuadrantes)
+2. Ejecutar análisis H1 Nexus Assessment completo según `Hipotesis 1.docx` de Adrian
+3. Generar 5 figuras de síntesis + 3 mapas bivariados + resumen de hallazgos
+
+#### Municipios Workshop (v3 final)
+- Removido Morungaba (Q1) para reducir sobre-representación
+- Agregados São Joaquim da Barra (Q3, 47.5k hab) y Miracatu (Q3, 19.5k hab)
+- Balance final: Q1=3, Q2=2, Q3=3, Q4=2
+- 10 municipios confirmados: Iporanga, Campinas, Santos, SJ da Barra, Miracatu, Eldorado, Francisco Morato, São Paulo, Arujá, Cerquilho
+
+#### Análisis H1 Nexus Assessment SEM
+Script: `scripts/analisis_h1_nexus_sem.py`
+- **H1.1**: 38/51 correlaciones bivariadas significativas (forest_cover↔dengue r=-0.454)
+- **H1.2**: 28/42 mediaciones significativas (pol_deficit media 48.6% de forest→flooding)
+- **H1.3**: 14/56 moderaciones significativas (pct_preta modulador más fuerte, 5+ relaciones)
+- **H1.4**: 7 modelos SEM convergidos con semopy (97/126 paths significativos)
+- **Hallazgo justicia ambiental**: Efecto protector del bosque vs dengue se debilita en municipios con alta pct_preta (r=-0.178 vs r=-0.436)
+
+Outputs: 4 CSVs (h1_1 a h1_4) + 20 PNGs (heatmap, 7 SEM diagrams, 12 scatter plots)
+
+#### Síntesis Visual (5 figuras + 3 mapas)
+Script: `scripts/sintesis_h1_figuras_mapas.py`
+
+**5 Figuras principales**:
+- FIG1: Diagrama causal SEM para dengue con coeficientes estandarizados
+- FIG2: Heatmap Biodiversidad+Clima × 7 enfermedades (Spearman r con significancia)
+- FIG3: Forest plot SEM — 6 predictores × 7 enfermedades (Species Richness consistentemente protector)
+- FIG4: Panel 2×2 modulación social (Forest vs Dengue × pobreza/preta/rural/indígena)
+- FIG5: Diagrama de mediación por déficit de polinización
+
+**3 Mapas bivariados** (choropleth bivariate 3×3):
+- MAP1: Forest Cover × Carga de Enfermedad — nexo biodiversidad-salud
+- MAP2: Vulnerabilidad Social × Riesgo Climático — justicia climática
+- MAP3: Gobernanza × Déficit Polinización — nexo gobernanza-ecosistemas
+
+#### Hallazgos Top 5
+1. Species richness es predictor más consistente (protege 6/7 enfermedades en SEM)
+2. Déficit de polinización media ~49% de relación bosque→inundación
+3. pct_preta es modulador social más fuerte (>pobreza, >ruralidad, >indígena)
+4. Gobernanza protege indirectamente (β=+0.202*** → forest cover)
+5. Patrón espacial: Vale do Ribeira concentra alta vulnerabilidad + alto riesgo + baja gobernanza
+
+#### Archivos generados
+| Archivo | Ubicación |
+|---------|-----------|
+| `analisis_h1_nexus_sem.py` | `scripts/` + Google Drive |
+| `sintesis_h1_figuras_mapas.py` | `scripts/` |
+| `h1_1_correlations.csv` a `h1_4_sem_paths.csv` | `outputs/` + Google Drive |
+| 20 PNGs análisis H1 | `outputs/figures/` + Google Drive |
+| 5 FIGs + 3 MAPs síntesis | `outputs/figures/` + Google Drive |
+
+#### Ubicación Google Drive
+`G:\My Drive\Adrian David\Forthe_worshop\analisis_h1\` — CSVs, script, figuras originales
+`G:\My Drive\Adrian David\Forthe_worshop\analisis_h1\sintesis\` — 5 figuras + 3 mapas síntesis
+
+---
+
+### 2026-01-26 (Sesión 24 - Corrección Metodológica H3 + Script v2) - ✅ COMPLETADO
+
+#### Solicitud
+Adrian revisó los resultados del análisis H3 (Sesión 23) e identificó dos problemas metodológicos:
+1. **Hospitalizaciones ausentes**: H3.2-H3.4 solo usaban mortalidad (mort_circ, mort_resp), faltaban hospitalizaciones
+2. **Distribución Gaussiana inadecuada**: Variables como fire_incidence (skew=2.52) y forest_cover (skew=2.27) requieren GLM Gamma o log-transform, no OLS
+
+#### Diagnóstico de Distribuciones
+
+Se realizó análisis formal de distribuciones para las variables clave:
+
+| Variable | Skewness | Shapiro-Wilk p | Mejor fit |
+|----------|----------|----------------|-----------|
+| fire_incidence_mean | 2.52 | <0.001 | Log-normal |
+| forest_cover | 2.27 | <0.001 | Log-normal |
+| hosp_circ_rate | 1.62 | <0.001 | Gamma |
+| hosp_resp_rate | 1.40 | <0.001 | Gamma |
+| mort_circ_rate | 0.48 | 0.011 | Gaussian acceptable |
+| mort_resp_rate | 0.89 | <0.001 | Gamma |
+
+**Conclusión**: Solo mort_circ_rate es razonablemente Gaussiana. Todas las demás requieren GLM Gamma o log-transform.
+
+#### Script v2 Creado (`analisis_h3_heat_stress_v2.py`)
+
+Reescritura completa (~630 líneas) con correcciones:
+
+1. **GLM Gamma(link=log)** para outcomes de salud, con fallback a Gaussian/OLS
+2. **Log-transformación** para variables con skewness > 1 antes de z-standardizar
+3. **4 outcomes de salud** en todos los análisis:
+   - `mort_circ_rate` (Mortalidad cardiovascular)
+   - `mort_resp_rate` (Mortalidad respiratoria)
+   - `hosp_circ_rate` (Hospitalizaciones cardiovasculares)
+   - `hosp_resp_rate` (Hospitalizaciones respiratorias)
+4. **Bootstrap IC 95%** (5000 iteraciones) para efectos indirectos, reemplaza test Sobel
+5. **Diagnóstico formal de distribuciones** (Shapiro-Wilk, AIC Gamma vs Gaussian)
+
+**Estado**: Script listo, NO ejecutado (por indicación explícita de Adrian)
+
+#### Figuras Adicionales Generadas
+
+| Archivo | Descripción |
+|---------|-------------|
+| `outputs/figures/h3_sem_path_diagram.png` | Diagrama SEM H3.4 con coeficientes |
+| `outputs/figures/h3_distribucion_variables.png` | 6 paneles: raw + Gaussian vs Log-normal fits |
+
+#### Resumen de Resultados H3 (v1, pendiente re-ejecutar con v2)
+
+**Hallazgos validados por literatura previa:**
+- Biodiversidad reduce incidencia de fuego (Forest -> Fire SEM: -0.243, p<0.001)
+- Efecto protector mayor en zonas urbanas vs rurales (simple slopes)
+
+**Novedades del análisis:**
+- Mediación serial: Biodiversidad -> Fuego -> Riesgo de fuego (cadena causal significativa)
+- fire_risk_index es proxy INADECUADO para estrés térmico en salud (correlación negativa con mortalidad CV, confundido por urbanización)
+- Gobernanza UAI_Crisk promueve cobertura forestal (+0.118, p=0.005) Y reduce incidencia fuego (-0.119, p=0.005)
+
+**Aclaración sobre enfermedades respiratorias:**
+- Biodiversidad SÍ reduce mortalidad respiratoria directamente (r=-0.27, p<0.001)
+- PERO la mediación vía fuego/estrés térmico NO es significativa (Sobel p=0.051)
+- Mecanismo probable: calidad del aire y regulación de humedad, no vía fuego
+
+#### Archivos Organizados en Google Drive
+
+`G:\My Drive\Adrian David\Outputs_Science_Team\`:
+- `correlaciones/` — 8 CSVs (h3_1_*, h3_2_*, h3_3_*, h3_4_*)
+- `figures/` — h3_analisis_completo.png, h3_heatmap_correlaciones.png, h3_sem_path_diagram.png
+- `reports/METODOLOGIA_ESTRES_TERMICO.md`
+- `analisis_h3_heat_stress.py` (v1)
+- `analisis_h3_heat_stress_v2.py` (v2)
+
+#### Próximos Pasos
+- [ ] Adrian revisa script v2 y aprueba ejecución
+- [ ] Ejecutar v2 y comparar resultados con v1
+- [ ] Extraer datos MODIS LST vía GEE para test directo de H3
+
+---
 
 ### 2026-01-23 (Sesión 18 - Validación de Datos de Salud) - ✅ COMPLETADO
 
