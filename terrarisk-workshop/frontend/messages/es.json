@@ -212,7 +212,19 @@
     "mediumDisparity": "Media",
     "lowDisparity": "Baja",
     "interpretation": "Interpretación",
-    "vulnerabilityInterpretation": "Las acciones con alta disparidad deben priorizarse para municipios de alta vulnerabilidad para reducir inequidad. Las barras rojas muestran el beneficio para el grupo de alta vulnerabilidad, las verdes para el de baja."
+    "vulnerabilityInterpretation": "Las acciones con alta disparidad deben priorizarse para municipios de alta vulnerabilidad para reducir inequidad. Las barras rojas muestran el beneficio para el grupo de alta vulnerabilidad, las verdes para el de baja.",
+    "perspectiveChange": "Cambio de Perspectiva",
+    "positionsChanged": "Posiciones Cambiadas",
+    "avgShift": "Cambio Prom.",
+    "layersExplored": "Capas Exploradas",
+    "creditsInvested": "Créditos Invertidos",
+    "convergenceImproved": "Su ranking convergió {pct}% más cerca del ranking basado en datos después de explorar capas",
+    "convergenceMaintained": "Su ranking inicial ya mostraba buena alineación con el análisis basado en datos",
+    "correlationDetail": "Correlación con plataforma: {before}% antes → {after}% después",
+    "detailedChanges": "Cambios Detallados de Posición",
+    "promoted": "Promovido",
+    "demoted": "Descendido",
+    "unchangedLabel": "Sin cambio"
   },
   "radarChart": {
     "noData": "Seleccione un municipio para ver su perfil de riesgo"

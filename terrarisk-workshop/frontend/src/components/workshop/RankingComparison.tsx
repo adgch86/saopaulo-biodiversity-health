@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import VulnerabilityComparison from './VulnerabilityComparison';
+import PerspectiveChange from './PerspectiveChange';
 
 export default function RankingComparison() {
   const t = useTranslations('workshopFlow');
@@ -270,6 +271,8 @@ export default function RankingComparison() {
         <Separator />
 
         <VulnerabilityComparison />
+
+        <PerspectiveChange />
 
         <div className="flex justify-center pt-4">
           <Button

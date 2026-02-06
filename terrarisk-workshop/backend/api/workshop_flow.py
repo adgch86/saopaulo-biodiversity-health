@@ -15,7 +15,7 @@ from core.pearc_actions import (
     WORKSHOP_MUNICIPALITIES,
     PEARC_ACTIONS
 )
-from core.ranking_algorithm import compute_platform_ranking, compute_ranking_difference
+from core.ranking_algorithm import compute_platform_ranking, compute_ranking_difference, compute_spearman, compute_kendall
 from core.database import (
     save_ranking,
     get_rankings,
@@ -693,3 +693,142 @@ async def get_vulnerability_comparison(group_id: str):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error computing vulnerability comparison: {str(e)}")
+
+
+@router.get("/perspective-change/{group_id}")
+async def get_perspective_change(group_id: str):
+    """
+    Compute perspective change metrics between initial and revised rankings.
+
+    Measures how much a group's decisions changed after exploring data,
+    and whether they converged toward the platform optimal ranking.
+
+    Path params:
+        group_id: Group identifier
+
+    Returns:
+        - totalPositionChanges, averagePositionShift, maxPositionShift
+        - municipalityChanges: detailed per-municipality changes
+        - convergenceWithPlatform: improvement toward optimal
+        - dataLayersUsed: how many layers informed the decision
+    """
+    # Validate group exists
+    group = get_group(group_id)
+    if not group:
+        raise HTTPException(status_code=404, detail="Group not found")
+
+    try:
+        # Get both rankings
+        rankings = get_rankings(group_id)
+        initial = rankings.get("initial")
+        revised = rankings.get("revised")
+
+        if not initial:
+            raise HTTPException(status_code=404, detail="No initial ranking found")
+
+        # If no revised ranking, use initial (no change)
+        if not revised:
+            revised = initial
+
+        # Get platform optimal ranking
+        platform_ranking = get_platform_ranking()
+
+        # Build position mappings
+        initial_pos = {item["code"]: item["position"] for item in initial}
+        revised_pos = {item["code"]: item["position"] for item in revised}
+        platform_pos = {item["code"]: item["position"] for item in platform_ranking}
+
+        # Get municipality names from platform ranking
+        code_to_name = {item["code"]: item["name"] for item in platform_ranking}
+
+        # Compute per-municipality changes
+        changes = []
+        promotions = 0
+        demotions = 0
+
+        for code in initial_pos:
+            init_p = initial_pos[code]
+            rev_p = revised_pos.get(code, init_p)
+            change = init_p - rev_p  # Positive = promoted (moved to higher priority)
+
+            change_type = "unchanged"
+            if change > 0:
+                change_type = "promoted"
+                promotions += 1
+            elif change < 0:
+                change_type = "demoted"
+                demotions += 1
+
+            changes.append({
+                "code": code,
+                "name": code_to_name.get(code, code),
+                "initialPosition": init_p,
+                "revisedPosition": rev_p,
+                "positionChange": change,
+                "changeType": change_type
+            })
+
+        # Aggregate metrics
+        position_shifts = [abs(c["positionChange"]) for c in changes]
+        total_changes = sum(1 for s in position_shifts if s > 0)
+        avg_shift = sum(position_shifts) / len(position_shifts) if position_shifts else 0
+        max_shift = max(position_shifts) if position_shifts else 0
+
+        # Top 3 / bottom 3 changes
+        top_three_changed = any(
+            c["positionChange"] != 0 for c in changes if c["initialPosition"] <= 3
+        )
+        bottom_three_changed = any(
+            c["positionChange"] != 0 for c in changes if c["initialPosition"] >= 8
+        )
+
+        # Correlation: initial vs revised
+        common_codes = sorted(initial_pos.keys())
+        initial_ranks = [initial_pos[c] for c in common_codes]
+        revised_ranks = [revised_pos.get(c, initial_pos[c]) for c in common_codes]
+
+        initial_vs_revised = {
+            "spearman": round(compute_spearman(initial_ranks, revised_ranks), 3),
+            "kendall": round(compute_kendall(initial_ranks, revised_ranks), 3),
+        }
+
+        # Convergence with platform
+        platform_ranks = [platform_pos.get(c, 5) for c in common_codes]
+
+        initial_plat_corr = compute_spearman(initial_ranks, platform_ranks) or 0
+        revised_plat_corr = compute_spearman(revised_ranks, platform_ranks) or 0
+        improvement = (revised_plat_corr - initial_plat_corr) * 100
+
+        # Data usage
+        purchased_layers = group.get("purchasedLayers", [])
+        initial_credits = 10  # from config
+        credits_spent = initial_credits - group.get("credits", initial_credits)
+
+        # Sort changes: biggest shifts first
+        changes.sort(key=lambda x: abs(x["positionChange"]), reverse=True)
+
+        return {
+            "totalPositionChanges": total_changes,
+            "averagePositionShift": round(avg_shift, 2),
+            "maxPositionShift": max_shift,
+            "unchangedCount": len(changes) - total_changes,
+            "promotions": promotions,
+            "demotions": demotions,
+            "topThreeChanges": top_three_changed,
+            "bottomThreeChanges": bottom_three_changed,
+            "initialVsRevisedCorrelation": initial_vs_revised,
+            "municipalityChanges": changes,
+            "convergenceWithPlatform": {
+                "initialSpearman": round(initial_plat_corr, 3),
+                "revisedSpearman": round(revised_plat_corr, 3),
+                "improvement": round(improvement, 1)
+            },
+            "dataLayersUsed": len(purchased_layers),
+            "layersUsed": purchased_layers,
+            "creditsSpent": max(0, credits_spent)
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error computing perspective change: {str(e)}")

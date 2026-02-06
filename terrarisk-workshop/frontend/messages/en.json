@@ -212,7 +212,19 @@
     "mediumDisparity": "Medium",
     "lowDisparity": "Low",
     "interpretation": "Interpretation",
-    "vulnerabilityInterpretation": "Actions with high disparity should be prioritized for high-vulnerability municipalities to reduce inequity. Red bars show benefit for high-vulnerability group, green bars for low-vulnerability group."
+    "vulnerabilityInterpretation": "Actions with high disparity should be prioritized for high-vulnerability municipalities to reduce inequity. Red bars show benefit for high-vulnerability group, green bars for low-vulnerability group.",
+    "perspectiveChange": "Perspective Change",
+    "positionsChanged": "Positions Changed",
+    "avgShift": "Avg. Shift",
+    "layersExplored": "Layers Explored",
+    "creditsInvested": "Credits Invested",
+    "convergenceImproved": "Your ranking converged {pct}% closer to the data-driven ranking after exploring data layers",
+    "convergenceMaintained": "Your initial ranking already showed good alignment with the data-driven analysis",
+    "correlationDetail": "Correlation with platform: {before}% before → {after}% after",
+    "detailedChanges": "Detailed Position Changes",
+    "promoted": "Promoted",
+    "demoted": "Demoted",
+    "unchangedLabel": "Unchanged"
   },
   "radarChart": {
     "noData": "Select a municipality to see its risk profile"
