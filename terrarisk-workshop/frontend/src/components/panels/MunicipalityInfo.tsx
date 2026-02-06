@@ -105,7 +105,7 @@ export default function MunicipalityInfo() {
   const { selectedMunicipality, setSelectedMunicipality, layers, activeLayers } =
     useWorkshopStore();
 
-  if (!selectedMunicipality) {
+  if (!selectedMunicipality || !selectedMunicipality.data) {
     return (
       <Card>
         <CardHeader className="py-3">

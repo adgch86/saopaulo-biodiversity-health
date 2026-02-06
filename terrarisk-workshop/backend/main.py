@@ -13,6 +13,7 @@ from api.layers import router as layers_router
 from api.municipalities import router as municipalities_router
 from api.bivariate import router as bivariate_router
 from api.admin import router as admin_router
+from api.workshop_flow import router as workshop_router
 from core.database import init_db
 
 app = FastAPI(
@@ -41,6 +42,7 @@ app.include_router(layers_router, prefix="/api/layers", tags=["layers"])
 app.include_router(municipalities_router, prefix="/api/municipalities", tags=["municipalities"])
 app.include_router(bivariate_router, prefix="/api/bivariate", tags=["bivariate"])
 app.include_router(admin_router, prefix="/api/admin", tags=["admin"])
+app.include_router(workshop_router, prefix="/api/workshop", tags=["workshop"])
 
 
 @app.on_event("startup")

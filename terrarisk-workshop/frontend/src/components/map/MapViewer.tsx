@@ -1,77 +1,133 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useWorkshopStore } from '@/lib/store';
 import { SP_CENTER, SP_BOUNDS } from '@/lib/types';
 
-// Dynamic import to avoid SSR issues with Leaflet
-const MapContainer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.MapContainer),
-  { ssr: false }
-);
-const TileLayer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.TileLayer),
-  { ssr: false }
-);
-const ImageOverlay = dynamic(
-  () => import('react-leaflet').then((mod) => mod.ImageOverlay),
-  { ssr: false }
-);
-const GeoJSON = dynamic(
-  () => import('react-leaflet').then((mod) => mod.GeoJSON),
-  { ssr: false }
-);
+interface ChoroplethData {
+  variable: string;
+  values: Record<string, number | null>;
+  terciles: [number, number];
+  min: number;
+  max: number;
+}
 
-import 'leaflet/dist/leaflet.css';
+// Color scales
+const POSITIVE_COLORS = ['#C62828', '#FFC107', '#2E7D32']; // Red -> Yellow -> Green (low is bad)
+const NEGATIVE_COLORS = ['#2E7D32', '#FFC107', '#C62828']; // Green -> Yellow -> Red (high is bad)
 
-interface GeoJSONFeature {
-  type: 'Feature';
-  properties: {
-    CD_MUN: string;
-    NM_MUN: string;
-  };
-  geometry: object;
+// Variables where higher values are worse
+const NEGATIVE_VARS = [
+  'fire_risk_index', 'flooding_risk', 'hydric_stress_r',
+  'dengue', 'leishmaniose', 'incidence_diarr',
+  'death_circ_mean', 'hosp_resp_mean',
+  'vulnerabilidad', 'pct_pobreza', 'pollination_deficit'
+];
+
+function getColor(value: number | null, terciles: [number, number], variable: string): string {
+  if (value === null) return '#cccccc';
+
+  const colors = NEGATIVE_VARS.includes(variable) ? NEGATIVE_COLORS : POSITIVE_COLORS;
+
+  if (value <= terciles[0]) return colors[0];
+  if (value <= terciles[1]) return colors[1];
+  return colors[2];
 }
 
 export default function MapViewer() {
+  const mapRef = useRef<HTMLDivElement>(null);
+  const geoJsonLayerRef = useRef<L.GeoJSON | null>(null);
+  const [mapInstance, setMapInstance] = useState<L.Map | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [choroplethData, setChoroplethData] = useState<ChoroplethData | null>(null);
   const [geoData, setGeoData] = useState<GeoJSON.FeatureCollection | null>(null);
-  const [isClient, setIsClient] = useState(false);
 
   const {
     layers,
     activeLayers,
-    layerOpacity,
-    bivariateMode,
-    bivariateImageUrl,
     setHoveredMunicipalityCode,
     setSelectedMunicipality,
     group,
   } = useWorkshopStore();
 
+  // Get the first active and unlocked layer's variable
+  const activeVariable = activeLayers
+    .map(id => layers.find(l => l.id === id))
+    .find(layer => layer && (layer.isFree || group?.purchasedLayers.includes(layer.id)))
+    ?.variable || null;
+
+  // Fetch choropleth data when active variable changes
   useEffect(() => {
-    setIsClient(true);
-    // Load GeoJSON
-    fetch('/geojson/sp_simplified.json')
-      .then((res) => res.json())
-      .then((data) => setGeoData(data))
-      .catch((err) => console.error('Failed to load GeoJSON:', err));
+    console.log('[MapViewer] activeVariable changed:', activeVariable);
+    console.log('[MapViewer] activeLayers:', activeLayers);
+    console.log('[MapViewer] layers count:', layers.length);
+    console.log('[MapViewer] group:', group?.id, 'purchasedLayers:', group?.purchasedLayers);
+
+    if (!activeVariable) {
+      setChoroplethData(null);
+      return;
+    }
+
+    console.log('[MapViewer] Fetching choropleth for:', activeVariable);
+    fetch(`/api/municipalities/choropleth/${activeVariable}`)
+      .then(res => res.json())
+      .then(data => {
+        console.log('[MapViewer] Choropleth data received:', data.variable, 'values count:', Object.keys(data.values || {}).length);
+        setChoroplethData(data);
+      })
+      .catch(err => console.error('Failed to fetch choropleth data:', err));
+  }, [activeVariable, activeLayers, layers, group]);
+
+  // Initialize map
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (typeof window === 'undefined' || !mapRef.current || mapInstance) return;
+
+    const initMap = async () => {
+      const L = (await import('leaflet')).default;
+
+      const map = L.map(mapRef.current!, {
+        center: SP_CENTER,
+        zoom: 7,
+        minZoom: 6,
+        maxZoom: 12,
+        preferCanvas: true,
+        maxBounds: [
+          [SP_BOUNDS[0][0] - 1, SP_BOUNDS[0][1] - 1],
+          [SP_BOUNDS[1][0] + 1, SP_BOUNDS[1][1] + 1],
+        ],
+      });
+
+      // Base tile layer
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+      }).addTo(map);
+
+      setMapInstance(map);
+
+      // Load GeoJSON
+      try {
+        const response = await fetch('/geojson/sp_simplified.json');
+        const data = await response.json();
+        setGeoData(data);
+      } catch (err) {
+        console.error('Failed to load GeoJSON:', err);
+      }
+
+      // Labels layer on top (add after GeoJSON)
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+        pane: 'overlayPane',
+        zIndex: 1000,
+      }).addTo(map);
+
+      setIsLoaded(true);
+    };
+
+    initMap();
   }, []);
 
-  if (!isClient) {
-    return (
-      <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-        <div className="animate-pulse text-gray-500">Cargando mapa...</div>
-      </div>
-    );
-  }
-
-  const activeLayerData = activeLayers
-    .map((id) => layers.find((l) => l.id === id))
-    .filter(Boolean);
-
-  const handleFeatureClick = async (feature: GeoJSONFeature) => {
-    const code = feature.properties.CD_MUN;
+  // Handle click on municipality
+  const handleMunicipalityClick = useCallback(async (code: string) => {
     try {
       const res = await fetch(`/api/municipalities/${code}`);
       const data = await res.json();
@@ -79,105 +135,132 @@ export default function MapViewer() {
     } catch (err) {
       console.error('Failed to fetch municipality:', err);
     }
-  };
+  }, [setSelectedMunicipality]);
 
-  const onEachFeature = (feature: GeoJSONFeature, layer: L.Layer) => {
-    layer.on({
-      mouseover: () => {
-        setHoveredMunicipalityCode(feature.properties.CD_MUN);
-        (layer as L.Path).setStyle({
-          weight: 2,
-          color: '#7B1FA2',
-          fillOpacity: 0.1,
-        });
-      },
-      mouseout: () => {
-        setHoveredMunicipalityCode(null);
-        (layer as L.Path).setStyle({
+  // Update GeoJSON layer when choropleth data changes
+  useEffect(() => {
+    if (!mapInstance || !isLoaded || !geoData) return;
+
+    const L = window.L;
+    if (!L) return;
+
+    // Remove existing GeoJSON layer
+    if (geoJsonLayerRef.current) {
+      mapInstance.removeLayer(geoJsonLayerRef.current);
+    }
+
+    // Create new GeoJSON layer with colors
+    const newGeoJsonLayer = L.geoJSON(geoData, {
+      style: (feature) => {
+        if (!feature || !choroplethData) {
+          return {
+            weight: 0.5,
+            color: '#666',
+            fillOpacity: 0,
+            fillColor: 'transparent',
+          };
+        }
+
+        // GeoJSON uses 7-digit codes, API uses 6-digit codes
+        const fullCode = feature.properties?.CD_MUN;
+        const code = fullCode ? fullCode.substring(0, 6) : null;
+        const value = code ? choroplethData.values[code] : null;
+        const fillColor = getColor(value, choroplethData.terciles, choroplethData.variable);
+
+        return {
           weight: 0.5,
           color: '#666',
-          fillOpacity: 0,
+          fillOpacity: 0.7,
+          fillColor,
+        };
+      },
+      onEachFeature: (feature, layer) => {
+        const props = feature.properties;
+        // GeoJSON uses 7-digit codes, API uses 6-digit codes
+        const code6 = props.CD_MUN ? props.CD_MUN.substring(0, 6) : null;
+
+        layer.on({
+          mouseover: () => {
+            setHoveredMunicipalityCode(code6);
+            (layer as L.Path).setStyle({
+              weight: 2,
+              color: '#7B1FA2',
+              fillOpacity: 0.85,
+            });
+            (layer as L.Path).bringToFront();
+          },
+          mouseout: () => {
+            setHoveredMunicipalityCode(null);
+            const value = choroplethData ? choroplethData.values[code6!] : null;
+            const fillColor = choroplethData
+              ? getColor(value, choroplethData.terciles, choroplethData.variable)
+              : 'transparent';
+
+            (layer as L.Path).setStyle({
+              weight: 0.5,
+              color: '#666',
+              fillOpacity: choroplethData ? 0.7 : 0,
+              fillColor,
+            });
+          },
+          click: () => handleMunicipalityClick(code6!),
+        });
+
+        // Tooltip with value
+        let tooltipContent = props.NM_MUN;
+        if (choroplethData && code6) {
+          const value = choroplethData.values[code6];
+          if (value !== null && value !== undefined) {
+            tooltipContent += `<br/><strong>${value.toFixed(2)}</strong>`;
+          }
+        }
+
+        layer.bindTooltip(tooltipContent, {
+          sticky: true,
+          className: 'municipality-tooltip',
         });
       },
-      click: () => handleFeatureClick(feature),
-    });
+    }).addTo(mapInstance);
 
-    layer.bindTooltip(feature.properties.NM_MUN, {
-      sticky: true,
-      className: 'municipality-tooltip',
-    });
-  };
-
-  const geoJsonStyle = {
-    weight: 0.5,
-    color: '#666',
-    fillOpacity: 0,
-    fillColor: 'transparent',
-  };
-
-  // Check if layer is unlocked (free or purchased)
-  const isLayerUnlocked = (layerId: string) => {
-    const layer = layers.find((l) => l.id === layerId);
-    if (!layer) return false;
-    if (layer.isFree) return true;
-    return group?.purchasedLayers.includes(layerId) ?? false;
-  };
+    geoJsonLayerRef.current = newGeoJsonLayer;
+  }, [mapInstance, isLoaded, geoData, choroplethData, handleMunicipalityClick, setHoveredMunicipalityCode]);
 
   return (
     <div className="w-full h-full relative">
-      <MapContainer
-        center={SP_CENTER}
-        zoom={7}
-        minZoom={6}
-        maxZoom={12}
-        className="w-full h-full"
-        preferCanvas={true}
-        maxBounds={[
-          [SP_BOUNDS[0][0] - 1, SP_BOUNDS[0][1] - 1],
-          [SP_BOUNDS[1][0] + 1, SP_BOUNDS[1][1] + 1],
-        ]}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://carto.com/">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
-        />
+      <div ref={mapRef} className="w-full h-full" style={{ background: '#e5e7eb' }} />
 
-        {/* Bivariate overlay */}
-        {bivariateMode && bivariateImageUrl && (
-          <ImageOverlay url={bivariateImageUrl} bounds={SP_BOUNDS} opacity={0.85} />
-        )}
+      {!isLoaded && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+          <div className="animate-pulse text-gray-500">Cargando mapa...</div>
+        </div>
+      )}
 
-        {/* Layer overlays */}
-        {!bivariateMode &&
-          activeLayerData.map(
-            (layer) =>
-              layer &&
-              isLayerUnlocked(layer.id) && (
-                <ImageOverlay
-                  key={layer.id}
-                  url={layer.imageUrl}
-                  bounds={SP_BOUNDS}
-                  opacity={layerOpacity[layer.id] ?? 0.75}
-                />
-              )
-          )}
-
-        {/* GeoJSON for interactivity */}
-        {geoData && (
-          <GeoJSON
-            data={geoData}
-            style={geoJsonStyle}
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            onEachFeature={onEachFeature as any}
-          />
-        )}
-
-        {/* Labels layer on top */}
-        <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png"
-          pane="shadowPane"
-        />
-      </MapContainer>
+      {/* Legend */}
+      {choroplethData && (
+        <div className="absolute bottom-4 left-4 z-[1000] bg-white p-3 rounded shadow-lg">
+          <div className="text-xs font-semibold mb-2 text-gray-700">
+            {layers.find(l => l.variable === choroplethData.variable)?.name || choroplethData.variable}
+          </div>
+          <div className="space-y-1">
+            {(NEGATIVE_VARS.includes(choroplethData.variable) ?
+              [
+                { color: '#2E7D32', label: `Bajo (≤${choroplethData.terciles[0].toFixed(1)})` },
+                { color: '#FFC107', label: `Medio` },
+                { color: '#C62828', label: `Alto (>${choroplethData.terciles[1].toFixed(1)})` },
+              ] : [
+                { color: '#C62828', label: `Bajo (≤${choroplethData.terciles[0].toFixed(1)})` },
+                { color: '#FFC107', label: `Medio` },
+                { color: '#2E7D32', label: `Alto (>${choroplethData.terciles[1].toFixed(1)})` },
+              ]
+            ).map(({ color, label }) => (
+              <div key={color + label} className="flex items-center gap-2">
+                <span className="w-4 h-3 rounded" style={{ backgroundColor: color }} />
+                <span className="text-xs text-gray-600">{label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Map controls */}
       <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">

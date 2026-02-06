@@ -100,3 +100,58 @@ export const CATEGORY_CONFIG: Record<LayerCategory, { label: string; color: stri
   health: { label: 'Salud', color: '#C62828', bgColor: 'bg-red-100' },
   social: { label: 'Social', color: '#1565C0', bgColor: 'bg-blue-100' },
 };
+
+// Workshop Flow Types
+
+export type WorkshopPhase = 'ranking' | 'explore' | 'revised' | 'results';
+
+export interface WorkshopMunicipality {
+  code: string;
+  name: string;
+  quadrant: string;
+  description: string;
+  riskSummary: {
+    governance: number;
+    biodiversity: number;
+    climate: number;
+    health: number;
+    social: number;
+  };
+}
+
+export interface RankingEntry {
+  code: string;
+  position: number;
+}
+
+export interface PEARCAction {
+  id: string;
+  category: string;
+  links: Record<string, number>;
+  totalLinks: number;
+  avgEvidence: number;
+}
+
+export interface RankingComparison {
+  userRanking: Array<{code: string; name: string; position: number}>;
+  platformRanking: Array<{code: string; name: string; position: number; compositeScore: number}>;
+  rankingCorrelation: {spearman: number; kendall: number};
+  positionDifferences: Array<{code: string; name: string; userPosition: number; platformPosition: number; difference: number}>;
+  userActions: string[];
+  suggestedActions: Array<{id: string; relevanceScore: number}>;
+  actionOverlap: number;
+}
+
+export const QUADRANT_CONFIG: Record<string, {label: string; color: string; bgColor: string}> = {
+  Q1: { label: 'Model', color: '#2E7D32', bgColor: 'bg-green-100' },
+  Q2: { label: 'Risk', color: '#FFC107', bgColor: 'bg-yellow-100' },
+  Q3: { label: 'Critical', color: '#C62828', bgColor: 'bg-red-100' },
+  Q4: { label: 'Potential', color: '#E65100', bgColor: 'bg-orange-100' },
+};
+
+export const PHASE_CONFIG: Record<WorkshopPhase, {step: number; icon: string}> = {
+  ranking: { step: 1, icon: '1' },
+  explore: { step: 2, icon: '2' },
+  revised: { step: 3, icon: '3' },
+  results: { step: 4, icon: '4' },
+};

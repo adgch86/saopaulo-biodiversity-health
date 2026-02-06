@@ -58,9 +58,12 @@ export default function LayerSelector() {
   };
 
   const handleLayerClick = (layerId: string) => {
+    console.log('[LayerSelector] Click on layer:', layerId);
+    console.log('[LayerSelector] isUnlocked:', isLayerUnlocked(layerId));
     if (isLayerUnlocked(layerId)) {
       toggleLayer(layerId);
     } else {
+      console.log('[LayerSelector] Opening purchase dialog for:', layerId);
       setPurchaseDialogLayer(layerId);
     }
   };
@@ -138,7 +141,10 @@ export default function LayerSelector() {
                             ${isActive ? 'bg-purple-100 ring-2 ring-purple-400' : 'hover:bg-gray-50'}
                             ${!isUnlocked ? 'opacity-75' : ''}
                           `}
-                          onClick={() => handleLayerClick(layer.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleLayerClick(layer.id);
+                          }}
                         >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
@@ -212,9 +218,13 @@ export default function LayerSelector() {
       </ScrollArea>
 
       {/* Purchase Dialog */}
+      {console.log('[LayerSelector] Dialog state - purchaseDialogLayer:', purchaseDialogLayer)}
       <Dialog
         open={!!purchaseDialogLayer}
-        onOpenChange={() => setPurchaseDialogLayer(null)}
+        onOpenChange={(open) => {
+          console.log('[LayerSelector] Dialog onOpenChange:', open);
+          if (!open) setPurchaseDialogLayer(null);
+        }}
       >
         <DialogContent>
           <DialogHeader>

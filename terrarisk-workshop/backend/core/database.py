@@ -65,6 +65,30 @@ def init_db():
             )
         """)
 
+        # Workshop rankings table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS rankings (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                group_id TEXT NOT NULL,
+                phase TEXT NOT NULL,
+                ranking TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                FOREIGN KEY (group_id) REFERENCES groups(id),
+                UNIQUE(group_id, phase)
+            )
+        """)
+
+        # Workshop selected actions table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS selected_actions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                group_id TEXT NOT NULL UNIQUE,
+                actions TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                FOREIGN KEY (group_id) REFERENCES groups(id)
+            )
+        """)
+
         conn.commit()
 
 
@@ -216,3 +240,89 @@ def get_purchase_stats() -> dict:
             "popularLayers": popular_layers,
             "groupStats": group_stats
         }
+
+
+# Workshop ranking operations
+
+def save_ranking(group_id: str, phase: str, ranking_data: list[dict]):
+    """
+    Save or update a group's ranking
+
+    Args:
+        group_id: Group ID
+        phase: 'initial' or 'revised'
+        ranking_data: List of {code, position}
+    """
+    now = datetime.utcnow().isoformat()
+    ranking_json = json.dumps(ranking_data)
+
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO rankings (group_id, phase, ranking, created_at)
+            VALUES (?, ?, ?, ?)
+            ON CONFLICT(group_id, phase)
+            DO UPDATE SET ranking = ?, created_at = ?
+        """, (group_id, phase, ranking_json, now, ranking_json, now))
+
+
+def get_rankings(group_id: str) -> dict:
+    """
+    Get all rankings for a group
+
+    Returns:
+        Dict with {initial: [...], revised: [...] or None}
+    """
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT phase, ranking FROM rankings WHERE group_id = ?
+        """, (group_id,))
+
+        results = {"initial": None, "revised": None}
+        for row in cursor.fetchall():
+            phase = row['phase']
+            ranking = json.loads(row['ranking'])
+            results[phase] = ranking
+
+        return results
+
+
+def save_selected_actions(group_id: str, action_ids: list[str]):
+    """
+    Save selected actions for a group
+
+    Args:
+        group_id: Group ID
+        action_ids: List of action IDs
+    """
+    now = datetime.utcnow().isoformat()
+    actions_json = json.dumps(action_ids)
+
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO selected_actions (group_id, actions, created_at)
+            VALUES (?, ?, ?)
+            ON CONFLICT(group_id)
+            DO UPDATE SET actions = ?, created_at = ?
+        """, (group_id, actions_json, now, actions_json, now))
+
+
+def get_selected_actions(group_id: str) -> list[str]:
+    """
+    Get selected actions for a group
+
+    Returns:
+        List of action IDs
+    """
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT actions FROM selected_actions WHERE group_id = ?
+        """, (group_id,))
+
+        row = cursor.fetchone()
+        if row:
+            return json.loads(row['actions'])
+        return []

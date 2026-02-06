@@ -1,7 +1,7 @@
 // TerraRisk Workshop - Zustand Store
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Group, Layer, Municipality, MunicipalityBasic } from './types';
+import type { Group, Layer, Municipality, MunicipalityBasic, WorkshopPhase, WorkshopMunicipality, RankingEntry, PEARCAction, RankingComparison } from './types';
 
 interface WorkshopState {
   // Group state
@@ -45,6 +45,23 @@ interface WorkshopState {
   layerOpacity: Record<string, number>;
   setLayerOpacity: (layerId: string, opacity: number) => void;
 
+  // Workshop Flow state
+  workshopPhase: WorkshopPhase;
+  setWorkshopPhase: (phase: WorkshopPhase) => void;
+  workshopMunicipalities: WorkshopMunicipality[];
+  setWorkshopMunicipalities: (municipalities: WorkshopMunicipality[]) => void;
+  initialRanking: RankingEntry[];
+  setInitialRanking: (ranking: RankingEntry[]) => void;
+  revisedRanking: RankingEntry[];
+  setRevisedRanking: (ranking: RankingEntry[]) => void;
+  pearcActions: PEARCAction[];
+  setPearcActions: (actions: PEARCAction[]) => void;
+  selectedActions: string[];
+  setSelectedActions: (actions: string[]) => void;
+  toggleAction: (actionId: string) => void;
+  comparison: RankingComparison | null;
+  setComparison: (comparison: RankingComparison | null) => void;
+
   // Actions
   purchaseLayer: (layerId: string) => Promise<boolean>;
   resetGroup: () => void;
@@ -66,6 +83,13 @@ export const useWorkshopStore = create<WorkshopState>()(
       bivariateImageUrl: null,
       creditAnimation: false,
       layerOpacity: {},
+      workshopPhase: 'ranking',
+      workshopMunicipalities: [],
+      initialRanking: [],
+      revisedRanking: [],
+      pearcActions: [],
+      selectedActions: [],
+      comparison: null,
 
       // Setters
       setGroup: (group) => set({ group }),
@@ -100,6 +124,22 @@ export const useWorkshopStore = create<WorkshopState>()(
       setLayerOpacity: (layerId, opacity) => set((state) => ({
         layerOpacity: { ...state.layerOpacity, [layerId]: opacity }
       })),
+
+      setWorkshopPhase: (phase) => set({ workshopPhase: phase }),
+      setWorkshopMunicipalities: (municipalities) => set({ workshopMunicipalities: municipalities }),
+      setInitialRanking: (ranking) => set({ initialRanking: ranking }),
+      setRevisedRanking: (ranking) => set({ revisedRanking: ranking }),
+      setPearcActions: (actions) => set({ pearcActions: actions }),
+      setSelectedActions: (actions) => set({ selectedActions: actions }),
+      toggleAction: (actionId) => set((state) => {
+        const isSelected = state.selectedActions.includes(actionId);
+        return {
+          selectedActions: isSelected
+            ? state.selectedActions.filter(id => id !== actionId)
+            : [...state.selectedActions, actionId]
+        };
+      }),
+      setComparison: (comparison) => set({ comparison }),
 
       // Purchase layer
       purchaseLayer: async (layerId) => {
@@ -136,14 +176,22 @@ export const useWorkshopStore = create<WorkshopState>()(
         selectedMunicipality: null,
         bivariateMode: false,
         bivariateImageUrl: null,
+        workshopPhase: 'ranking',
+        initialRanking: [],
+        revisedRanking: [],
+        selectedActions: [],
+        comparison: null,
       }),
     }),
     {
       name: 'terrarisk-workshop',
       partialize: (state) => ({
         group: state.group,
-        activeLayers: state.activeLayers,
         layerOpacity: state.layerOpacity,
+        workshopPhase: state.workshopPhase,
+        initialRanking: state.initialRanking,
+        revisedRanking: state.revisedRanking,
+        selectedActions: state.selectedActions,
       }),
     }
   )
