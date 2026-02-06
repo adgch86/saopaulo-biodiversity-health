@@ -12,7 +12,8 @@ from core.config import DATA_DIR
 from core.pearc_actions import (
     get_actions_list,
     get_actions_for_risks,
-    WORKSHOP_MUNICIPALITIES
+    WORKSHOP_MUNICIPALITIES,
+    PEARC_ACTIONS
 )
 from core.ranking_algorithm import compute_platform_ranking, compute_ranking_difference
 from core.database import (
@@ -493,3 +494,202 @@ async def get_radar_profiles(codes: str):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error computing radar: {str(e)}")
+
+
+@router.get("/vulnerability-comparison/{group_id}")
+async def get_vulnerability_comparison(group_id: str):
+    """
+    Compare high vs low vulnerability municipalities among the 10 workshop municipalities.
+
+    Splits municipalities by median vulnerability into two groups and compares:
+    - Average dimension values (normalized 0-100)
+    - Action impact analysis (which actions benefit each group most)
+
+    Path params:
+        group_id: Group identifier (for multi-group workshop support)
+
+    Returns:
+        - highVulnerability: {municipalities, averages, count}
+        - lowVulnerability: {municipalities, averages, count}
+        - actionImpact: List of actions with benefit scores per group
+    """
+    # Validate group exists
+    group = get_group(group_id)
+    if not group:
+        raise HTTPException(status_code=404, detail="Group not found")
+
+    try:
+        # Load workshop data (10 municipalities only)
+        data = get_workshop_data()
+        df = data["df"]
+        name_col = data["name_col"]
+        code_col = data["code_col"]
+
+        # Load full data for normalization stats
+        full_data = get_full_data()
+        min_max = full_data["min_max"]
+
+        # Check if vulnerability column exists
+        vuln_col = VARIABLE_MAPPING.get('vulnerability')
+        if not vuln_col or vuln_col not in df.columns:
+            raise HTTPException(status_code=500, detail="Vulnerability column not found in data")
+
+        # Convert vulnerability column to numeric
+        df[vuln_col] = pd.to_numeric(df[vuln_col], errors='coerce')
+
+        # Remove rows with NaN vulnerability
+        df_valid = df.dropna(subset=[vuln_col])
+
+        if len(df_valid) == 0:
+            raise HTTPException(status_code=500, detail="No valid vulnerability data found")
+
+        # Calculate median vulnerability
+        median_vuln = df_valid[vuln_col].median()
+
+        # Split into high and low vulnerability groups
+        high_vuln_df = df_valid[df_valid[vuln_col] > median_vuln]
+        low_vuln_df = df_valid[df_valid[vuln_col] <= median_vuln]
+
+        # Helper function to normalize a value to 0-100 scale
+        def normalize_value(val, layer_id):
+            """Normalize value using global min-max from all 645 municipalities"""
+            if pd.isna(val):
+                return None
+
+            mm = min_max.get(layer_id)
+            if not mm:
+                return None
+
+            range_val = mm["max"] - mm["min"]
+            if range_val > 0:
+                norm = ((float(val) - mm["min"]) / range_val) * 100
+            else:
+                norm = 50
+
+            return round(norm, 2)
+
+        # Helper function to build municipality list with vulnerability scores
+        def build_municipality_list(group_df):
+            """Build list of municipalities with code, name, and vulnerability score"""
+            municipalities = []
+
+            for _, row in group_df.iterrows():
+                code = str(row[code_col])
+                name = str(row[name_col])
+                vuln_raw = float(row[vuln_col])
+                vuln_normalized = normalize_value(vuln_raw, 'vulnerability')
+
+                municipalities.append({
+                    "code": code,
+                    "name": name,
+                    "vulnerability": vuln_normalized if vuln_normalized is not None else vuln_raw
+                })
+
+            return municipalities
+
+        # Helper function to calculate average normalized values for all dimensions
+        def calculate_averages(group_df):
+            """Calculate average normalized values for all dimensions in VARIABLE_MAPPING"""
+            averages = {}
+
+            for layer_id, col_name in VARIABLE_MAPPING.items():
+                if col_name not in group_df.columns:
+                    continue
+
+                # Convert to numeric
+                col_numeric = pd.to_numeric(group_df[col_name], errors='coerce')
+
+                # Normalize each value
+                normalized_values = []
+                for val in col_numeric:
+                    norm = normalize_value(val, layer_id)
+                    if norm is not None:
+                        normalized_values.append(norm)
+
+                # Calculate average
+                if normalized_values:
+                    averages[layer_id] = round(sum(normalized_values) / len(normalized_values), 2)
+                else:
+                    averages[layer_id] = 0
+
+            return averages
+
+        # Build response for each group
+        high_vuln_data = {
+            "municipalities": build_municipality_list(high_vuln_df),
+            "averages": calculate_averages(high_vuln_df),
+            "count": len(high_vuln_df)
+        }
+
+        low_vuln_data = {
+            "municipalities": build_municipality_list(low_vuln_df),
+            "averages": calculate_averages(low_vuln_df),
+            "count": len(low_vuln_df)
+        }
+
+        # Calculate action impact analysis
+        # For each action, compute how much it benefits each group based on their risk profiles
+        action_impacts = []
+
+        for action in PEARC_ACTIONS:
+            action_id = action["id"]
+            links = action["links"]
+
+            # Calculate benefit score for each group
+            # Benefit = sum of (link_strength × normalized_risk_level)
+            # Higher risk × stronger link = higher benefit
+
+            high_vuln_benefit = 0
+            low_vuln_benefit = 0
+
+            for layer_id, link_strength in links.items():
+                # Get average risk level for this dimension in each group
+                high_risk = high_vuln_data["averages"].get(layer_id, 0)
+                low_risk = low_vuln_data["averages"].get(layer_id, 0)
+
+                # For protective layers (governance, biodiversity), benefit is higher when score is LOW
+                # For risk layers, benefit is higher when score is HIGH
+                if layer_id in PROTECTIVE_LAYERS:
+                    # Lower governance = needs more improvement = higher benefit
+                    high_vuln_benefit += link_strength * (100 - high_risk) / 100
+                    low_vuln_benefit += link_strength * (100 - low_risk) / 100
+                else:
+                    # Higher risk = needs more mitigation = higher benefit
+                    high_vuln_benefit += link_strength * (high_risk / 100)
+                    low_vuln_benefit += link_strength * (low_risk / 100)
+
+            # Normalize benefits to 0-1 scale (divide by max possible benefit)
+            max_possible = sum(links.values())
+            if max_possible > 0:
+                high_vuln_benefit = high_vuln_benefit / max_possible
+                low_vuln_benefit = low_vuln_benefit / max_possible
+
+            # Calculate disparity
+            disparity = abs(high_vuln_benefit - low_vuln_benefit)
+
+            # Get action name (convert ID to readable name)
+            action_name = action_id.replace("_", " ").title()
+
+            action_impacts.append({
+                "actionId": action_id,
+                "actionName": action_name,
+                "category": action["category"],
+                "highVulnBenefit": round(high_vuln_benefit, 3),
+                "lowVulnBenefit": round(low_vuln_benefit, 3),
+                "disparity": round(disparity, 3)
+            })
+
+        # Sort by disparity (descending) to show actions with biggest differences first
+        action_impacts.sort(key=lambda x: x["disparity"], reverse=True)
+
+        return {
+            "highVulnerability": high_vuln_data,
+            "lowVulnerability": low_vuln_data,
+            "actionImpact": action_impacts,
+            "medianVulnerability": round(float(median_vuln), 3)
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error computing vulnerability comparison: {str(e)}")

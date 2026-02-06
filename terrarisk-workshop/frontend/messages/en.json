@@ -182,7 +182,21 @@
     "moveUp": "Move up",
     "moveDown": "Move down",
     "remove": "Remove",
-    "pearcNetwork": "PEARC Network"
+    "pearcNetwork": "PEARC Network",
+    "vulnerabilityComparison": "Vulnerability Comparison",
+    "highVulnerability": "High Vulnerability",
+    "lowVulnerability": "Low Vulnerability",
+    "dimensionComparison": "Average Risk Dimensions",
+    "dimension": "Dimension",
+    "highVuln": "High Vuln",
+    "lowVuln": "Low Vuln",
+    "difference": "Difference",
+    "actionImpactDisparity": "Action Impact Disparity",
+    "highDisparity": "High",
+    "mediumDisparity": "Medium",
+    "lowDisparity": "Low",
+    "interpretation": "Interpretation",
+    "vulnerabilityInterpretation": "Actions with high disparity should be prioritized for high-vulnerability municipalities to reduce inequity. Red bars show benefit for high-vulnerability group, green bars for low-vulnerability group."
   },
   "radarChart": {
     "noData": "Select a municipality to see its risk profile"

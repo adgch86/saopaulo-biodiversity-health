@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
+import VulnerabilityComparison from './VulnerabilityComparison';
 
 export default function RankingComparison() {
   const t = useTranslations('workshopFlow');
@@ -265,6 +266,10 @@ export default function RankingComparison() {
             </div>
           </CardContent>
         </Card>
+
+        <Separator />
+
+        <VulnerabilityComparison />
 
         <div className="flex justify-center pt-4">
           <Button
