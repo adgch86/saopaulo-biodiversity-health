@@ -13,6 +13,22 @@ export default function AdminPage() {
   const t = useTranslations('admin');
   const tc = useTranslations('common');
   const tl = useTranslations('landing');
+
+  const AREA_LABELS: Record<string, string> = {
+    academia: tl('areaAcademia'),
+    government: tl('areaGovernment'),
+    ngo: tl('areaNgo'),
+    private: tl('areaPrivate'),
+    student: tl('areaStudent'),
+    other: tl('areaOther'),
+  };
+
+  const EXP_LABELS: Record<string, string> = {
+    none: tl('expNone'),
+    basic: tl('expBasic'),
+    intermediate: tl('expIntermediate'),
+    advanced: tl('expAdvanced'),
+  };
   const locale = useLocale() as Locale;
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -189,12 +205,12 @@ export default function AdminPage() {
                         <div className="flex flex-wrap gap-1">
                           {group.professionalArea && (
                             <Badge variant="outline" className="text-xs">
-                              {tl(`area${group.professionalArea.charAt(0).toUpperCase()}${group.professionalArea.slice(1)}` as any)}
+                              {AREA_LABELS[group.professionalArea] ?? group.professionalArea}
                             </Badge>
                           )}
                           {group.environmentalExperience && (
                             <Badge variant="secondary" className="text-xs">
-                              {tl(`exp${group.environmentalExperience.charAt(0).toUpperCase()}${group.environmentalExperience.slice(1)}` as any)}
+                              {EXP_LABELS[group.environmentalExperience] ?? group.environmentalExperience}
                             </Badge>
                           )}
                         </div>
