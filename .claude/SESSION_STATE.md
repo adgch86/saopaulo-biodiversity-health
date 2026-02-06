@@ -5,54 +5,59 @@
 
 ## Ultima Sesion
 
-**Fecha:** 2026-02-05
-**Estado general:** Workshop Flow DEPLOYED en produccion - listo para demo con Adrian
+**Fecha:** 2026-02-06
+**Estado general:** Red Bipartita PEARC implementada - pendiente deploy
 
 ### Lo que se hizo hoy
 
-1. **TerraRisk Workshop Flow - IMPLEMENTACION + DEPLOY COMPLETO**
-   - Flujo de 4 fases implementado end-to-end (7 archivos nuevos, 9 modificados)
-   - Backend: PEARC actions catalog (15), ranking algorithm (Spearman/Kendall), 6 API endpoints
-   - Frontend: 4 componentes (Stepper, Ranking, Actions, Comparison), i18n EN/ES/PT
-   - 6 bugs de integracion encontrados y corregidos
-2. **Tests E2E completos:**
-   - Backend API: 11/11 tests OK
-   - Frontend integration: 7/7 steps OK (flujo usuario completo simulado)
-   - Spearman: 0.624, Kendall: 0.467 con ranking de test
-3. **Deploy a produccion:**
-   - Commit 486f93b pushed a GitHub
-   - Synced a Contabo via scp + tar
-   - Docker rebuild + compose up
-   - Verificado: health=200, municipalities=10, actions=15, frontend=200
-4. **Documento actualizado:** `docs/WORKSHOP_FLOW_IMPLEMENTATION_REPORT.md`
-   - Incluye detalle de TODOS los pendientes de Adrian (puntos 1-11)
-   - Roadmap sugerido pre-workshop con estimaciones
+1. **Red Bipartita PEARC (Punto 7) - IMPLEMENTADO**
+   - Componente `BipartiteNetwork.tsx` (SVG puro, sin dependencias extra)
+   - 15 acciones PEARC (izquierda, circulos) + 15 dimensiones riesgo (derecha, cuadrados)
+   - ~50 aristas con grosor proporcional a evidencia (1-3)
+   - Nodos coloreados por categoria (governance, biodiversity, climate, health, social)
+   - Interactividad: hover resalta conexiones, click selecciona/deselecciona acciones
+   - Sincronizado con store Zustand (selectedActions compartido con ActionsSelector)
+   - Integrado en Phase 3 via tabs: "Seleccionar Acciones" | "Red PEARC"
+   - i18n completo EN/ES/PT (6 keys nuevas + 1 key en workshopFlow)
+   - Build exitoso: 0 errores, +1.6 kB en /workshop (35.3 kB total)
+2. **Science Team integrado como equipo aliado en workspace principal**
+   - Dante configurado como enlace ciencia-negocio
+   - Knowledge Graph actualizado con entidad Science Team
+   - Adrian David cambiado de PAUSADO a ACTIVO
 
 ### Deploy
 
 - **URL:** https://terrarisk.arlexperalta.com
-- **Commit:** 486f93b (master)
-- **Containers:** terrarisk-workshop-api-1 (8002) + terrarisk-workshop-frontend-1 (4001)
+- **Commit anterior:** 486f93b (master)
+- **Cambios locales pendientes de deploy:** BipartiteNetwork + tabs Phase 3 + i18n
 
 ### Pendiente critico (para workshop Feb 22-26)
 
+- [x] Red bipartita PEARC network (punto 7) - COMPLETADO
 - [ ] Radar chart por municipio (punto 8, ~3h)
-- [ ] Red bipartita PEARC network (punto 7, ~5h)
 - [ ] Comparacion por vulnerabilidad (punto 9, ~3h)
 - [ ] Perfiles de participantes (punto 4, ~2h)
 - [ ] Metricas cambio de perspectiva (punto 5, ~3h)
 - [ ] Testing con datos reales + QA visual
 - [ ] Deploy final pre-workshop
 
+### Archivos modificados
+
+- `frontend/src/components/workshop/BipartiteNetwork.tsx` (NUEVO - 270 lineas)
+- `frontend/src/app/workshop/page.tsx` (modificado - tabs en Phase 3)
+- `frontend/messages/en.json` (modificado - bipartiteNetwork keys + pearcNetwork)
+- `frontend/messages/es.json` (modificado - bipartiteNetwork keys + pearcNetwork)
+- `frontend/messages/pt.json` (modificado - bipartiteNetwork keys + pearcNetwork)
+
 ### Proximos pasos
 
-1. **Reunion con Adrian (Feb 6):** Mostrar demo en https://terrarisk.arlexperalta.com
-2. Discutir prioridades de los puntos pendientes (7-9 son los mas impactantes)
-3. Air Pollution: Enviar tabla a Luisa (deadline Feb 6)
+1. Deploy a produccion (commit + push + sync Contabo)
+2. Radar chart por municipio (Punto 8) - siguiente feature
+3. Comparacion por vulnerabilidad (Punto 9)
 
 ### Proyectos activos
 
-1. **Air Pollution & Pollinator Networks** - deadline tabla 6 Feb
+1. **Air Pollution & Pollinator Networks** - tabla enviada a Luisa (6 Feb), esperando respuesta
 2. **Resilient Landscapes (Sao Paulo)** - Workshop SEMIL-USP Feb 22-26
-   - TerraRisk Workshop: DEPLOYED, flujo completo funcionando
-   - Pendiente: 5 features adicionales (~16-20h total)
+   - TerraRisk Workshop: DEPLOYED + Red Bipartita lista
+   - Pendiente: 4 features adicionales (~11h total)

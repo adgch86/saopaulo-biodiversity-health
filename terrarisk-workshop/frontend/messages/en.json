@@ -181,7 +181,16 @@
     "allRanked": "All municipalities ranked!",
     "moveUp": "Move up",
     "moveDown": "Move down",
-    "remove": "Remove"
+    "remove": "Remove",
+    "pearcNetwork": "PEARC Network"
+  },
+  "bipartiteNetwork": {
+    "title": "PEARC Action-Risk Network",
+    "description": "Hover over nodes to explore connections. Click actions to select/deselect them.",
+    "actions": "ACTIONS",
+    "riskDimensions": "RISK DIMENSIONS",
+    "evidenceLevel": "evidence",
+    "actionsSelectedCount": "actions selected"
   },
   "actionNames": {
     "reforestation": "Reforestation & Ecological Restoration",

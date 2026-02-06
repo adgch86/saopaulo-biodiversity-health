@@ -10,6 +10,7 @@ import MapViewer from '@/components/map/MapViewer';
 import WorkshopStepper from '@/components/workshop/WorkshopStepper';
 import MunicipalityRanking from '@/components/workshop/MunicipalityRanking';
 import ActionsSelector from '@/components/workshop/ActionsSelector';
+import BipartiteNetwork from '@/components/workshop/BipartiteNetwork';
 import RankingComparison from '@/components/workshop/RankingComparison';
 import { Button } from '@/components/ui/button';
 import type { RankingEntry } from '@/lib/types';
@@ -32,6 +33,7 @@ export default function WorkshopPage() {
   } = useWorkshopStore();
   const [isLoading, setIsLoading] = useState(true);
   const [showPhaseTransition, setShowPhaseTransition] = useState(false);
+  const [phase3RightTab, setPhase3RightTab] = useState<'actions' | 'network'>('actions');
 
   // Redirect if no group
   useEffect(() => {
@@ -233,8 +235,38 @@ export default function WorkshopPage() {
           <div className="w-1/2 overflow-auto">
             <MunicipalityRanking phase="revised" onSubmit={handleRevisedRanking} />
           </div>
-          <div className="w-1/2 overflow-auto border-l">
-            <ActionsSelector onSubmit={handleActionsSubmit} />
+          <div className="w-1/2 flex flex-col overflow-hidden border-l">
+            {/* Tab switcher */}
+            <div className="flex border-b border-gray-200 bg-white shrink-0">
+              <button
+                className={`flex-1 px-4 py-2.5 text-sm font-medium transition-colors ${
+                  phase3RightTab === 'actions'
+                    ? 'text-purple-700 border-b-2 border-purple-600 bg-purple-50/50'
+                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                }`}
+                onClick={() => setPhase3RightTab('actions')}
+              >
+                {tf('selectActions')}
+              </button>
+              <button
+                className={`flex-1 px-4 py-2.5 text-sm font-medium transition-colors ${
+                  phase3RightTab === 'network'
+                    ? 'text-purple-700 border-b-2 border-purple-600 bg-purple-50/50'
+                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                }`}
+                onClick={() => setPhase3RightTab('network')}
+              >
+                {tf('pearcNetwork')}
+              </button>
+            </div>
+            {/* Tab content */}
+            <div className="flex-1 overflow-auto">
+              {phase3RightTab === 'actions' ? (
+                <ActionsSelector onSubmit={handleActionsSubmit} />
+              ) : (
+                <BipartiteNetwork />
+              )}
+            </div>
           </div>
         </div>
       )}
