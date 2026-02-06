@@ -17,6 +17,9 @@ export default function Home() {
   const router = useRouter();
   const { group, setGroup } = useWorkshopStore();
   const [groupName, setGroupName] = useState('');
+  const [professionalArea, setProfessionalArea] = useState('');
+  const [environmentalExperience, setEnvironmentalExperience] = useState('');
+  const [numParticipants, setNumParticipants] = useState('');
   const [groups, setGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -49,7 +52,12 @@ export default function Home() {
       const res = await fetch('/api/groups', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: groupName.trim() }),
+        body: JSON.stringify({
+          name: groupName.trim(),
+          professionalArea: professionalArea || undefined,
+          environmentalExperience: environmentalExperience || undefined,
+          numParticipants: numParticipants ? parseInt(numParticipants, 10) : undefined,
+        }),
       });
 
       if (!res.ok) throw new Error('Error');
@@ -133,7 +141,7 @@ export default function Home() {
                 <div className="space-y-4">
                   <div>
                     <label className="text-sm font-medium text-gray-700">
-                      {t('groupName')}
+                      {t('groupName')} *
                     </label>
                     <input
                       type="text"
@@ -143,6 +151,64 @@ export default function Home() {
                       className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       onKeyDown={(e) => e.key === 'Enter' && handleCreateGroup()}
                     />
+                  </div>
+
+                  {/* Profile fields */}
+                  <div className="border-t border-gray-200 pt-4 space-y-3">
+                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {t('profileSection')}
+                    </p>
+
+                    <div>
+                      <label className="text-sm font-medium text-gray-700">
+                        {t('professionalArea')}
+                      </label>
+                      <select
+                        value={professionalArea}
+                        onChange={(e) => setProfessionalArea(e.target.value)}
+                        className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white"
+                      >
+                        <option value="">{t('selectOption')}</option>
+                        <option value="academia">{t('areaAcademia')}</option>
+                        <option value="government">{t('areaGovernment')}</option>
+                        <option value="ngo">{t('areaNgo')}</option>
+                        <option value="private">{t('areaPrivate')}</option>
+                        <option value="student">{t('areaStudent')}</option>
+                        <option value="other">{t('areaOther')}</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium text-gray-700">
+                        {t('environmentalExperience')}
+                      </label>
+                      <select
+                        value={environmentalExperience}
+                        onChange={(e) => setEnvironmentalExperience(e.target.value)}
+                        className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white"
+                      >
+                        <option value="">{t('selectOption')}</option>
+                        <option value="none">{t('expNone')}</option>
+                        <option value="basic">{t('expBasic')}</option>
+                        <option value="intermediate">{t('expIntermediate')}</option>
+                        <option value="advanced">{t('expAdvanced')}</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium text-gray-700">
+                        {t('numParticipants')}
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="20"
+                        value={numParticipants}
+                        onChange={(e) => setNumParticipants(e.target.value)}
+                        placeholder="1-20"
+                        className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      />
+                    </div>
                   </div>
 
                   {error && <p className="text-sm text-red-500">{error}</p>}

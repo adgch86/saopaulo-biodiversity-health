@@ -48,10 +48,27 @@ def init_db():
                 name TEXT NOT NULL,
                 credits INTEGER DEFAULT 10,
                 purchased_layers TEXT DEFAULT '[]',
+                professional_area TEXT,
+                environmental_experience TEXT,
+                num_participants INTEGER,
                 created_at TEXT NOT NULL,
                 updated_at TEXT NOT NULL
             )
         """)
+
+        # Migration: add profile columns to existing tables
+        try:
+            cursor.execute("ALTER TABLE groups ADD COLUMN professional_area TEXT")
+        except sqlite3.OperationalError:
+            pass  # Column already exists
+        try:
+            cursor.execute("ALTER TABLE groups ADD COLUMN environmental_experience TEXT")
+        except sqlite3.OperationalError:
+            pass
+        try:
+            cursor.execute("ALTER TABLE groups ADD COLUMN num_participants INTEGER")
+        except sqlite3.OperationalError:
+            pass
 
         # Purchase history table
         cursor.execute("""
@@ -103,21 +120,32 @@ def row_to_dict(row) -> dict:
         d['createdAt'] = d.pop('created_at')
     if 'updated_at' in d:
         d['updatedAt'] = d.pop('updated_at')
+    if 'professional_area' in d:
+        d['professionalArea'] = d.pop('professional_area')
+    if 'environmental_experience' in d:
+        d['environmentalExperience'] = d.pop('environmental_experience')
+    if 'num_participants' in d:
+        d['numParticipants'] = d.pop('num_participants')
     return d
 
 
 # Group operations
 
-def create_group(group_id: str, name: str) -> dict:
-    """Create a new group"""
+def create_group(group_id: str, name: str, professional_area: str = None,
+                  environmental_experience: str = None, num_participants: int = None) -> dict:
+    """Create a new group with optional profile data"""
     now = datetime.utcnow().isoformat()
 
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute("""
-            INSERT INTO groups (id, name, credits, purchased_layers, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (group_id, name, INITIAL_CREDITS, '[]', now, now))
+            INSERT INTO groups (id, name, credits, purchased_layers,
+                                professional_area, environmental_experience, num_participants,
+                                created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (group_id, name, INITIAL_CREDITS, '[]',
+              professional_area, environmental_experience, num_participants,
+              now, now))
 
         cursor.execute("SELECT * FROM groups WHERE id = ?", (group_id,))
         return row_to_dict(cursor.fetchone())
@@ -218,7 +246,8 @@ def get_purchase_stats() -> dict:
 
         # Group stats
         cursor.execute("""
-            SELECT g.id, g.name, g.credits, g.purchased_layers, g.updated_at
+            SELECT g.id, g.name, g.credits, g.purchased_layers, g.updated_at,
+                   g.professional_area, g.environmental_experience, g.num_participants
             FROM groups g
             ORDER BY g.updated_at DESC
         """)
@@ -230,7 +259,10 @@ def get_purchase_stats() -> dict:
                 "name": row['name'],
                 "credits": row['credits'],
                 "purchasedCount": len(purchased),
-                "lastActivity": row['updated_at']
+                "lastActivity": row['updated_at'],
+                "professionalArea": row['professional_area'],
+                "environmentalExperience": row['environmental_experience'],
+                "numParticipants": row['num_participants'],
             })
 
         return {

@@ -31,6 +31,21 @@
     "credits": "credits",
     "footer1": "SEMIL - Sustainability, Ecosystem services, Modelling,",
     "footer2": "Integration Laboratory | USP 2026",
+    "profileSection": "Group Profile (optional)",
+    "professionalArea": "Professional Area",
+    "selectOption": "Select...",
+    "areaAcademia": "Academia / Research",
+    "areaGovernment": "Government / Public Sector",
+    "areaNgo": "NGO / Civil Society",
+    "areaPrivate": "Private Sector",
+    "areaStudent": "Student",
+    "areaOther": "Other",
+    "environmentalExperience": "Environmental Management Experience",
+    "expNone": "None",
+    "expBasic": "Basic",
+    "expIntermediate": "Intermediate",
+    "expAdvanced": "Advanced / Expert",
+    "numParticipants": "Number of Participants",
     "errorNameRequired": "Please enter a name for your group",
     "errorCreateGroup": "Error creating group. Please try again.",
     "errorJoinGroup": "Error joining group."
@@ -144,7 +159,8 @@
     "lastActivity": "Last Activity",
     "actions": "Actions",
     "resetCredits": "Reset Credits",
-    "noGroups": "No groups created"
+    "noGroups": "No groups created",
+    "profile": "Profile"
   },
   "workshopFlow": {
     "phase1Title": "Step 1: Initial Prioritization",

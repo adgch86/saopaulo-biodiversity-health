@@ -20,6 +20,9 @@ router = APIRouter()
 
 class CreateGroupRequest(BaseModel):
     name: str
+    professionalArea: str | None = None
+    environmentalExperience: str | None = None
+    numParticipants: int | None = None
 
 
 class PurchaseLayerRequest(BaseModel):
@@ -33,7 +36,13 @@ async def create_new_group(request: CreateGroupRequest):
         raise HTTPException(status_code=400, detail="Nombre debe tener al menos 2 caracteres")
 
     group_id = str(uuid.uuid4())[:8]
-    group = create_group(group_id, request.name.strip())
+    group = create_group(
+        group_id,
+        request.name.strip(),
+        professional_area=request.professionalArea,
+        environmental_experience=request.environmentalExperience,
+        num_participants=request.numParticipants,
+    )
 
     return group
 

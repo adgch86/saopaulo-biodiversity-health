@@ -25,6 +25,9 @@ export interface Group {
   name: string;
   credits: number;
   purchasedLayers: string[];
+  professionalArea?: string;
+  environmentalExperience?: string;
+  numParticipants?: number;
   createdAt: string;
 }
 
@@ -82,6 +85,9 @@ export interface GroupStats {
   credits: number;
   purchasedCount: number;
   lastActivity: string;
+  professionalArea?: string;
+  environmentalExperience?: string;
+  numParticipants?: number;
 }
 
 // Map bounds for São Paulo state
