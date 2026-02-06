@@ -6,65 +6,53 @@
 ## Ultima Sesion
 
 **Fecha:** 2026-02-05
-**Estado general:** TerraRisk Workshop Flow completo (frontend + backend) - Build exitoso, tests pasados
+**Estado general:** Workshop Flow DEPLOYED en produccion - listo para demo con Adrian
 
 ### Lo que se hizo hoy
 
-1. **Procesadas 11 notas de Adrian** sobre vision expandida de la plataforma
-2. **TerraRisk Workshop Flow - IMPLEMENTACION COMPLETA**
-   - Flujo de 4 fases para workshop SEMIL-USP implementado end-to-end
-   - Backend: PEARC actions catalog (15 acciones), ranking algorithm (Spearman/Kendall), API (6 endpoints)
-   - Frontend: 4 componentes nuevos (Stepper, Ranking, Actions, Comparison)
-   - i18n completo (EN/ES/PT) para todo el flujo nuevo
-   - Corregidos 6 bugs de integracion
-3. **Tests completos:**
-   - Backend API: 6/6 endpoints pasaron (municipalities, actions, ranking, comparison)
-   - Frontend build: compilacion exitosa, 0 errores TypeScript
-4. **Documento de reporte:** `docs/WORKSHOP_FLOW_IMPLEMENTATION_REPORT.md`
+1. **TerraRisk Workshop Flow - IMPLEMENTACION + DEPLOY COMPLETO**
+   - Flujo de 4 fases implementado end-to-end (7 archivos nuevos, 9 modificados)
+   - Backend: PEARC actions catalog (15), ranking algorithm (Spearman/Kendall), 6 API endpoints
+   - Frontend: 4 componentes (Stepper, Ranking, Actions, Comparison), i18n EN/ES/PT
+   - 6 bugs de integracion encontrados y corregidos
+2. **Tests E2E completos:**
+   - Backend API: 11/11 tests OK
+   - Frontend integration: 7/7 steps OK (flujo usuario completo simulado)
+   - Spearman: 0.624, Kendall: 0.467 con ranking de test
+3. **Deploy a produccion:**
+   - Commit 486f93b pushed a GitHub
+   - Synced a Contabo via scp + tar
+   - Docker rebuild + compose up
+   - Verificado: health=200, municipalities=10, actions=15, frontend=200
+4. **Documento actualizado:** `docs/WORKSHOP_FLOW_IMPLEMENTATION_REPORT.md`
+   - Incluye detalle de TODOS los pendientes de Adrian (puntos 1-11)
+   - Roadmap sugerido pre-workshop con estimaciones
 
-### Archivos creados
+### Deploy
 
-**Backend:**
-- `terrarisk-workshop/backend/core/pearc_actions.py` - 15 acciones PEARC con links
-- `terrarisk-workshop/backend/core/ranking_algorithm.py` - Ranking optimo + Spearman/Kendall
-- `terrarisk-workshop/backend/api/workshop_flow.py` - 6 endpoints API
+- **URL:** https://terrarisk.arlexperalta.com
+- **Commit:** 486f93b (master)
+- **Containers:** terrarisk-workshop-api-1 (8002) + terrarisk-workshop-frontend-1 (4001)
 
-**Frontend:**
-- `terrarisk-workshop/frontend/src/components/workshop/WorkshopStepper.tsx`
-- `terrarisk-workshop/frontend/src/components/workshop/MunicipalityRanking.tsx`
-- `terrarisk-workshop/frontend/src/components/workshop/ActionsSelector.tsx`
-- `terrarisk-workshop/frontend/src/components/workshop/RankingComparison.tsx`
+### Pendiente critico (para workshop Feb 22-26)
 
-**Documentacion:**
-- `docs/WORKSHOP_FLOW_IMPLEMENTATION_REPORT.md` - Reporte completo de implementacion
-
-### Archivos modificados
-
-- `terrarisk-workshop/backend/main.py` - Agregado workshop router
-- `terrarisk-workshop/backend/core/database.py` - Tablas rankings + selected_actions
-- `terrarisk-workshop/frontend/src/lib/types.ts` - Tipos workshop flow
-- `terrarisk-workshop/frontend/src/lib/store.ts` - Estado Zustand workshop flow
-- `terrarisk-workshop/frontend/src/app/workshop/page.tsx` - Stepper con 4 fases
-- `terrarisk-workshop/frontend/messages/{en,es,pt}.json` - i18n workshop flow
-
-### Pendiente critico
-
-- [ ] Testing end-to-end del flujo completo (docker-compose up)
-- [ ] Verificar CSV tiene los 10 municipios del workshop
-- [ ] Implementar radar chart por municipio (punto 8 de Adrian)
-- [ ] Implementar red bipartita PEARC (punto 7 de Adrian)
-- [ ] Deploy a staging para testing pre-workshop
+- [ ] Radar chart por municipio (punto 8, ~3h)
+- [ ] Red bipartita PEARC network (punto 7, ~5h)
+- [ ] Comparacion por vulnerabilidad (punto 9, ~3h)
+- [ ] Perfiles de participantes (punto 4, ~2h)
+- [ ] Metricas cambio de perspectiva (punto 5, ~3h)
+- [ ] Testing con datos reales + QA visual
+- [ ] Deploy final pre-workshop
 
 ### Proximos pasos
 
-1. Testing: docker-compose up y verificar flujo completo
-2. Radar chart y red PEARC (puntos 7-8)
+1. **Reunion con Adrian (Feb 6):** Mostrar demo en https://terrarisk.arlexperalta.com
+2. Discutir prioridades de los puntos pendientes (7-9 son los mas impactantes)
 3. Air Pollution: Enviar tabla a Luisa (deadline Feb 6)
-4. MODIS LST: Extraer datos via GEE
 
 ### Proyectos activos
 
-1. **Air Pollution & Pollinator Networks** - NUEVO, deadline tabla 6 Feb
+1. **Air Pollution & Pollinator Networks** - deadline tabla 6 Feb
 2. **Resilient Landscapes (Sao Paulo)** - Workshop SEMIL-USP Feb 22-26
-   - TerraRisk Workshop: frontend + backend completos, build exitoso
-   - Pendiente: testing e2e, deploy, features adicionales (radar, red PEARC)
+   - TerraRisk Workshop: DEPLOYED, flujo completo funcionando
+   - Pendiente: 5 features adicionales (~16-20h total)

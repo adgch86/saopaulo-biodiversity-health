@@ -15,7 +15,9 @@ Se implemento el flujo completo de 4 fases para el Workshop SEMIL-USP (Feb 22-26
 3. **Fase 3 - Ranking Revisado + Acciones PEARC:** Re-priorizar con datos + seleccionar acciones
 4. **Fase 4 - Resultados:** Comparar ranking del grupo vs ranking optimo de la plataforma
 
-**Estado:** Backend y Frontend completos. Build exitoso. Tests de API pasados (6/6 endpoints).
+**Estado:** DEPLOYED en produccion. Backend + Frontend completos. Tests E2E pasados (11/11 backend, 7/7 frontend).
+**URL:** https://terrarisk.arlexperalta.com
+**Deploy:** Contabo VPS (161.97.95.132) via Docker Compose
 
 ---
 
@@ -213,24 +215,176 @@ Route /workshop: 33.7 kB (First Load: 149 kB)
 
 ---
 
-## 9. Pendientes (Puntos de Adrian)
+## 9. Deploy en Produccion
 
-| Punto | Descripcion | Estado |
-|-------|-------------|--------|
-| 7 | Red bipartita PEARC (network visualization) | Pendiente |
-| 8 | Radar/spider chart por municipio | Pendiente |
-| 9 | Comparacion por niveles de vulnerabilidad | Pendiente |
-| 1-6 | Positioning, governance audit, IPAM benchmark, profiles | Pendiente (documentado) |
-| 11 | Metadata de acciones (costos, tiempos, ejemplos) | Pendiente |
+**Fecha deploy:** 2026-02-05 23:59 (CET)
+**Servidor:** Contabo VPS (161.97.95.132)
+**URL:** https://terrarisk.arlexperalta.com
 
-### Proximo paso inmediato:
-- Testing end-to-end con `docker-compose up` (backend + frontend juntos)
-- Verificar que el CSV tiene los 10 municipios correctos
-- Implementar radar chart (punto 8) y red PEARC (punto 7)
+```
+Verificacion post-deploy:
+  Health check:            200 OK
+  Workshop municipalities: 10 (todos presentes)
+  PEARC actions:           15 (todas las categorias)
+  Frontend HTTPS:          200 OK
+  Docker containers:       2/2 running (api + frontend)
+```
 
 ---
 
-## 10. Estructura Final de Archivos
+## 10. Tests End-to-End Completos
+
+### 10.1. Backend API (11/11 OK)
+
+```
+[OK] Health check: 200
+[OK] Workshop municipalities: 10 (Iporanga Q3, Campinas Q1, Santos Q1...)
+[OK] PEARC actions: 15 (5 categorias)
+[OK] Create group
+[OK] Save initial ranking (10 positions)
+[OK] Get rankings (initial + platform)
+     Platform top 3: Sao Joaquim da Barra (1.38), Iporanga (1.04), Francisco Morato (1.00)
+[OK] Save revised ranking
+[OK] Save selected actions (5)
+[OK] Full comparison (Spearman: 0.164, Kendall: 0.111)
+[OK] Layers endpoint: 16
+[OK] All municipalities: 645
+```
+
+### 10.2. Frontend Integration (7/7 OK)
+
+Flujo completo simulando un usuario real a traves del proxy Next.js:
+
+```
+Step 1: Create group "Workshop Team Alpha"           [OK]
+Step 2: Page loads (16 layers, 645 munis, 10 workshop, 15 actions) [OK]
+Step 3: Phase 1 - Initial ranking (SP > Campinas > Santos > ...) [OK]
+Step 4: Phase 2 - Buy layer "Gobernanza Riesgo Climatico"  [OK]
+Step 5: Phase 3 - Revised ranking (SJB > Iporanga > F.Morato)  [OK]
+Step 6: Phase 3 - Select 5 PEARC actions                    [OK]
+Step 7: Phase 4 - Comparison results                         [OK]
+         Spearman: 0.624 (62%) - MODERATE agreement
+         Kendall:  0.467 (47%)
+         Action overlap: 80%
+         Biggest diff: Cerquilho (user #10 vs platform #4)
+```
+
+---
+
+## 11. Pendientes por Implementar (Notas de Adrian)
+
+### PRIORIDAD ALTA (para el workshop Feb 22-26)
+
+#### Punto 7 - Red Bipartita PEARC (Network Visualization)
+**Que pidio Adrian:** Visualizar la relacion entre acciones PEARC y dimensiones de riesgo como una red bipartita interactiva.
+**Que falta:**
+- Componente de visualizacion de red (d3.js o vis-network)
+- Nodos izquierda: 15 acciones PEARC (coloreados por categoria)
+- Nodos derecha: 14 dimensiones de riesgo
+- Aristas: ponderadas por evidencia (1-3), grosor proporcional
+- Interactividad: hover para resaltar conexiones, click para filtrar
+- Integracion en la Fase 3 (al seleccionar acciones, resaltar sus conexiones)
+**Estimacion:** ~4-6 horas de desarrollo
+**Impacto:** Alto - permite a los participantes entender visualmente que acciones impactan que riesgos
+
+#### Punto 8 - Radar/Spider Chart por Municipio
+**Que pidio Adrian:** Grafico radar con las 5 dimensiones de riesgo (governance, biodiversity, climate, health, social) para cada municipio seleccionado.
+**Que falta:**
+- Componente RadarChart (recharts o chart.js)
+- Mostrar en la Fase 2 al hacer click en un municipio
+- Superponer multiples municipios para comparacion
+- Normalizar valores a escala 0-100 para comparabilidad
+- Opcional: mostrar en Fase 4 junto a la comparacion de rankings
+**Estimacion:** ~3-4 horas de desarrollo
+**Impacto:** Alto - representacion visual intuitiva del perfil de riesgo
+
+#### Punto 9 - Comparacion por Niveles de Vulnerabilidad
+**Que pidio Adrian:** Separar municipios en grupos de alta/baja vulnerabilidad y comparar patrones.
+**Que falta:**
+- Split de los 10 municipios en 2 grupos segun idx_vulnerabilidad
+- Tabla comparativa: promedios de cada dimension por grupo
+- Highlight visual de como las acciones PEARC impactan diferente a cada grupo
+- Integracion en Fase 4 (seccion adicional en RankingComparison)
+**Estimacion:** ~2-3 horas de desarrollo
+**Impacto:** Medio-alto - permite entender inequidades
+
+### PRIORIDAD MEDIA (mejoras pre-workshop)
+
+#### Punto 4 - Perfiles de Participantes
+**Que pidio Adrian:** Capturar perfil de cada grupo (area de expertise, familiaridad con los temas) al registrarse.
+**Que falta:**
+- Formulario extendido en la pagina de registro (landing)
+- Campos: area profesional, experiencia en gestion ambiental, municipio de origen
+- Almacenar en BD y mostrar en panel admin
+**Estimacion:** ~2 horas
+**Impacto:** Medio - datos utiles para analisis post-workshop
+
+#### Punto 5 - Valor de la Informacion
+**Que pidio Adrian:** Metricas sobre cuanto cambia la decision de los participantes despues de ver datos (Phase 1 vs Phase 3).
+**Que falta:**
+- Endpoint que compare ranking inicial vs revisado automaticamente
+- Calcular: cuantas posiciones cambiaron, en que direccion
+- Mostrar en panel admin: "grupos que mas cambiaron de opinion"
+- Agregar a Fase 4: seccion "Tu cambio de perspectiva"
+**Estimacion:** ~2-3 horas
+**Impacto:** Medio - metricas clave para la publicacion
+
+#### Punto 6 - Cuanto Pagaron por la Informacion
+**Que pidio Adrian:** Analizar que capas compraron los grupos y correlacionar con cambios en ranking.
+**Que falta:**
+- Panel admin: capas mas compradas, creditos gastados por grupo
+- Correlacion: grupos que compraron mas capas cambiaron mas su ranking?
+- Visualizacion: heatmap de compras por grupo
+**Estimacion:** ~2 horas (parcialmente implementado en admin existente)
+**Impacto:** Medio - dato interesante para paper
+
+### PRIORIDAD BAJA (post-workshop o version futura)
+
+#### Punto 1 - Positioning vs Plataformas Existentes
+**Que pidio Adrian:** Diferenciar TerraRisk de Adapta Brasil, IPAM, MapBiomas.
+**Estado:** Documentado en notas, no requiere desarrollo.
+
+#### Punto 2 - Auditoria de Gobernanza
+**Que pidio Adrian:** Funcionalidad para auditar politicas climaticas municipales.
+**Estado:** Vision futura, fuera de scope del workshop.
+
+#### Punto 3 - Benchmark IPAM
+**Que pidio Adrian:** Investigar IPAM para ideas de UX y datos.
+**Estado:** Tarea de research, no de desarrollo.
+
+#### Punto 11 - Metadata Extendida de Acciones
+**Que pidio Adrian:** Agregar a cada accion PEARC: costo estimado, tiempo de implementacion, ejemplos en Brasil, fuentes.
+**Que falta:**
+- Extender el catalogo pearc_actions.py con campos adicionales
+- Mostrar en modal expandido al hacer click en una accion
+- Links a documentos de referencia
+**Estimacion:** ~3-4 horas (la mayoria es curar los datos)
+**Impacto:** Bajo para el workshop, alto para version productiva
+
+---
+
+## 12. Roadmap Sugerido Pre-Workshop
+
+```
+Semana del 10-14 Feb:
+  [ ] Radar chart por municipio (Punto 8) - 3h
+  [ ] Red bipartita PEARC (Punto 7) - 5h
+  [ ] Comparacion por vulnerabilidad (Punto 9) - 3h
+
+Semana del 17-21 Feb:
+  [ ] Perfiles de participantes (Punto 4) - 2h
+  [ ] Metricas de cambio de perspectiva (Punto 5) - 3h
+  [ ] Testing con datos reales + QA visual
+  [ ] Deploy final pre-workshop
+
+22-26 Feb: WORKSHOP SEMIL-USP
+```
+
+**Total estimado:** ~16-20 horas de desarrollo para features completos
+
+---
+
+## 13. Estructura Final de Archivos
 
 ```
 terrarisk-workshop/
