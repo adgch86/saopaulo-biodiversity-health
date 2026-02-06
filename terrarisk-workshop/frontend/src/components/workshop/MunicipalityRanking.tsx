@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { QUADRANT_CONFIG, CATEGORY_CONFIG, type RankingEntry } from '@/lib/types';
+import { CATEGORY_CONFIG, type RankingEntry } from '@/lib/types';
 
 interface Props {
   phase: 'initial' | 'revised';
@@ -74,23 +74,38 @@ export default function MunicipalityRanking({ phase, onSubmit }: Props) {
     .map((l) => l.variable);
 
   return (
-    <div className="h-full flex overflow-hidden bg-gray-50">
-      <div className="flex-1 p-6 overflow-auto">
+    <div className="h-full flex flex-col lg:flex-row overflow-hidden bg-gray-50">
+      <div className="flex-1 p-4 lg:p-6 overflow-auto">
         <div className="max-w-5xl mx-auto">
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">
+          <div className="mb-4 lg:mb-6">
+            <h2 className="text-xl lg:text-2xl font-bold text-gray-800 mb-1 lg:mb-2">
               {phase === 'initial' ? t('phase1Title') : t('phase3Title')}
             </h2>
-            <p className="text-gray-600">
+            <p className="text-sm lg:text-base text-gray-600">
               {phase === 'initial' ? t('phase1Desc') : t('phase3Desc')}
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          {/* Mobile: ranking summary bar */}
+          <div className="lg:hidden mb-3 flex items-center justify-between bg-white rounded-lg border border-gray-200 p-3">
+            <span className="text-sm font-medium text-gray-700">
+              {t('yourPriorityList')}: {ranking.length}/10
+            </span>
+            {ranking.length === 10 && (
+              <Button
+                size="sm"
+                className="bg-purple-600 hover:bg-purple-700"
+                onClick={handleSubmit}
+              >
+                {t('submitRanking')}
+              </Button>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
             {workshopMunicipalities.map((muni) => {
               const ranked = isRanked(muni.code);
               const position = getRankPosition(muni.code);
-              const quadrantConfig = QUADRANT_CONFIG[muni.quadrant];
 
               return (
                 <Card
@@ -100,31 +115,23 @@ export default function MunicipalityRanking({ phase, onSubmit }: Props) {
                   }`}
                   onClick={() => handleMunicipalityClick(muni.code)}
                 >
-                  <CardContent className="p-4">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex-1">
-                        <h3 className="font-bold text-lg text-gray-800">{muni.name}</h3>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Badge
-                            className={`${quadrantConfig.bgColor} text-xs`}
-                            style={{ color: quadrantConfig.color }}
-                          >
-                            {muni.quadrant} - {quadrantConfig.label}
-                          </Badge>
-                        </div>
+                  <CardContent className="p-3 lg:p-4">
+                    <div className="flex items-start justify-between mb-2 lg:mb-3">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-base lg:text-lg text-gray-800 truncate">{muni.name}</h3>
                       </div>
                       {ranked && (
-                        <div className="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-lg">
+                        <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-sm lg:text-lg flex-shrink-0 ml-2">
                           {position}
                         </div>
                       )}
                     </div>
 
-                    <p className="text-sm text-gray-600 mb-3">{muni.description}</p>
+                    <p className="text-xs lg:text-sm text-gray-600 mb-2 lg:mb-3 line-clamp-3">{muni.description}</p>
 
                     {phase === 'revised' && purchasedLayerVariables.length > 0 && (
                       <div className="pt-2 border-t border-gray-200">
-                        <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div className="grid grid-cols-2 gap-1.5 lg:gap-2 text-xs">
                           {Object.entries(muni.riskSummary).map(([category, value]) => {
                             const categoryConfig = CATEGORY_CONFIG[category as keyof typeof CATEGORY_CONFIG];
                             return (
@@ -152,21 +159,21 @@ export default function MunicipalityRanking({ phase, onSubmit }: Props) {
         </div>
       </div>
 
-      <div className="w-96 bg-white border-l border-gray-200 p-6 flex flex-col">
-        <div className="mb-4">
-          <h3 className="text-lg font-bold text-gray-800 mb-2">{t('yourPriorityList')}</h3>
+      <div className="w-full lg:w-96 bg-white border-t lg:border-t-0 lg:border-l border-gray-200 p-4 lg:p-6 flex flex-col max-h-[40vh] lg:max-h-none">
+        <div className="mb-3 lg:mb-4">
+          <h3 className="text-base lg:text-lg font-bold text-gray-800 mb-1 lg:mb-2">{t('yourPriorityList')}</h3>
           <p className="text-sm text-gray-600">
             {ranking.length}/10 {t('ranked')}
           </p>
         </div>
 
         {ranking.length === 0 ? (
-          <div className="flex-1 flex items-center justify-center">
+          <div className="flex-1 flex items-center justify-center py-4 lg:py-0">
             <p className="text-sm text-gray-400 text-center">{t('noRankingYet')}</p>
           </div>
         ) : (
-          <ScrollArea className="flex-1 mb-4">
-            <div className="space-y-2">
+          <ScrollArea className="flex-1 mb-3 lg:mb-4">
+            <div className="space-y-1.5 lg:space-y-2">
               {ranking.map((entry, index) => {
                 const muni = getMunicipalityByCode(entry.code);
                 if (!muni) return null;
@@ -174,26 +181,25 @@ export default function MunicipalityRanking({ phase, onSubmit }: Props) {
                 return (
                   <div
                     key={entry.code}
-                    className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg border border-gray-200"
+                    className="flex items-center gap-2 p-2 lg:p-3 bg-gray-50 rounded-lg border border-gray-200"
                   >
-                    <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
+                    <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-xs lg:text-sm flex-shrink-0">
                       {entry.position}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium text-gray-800 truncate">{muni.name}</div>
-                      <div className="text-xs text-gray-500">{muni.quadrant}</div>
+                      <div className="text-xs lg:text-sm font-medium text-gray-800 truncate">{muni.name}</div>
                     </div>
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-0.5 lg:gap-1">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           handleMoveUp(index);
                         }}
                         disabled={index === 0}
-                        className="p-1 hover:bg-gray-200 rounded disabled:opacity-30 disabled:cursor-not-allowed"
+                        className="p-0.5 lg:p-1 hover:bg-gray-200 rounded disabled:opacity-30 disabled:cursor-not-allowed"
                         title={t('moveUp')}
                       >
-                        <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
                         </svg>
                       </button>
@@ -203,10 +209,10 @@ export default function MunicipalityRanking({ phase, onSubmit }: Props) {
                           handleMoveDown(index);
                         }}
                         disabled={index === ranking.length - 1}
-                        className="p-1 hover:bg-gray-200 rounded disabled:opacity-30 disabled:cursor-not-allowed"
+                        className="p-0.5 lg:p-1 hover:bg-gray-200 rounded disabled:opacity-30 disabled:cursor-not-allowed"
                         title={t('moveDown')}
                       >
-                        <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                         </svg>
                       </button>
@@ -216,10 +222,10 @@ export default function MunicipalityRanking({ phase, onSubmit }: Props) {
                         e.stopPropagation();
                         handleRemove(entry.code);
                       }}
-                      className="p-1 hover:bg-red-100 rounded text-red-500"
+                      className="p-0.5 lg:p-1 hover:bg-red-100 rounded text-red-500"
                       title={t('remove')}
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-3.5 h-3.5 lg:w-4 lg:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </button>
@@ -231,8 +237,8 @@ export default function MunicipalityRanking({ phase, onSubmit }: Props) {
         )}
 
         {ranking.length === 10 && (
-          <div className="mb-2 p-3 bg-green-50 border border-green-200 rounded-lg">
-            <p className="text-sm text-green-700 font-medium text-center">{t('allRanked')}</p>
+          <div className="mb-2 p-2 lg:p-3 bg-green-50 border border-green-200 rounded-lg">
+            <p className="text-xs lg:text-sm text-green-700 font-medium text-center">{t('allRanked')}</p>
           </div>
         )}
 
