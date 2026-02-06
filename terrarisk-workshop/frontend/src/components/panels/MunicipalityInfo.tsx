@@ -1,11 +1,14 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useWorkshopStore } from '@/lib/store';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
+import RadarChart from '@/components/workshop/RadarChart';
+import type { RadarProfile } from '@/components/workshop/RadarChart';
 
 // Variable categories for organized display
 const VARIABLE_GROUPS = {
@@ -104,6 +107,24 @@ export default function MunicipalityInfo() {
   const t = useTranslations('municipality');
   const { selectedMunicipality, setSelectedMunicipality, layers, activeLayers } =
     useWorkshopStore();
+  const [radarProfile, setRadarProfile] = useState<RadarProfile | null>(null);
+
+  // Fetch radar data when municipality changes
+  useEffect(() => {
+    if (!selectedMunicipality) {
+      setRadarProfile(null);
+      return;
+    }
+
+    fetch(`/api/workshop/radar?codes=${selectedMunicipality.code}`)
+      .then((res) => res.json())
+      .then((data: RadarProfile[]) => {
+        if (data.length > 0) {
+          setRadarProfile(data[0]);
+        }
+      })
+      .catch(() => setRadarProfile(null));
+  }, [selectedMunicipality]);
 
   if (!selectedMunicipality || !selectedMunicipality.data) {
     return (
@@ -150,8 +171,15 @@ export default function MunicipalityInfo() {
         </CardTitle>
       </CardHeader>
       <CardContent className="py-0">
-        <ScrollArea className="h-[200px]">
+        <ScrollArea className="h-[350px]">
           <div className="space-y-3 pr-4">
+            {/* Radar chart */}
+            {radarProfile && (
+              <div className="pb-2">
+                <RadarChart profiles={[radarProfile]} size={240} />
+                <Separator className="mt-2" />
+              </div>
+            )}
             {/* Active layer variables first */}
             {activeLayerVariables.length > 0 && (
               <div>

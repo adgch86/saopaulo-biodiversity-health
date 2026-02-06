@@ -184,6 +184,9 @@
     "remove": "Remove",
     "pearcNetwork": "PEARC Network"
   },
+  "radarChart": {
+    "noData": "Select a municipality to see its risk profile"
+  },
   "bipartiteNetwork": {
     "title": "PEARC Action-Risk Network",
     "description": "Hover over nodes to explore connections. Click actions to select/deselect them.",

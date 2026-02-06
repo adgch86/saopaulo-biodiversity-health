@@ -41,6 +41,72 @@ class ActionsRequest(BaseModel):
 # Cached data
 _workshop_data = None
 _platform_ranking = None
+_full_data = None
+
+
+def _load_csv():
+    """Find and load the municipality CSV"""
+    csv_path = DATA_DIR / "municipios.csv"
+    if not csv_path.exists():
+        alt_paths = [
+            DATA_DIR.parent.parent / "outputs" / "municipios_integrado_v8.csv",
+            DATA_DIR.parent.parent / "outputs" / "municipios_integrado_v7.csv",
+        ]
+        for alt_path in alt_paths:
+            if alt_path.exists():
+                csv_path = alt_path
+                break
+
+    if not csv_path.exists():
+        raise FileNotFoundError("Municipality data CSV not found")
+
+    df = pd.read_csv(csv_path)
+
+    name_col = next(
+        (c for c in ['Municipio', 'nome', 'NM_MUN', 'municipio', 'name'] if c in df.columns),
+        None
+    )
+    code_col = next(
+        (c for c in ['cod_ibge', 'CD_MUN', 'codigo'] if c in df.columns),
+        None
+    )
+
+    if not name_col or not code_col:
+        raise ValueError("Could not find name or code column in CSV")
+
+    return df, name_col, code_col, str(csv_path)
+
+
+# Variable mapping (shared)
+VARIABLE_MAPPING = {
+    'governance_general': 'idx_gobernanza_100',
+    'governance_climatic': 'UAI_Crisk',
+    'biodiversity': 'idx_biodiv',
+    'natural_habitat': 'forest_cover',
+    'pollination': 'pol_deficit',
+    'fire_risk': 'fire_risk_index',
+    'flooding': 'flooding_risks',
+    'hydric_stress': 'hydric_stress_risk',
+    'dengue': 'incidence_mean_dengue',
+    'diarrhea': 'incidence_diarrhea_mean',
+    'cv_mortality': 'health_death_circ_mean',
+    'resp_hosp': 'health_hosp_resp_mean',
+    'leishmaniasis': 'incidence_mean_leishmaniose',
+    'poverty': 'pct_pobreza',
+    'vulnerability': 'idx_vulnerabilidad'
+}
+
+# Category to layer mapping
+CATEGORY_LAYERS = {
+    "governance": ["governance_general", "governance_climatic"],
+    "biodiversity": ["biodiversity", "natural_habitat", "pollination"],
+    "climate": ["fire_risk", "flooding", "hydric_stress"],
+    "health": ["dengue", "diarrhea", "cv_mortality", "resp_hosp", "leishmaniasis"],
+    "social": ["poverty", "vulnerability"]
+}
+
+# Risk layers (higher = worse) vs protective (higher = better)
+PROTECTIVE_LAYERS = {"governance_general", "governance_climatic", "biodiversity", "natural_habitat"}
 
 
 def get_workshop_data():
@@ -48,57 +114,8 @@ def get_workshop_data():
     global _workshop_data
 
     if _workshop_data is None:
-        # Try to load municipality data
-        csv_path = DATA_DIR / "municipios.csv"
-        if not csv_path.exists():
-            # Try alternative paths
-            alt_paths = [
-                DATA_DIR.parent.parent / "outputs" / "municipios_integrado_v8.csv",
-                DATA_DIR.parent.parent / "outputs" / "municipios_integrado_v7.csv",
-            ]
-            for alt_path in alt_paths:
-                if alt_path.exists():
-                    csv_path = alt_path
-                    break
+        df, name_col, code_col, csv_path = _load_csv()
 
-        if not csv_path.exists():
-            raise FileNotFoundError("Municipality data CSV not found")
-
-        df = pd.read_csv(csv_path)
-
-        # Find columns
-        name_col = next(
-            (c for c in ['Municipio', 'nome', 'NM_MUN', 'municipio', 'name'] if c in df.columns),
-            None
-        )
-        code_col = next(
-            (c for c in ['cod_ibge', 'CD_MUN', 'codigo'] if c in df.columns),
-            None
-        )
-
-        if not name_col or not code_col:
-            raise ValueError("Could not find name or code column in CSV")
-
-        # Variable mapping
-        variable_mapping = {
-            'governance_general': 'idx_gobernanza_100',
-            'governance_climatic': 'UAI_Crisk',
-            'biodiversity': 'idx_biodiv',
-            'natural_habitat': 'forest_cover',
-            'pollination': 'pol_deficit',
-            'fire_risk': 'fire_risk_index',
-            'flooding': 'flooding_risks',
-            'hydric_stress': 'hydric_stress_risk',
-            'dengue': 'incidence_mean_dengue',
-            'diarrhea': 'incidence_diarrhea_mean',
-            'cv_mortality': 'health_death_circ_mean',
-            'resp_hosp': 'health_hosp_resp_mean',
-            'leishmaniasis': 'incidence_mean_leishmaniose',
-            'poverty': 'pct_pobreza',
-            'vulnerability': 'idx_vulnerabilidad'
-        }
-
-        # Filter workshop municipalities
         workshop_names = [m["name"] for m in WORKSHOP_MUNICIPALITIES]
         df_workshop = df[df[name_col].isin(workshop_names)].copy()
 
@@ -106,11 +123,39 @@ def get_workshop_data():
             "df": df_workshop,
             "name_col": name_col,
             "code_col": code_col,
-            "variable_mapping": variable_mapping,
-            "csv_path": str(csv_path)
+            "variable_mapping": VARIABLE_MAPPING,
+            "csv_path": csv_path
         }
 
     return _workshop_data
+
+
+def get_full_data():
+    """Load ALL municipality data with min-max normalization stats"""
+    global _full_data
+
+    if _full_data is None:
+        df, name_col, code_col, csv_path = _load_csv()
+
+        # Pre-compute min/max for each variable across all 645 municipalities
+        min_max = {}
+        for layer_id, col_name in VARIABLE_MAPPING.items():
+            if col_name in df.columns:
+                col = pd.to_numeric(df[col_name], errors='coerce')
+                min_max[layer_id] = {
+                    "min": float(col.min()) if not col.isna().all() else 0,
+                    "max": float(col.max()) if not col.isna().all() else 1,
+                }
+
+        _full_data = {
+            "df": df,
+            "name_col": name_col,
+            "code_col": code_col,
+            "min_max": min_max,
+            "csv_path": csv_path,
+        }
+
+    return _full_data
 
 
 def get_platform_ranking():
@@ -361,3 +406,90 @@ async def get_workshop_comparison(group_id: str):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generating comparison: {str(e)}")
+
+
+@router.get("/radar")
+async def get_radar_profiles(codes: str):
+    """
+    Get radar chart profiles for one or more municipalities.
+    Each category score is min-max normalized to 0-100 across all 645 municipalities.
+
+    For risk categories (climate, health, social): higher score = higher risk.
+    For protective categories (governance, biodiversity): higher score = better.
+
+    Query params:
+        codes: Comma-separated municipality codes (e.g. "3520509,3548500")
+
+    Returns:
+        List of {code, name, scores: {governance, biodiversity, climate, health, social}}
+    """
+    if not codes or not codes.strip():
+        raise HTTPException(status_code=400, detail="codes parameter is required")
+
+    code_list = [c.strip() for c in codes.split(",") if c.strip()]
+
+    try:
+        data = get_full_data()
+        df = data["df"]
+        code_col = data["code_col"]
+        name_col = data["name_col"]
+        min_max = data["min_max"]
+
+        results = []
+
+        for code in code_list:
+            # Match by code (try int and string)
+            row = df[df[code_col].astype(str).str.strip() == code]
+            if row.empty:
+                continue
+
+            row = row.iloc[0]
+            scores = {}
+
+            for category, layers_list in CATEGORY_LAYERS.items():
+                normalized_values = []
+
+                for layer_id in layers_list:
+                    col_name = VARIABLE_MAPPING.get(layer_id)
+                    if not col_name or col_name not in df.columns:
+                        continue
+
+                    val = row[col_name]
+                    if pd.isna(val):
+                        continue
+
+                    val = float(val)
+                    mm = min_max.get(layer_id)
+                    if not mm:
+                        continue
+
+                    # Min-max normalize to 0-100
+                    range_val = mm["max"] - mm["min"]
+                    if range_val > 0:
+                        norm = ((val - mm["min"]) / range_val) * 100
+                    else:
+                        norm = 50
+
+                    # For protective layers, invert so higher = better protection
+                    if layer_id in PROTECTIVE_LAYERS:
+                        norm = norm  # Keep as-is: higher governance = higher score = good
+                    else:
+                        # Risk layers: higher raw = more risk, we keep as-is
+                        norm = norm
+
+                    normalized_values.append(norm)
+
+                scores[category] = round(
+                    sum(normalized_values) / len(normalized_values), 1
+                ) if normalized_values else 0
+
+            results.append({
+                "code": code,
+                "name": str(row[name_col]),
+                "scores": scores
+            })
+
+        return results
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error computing radar: {str(e)}")
