@@ -82,9 +82,6 @@ export default function PerspectiveChange() {
   }
 
   const improvementPositive = data.convergenceWithPlatform.improvement > 0;
-  const changeIntensity =
-    data.averagePositionShift >= 3 ? 'high' :
-    data.averagePositionShift >= 1.5 ? 'medium' : 'low';
 
   return (
     <Card className="mt-8 border-2 border-blue-200">
