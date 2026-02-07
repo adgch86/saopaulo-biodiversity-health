@@ -1,0 +1,28 @@
+Vulnerabilidad,Variable_Y,Variable_X,Tipo_X,r,p,n
+Baja,Carga Enfermedad,UAI General,Gobernanza,0.0489587777798201,0.4751529302787375,215
+Baja,Carga Enfermedad,UAI Ambiental,Gobernanza,0.02398414503754996,0.7265812750553271,215
+Baja,Carga Enfermedad,UAI Riesgo Clim.,Gobernanza,-0.03842585795134224,0.575236557765618,215
+Baja,Riesgo Climatico,UAI General,Gobernanza,0.22462137560281742,0.0009102763564016392,215
+Baja,Riesgo Climatico,UAI Ambiental,Gobernanza,0.09655270124862977,0.1583078412345011,215
+Baja,Riesgo Climatico,UAI Riesgo Clim.,Gobernanza,0.16449332031825936,0.015763135327939666,215
+Baja,Deficit Polinizacion,UAI General,Gobernanza,-0.12160815120674658,0.07518398658109846,215
+Baja,Deficit Polinizacion,UAI Ambiental,Gobernanza,-0.07635007282487798,0.2650161613634121,215
+Baja,Deficit Polinizacion,UAI Riesgo Clim.,Gobernanza,-0.24705447861769278,0.00025391015718047576,215
+Media,Carga Enfermedad,UAI General,Gobernanza,-0.09856588447118161,0.1497701057058075,215
+Media,Carga Enfermedad,UAI Ambiental,Gobernanza,-0.04577652452859409,0.5043552322424762,215
+Media,Carga Enfermedad,UAI Riesgo Clim.,Gobernanza,-0.17811130551612683,0.00886124682170868,215
+Media,Riesgo Climatico,UAI General,Gobernanza,0.24054442721015118,0.0003723961195214975,215
+Media,Riesgo Climatico,UAI Ambiental,Gobernanza,0.1385535092955752,0.042402382036711,215
+Media,Riesgo Climatico,UAI Riesgo Clim.,Gobernanza,0.24699495069596242,0.00025481282111106373,215
+Media,Deficit Polinizacion,UAI General,Gobernanza,-0.2947910214035839,1.1059145185340133e-05,215
+Media,Deficit Polinizacion,UAI Ambiental,Gobernanza,-0.11332637767612373,0.09744926621468392,215
+Media,Deficit Polinizacion,UAI Riesgo Clim.,Gobernanza,-0.2766026007774085,3.911033435129166e-05,215
+Alta,Carga Enfermedad,UAI General,Gobernanza,0.0038019094936741294,0.9558021454434209,215
+Alta,Carga Enfermedad,UAI Ambiental,Gobernanza,0.0371239197698858,0.5882616114209835,215
+Alta,Carga Enfermedad,UAI Riesgo Clim.,Gobernanza,0.03650635400773067,0.5944869139111676,215
+Alta,Riesgo Climatico,UAI General,Gobernanza,-0.012365776732139658,0.8569423593373426,215
+Alta,Riesgo Climatico,UAI Ambiental,Gobernanza,-0.05042257739923817,0.46203619959153697,215
+Alta,Riesgo Climatico,UAI Riesgo Clim.,Gobernanza,0.06298292803533757,0.35807456276645555,215
+Alta,Deficit Polinizacion,UAI General,Gobernanza,-0.22377972098112733,0.0009527185385788469,215
+Alta,Deficit Polinizacion,UAI Ambiental,Gobernanza,0.004020110942314829,0.9532683197273362,215
+Alta,Deficit Polinizacion,UAI Riesgo Clim.,Gobernanza,-0.2474383209169962,0.00024816080914146193,215

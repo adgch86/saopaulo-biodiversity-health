@@ -1,0 +1,7 @@
+Tipo_Riesgo,Categoria_X,Variable_X,Nombre_X,Variable_Y,Nombre_Y,r,p,Efecto
+SALUD,Gobernanza,UAI_mob,UAI Movilidad,persist_leptospirose,Persistencia Leptospirosis,0.6527905362992551,1.3778524535915914e-79,AUMENTA
+SALUD,Biodiversidad,max_species_richness,Riqueza Sp. Maxima,persist_leptospirose,Persistencia Leptospirosis,0.5224687652006282,1.845913896938978e-46,AUMENTA
+CLIMA,Gobernanza,UAI_mob,UAI Movilidad,hydric_stress_risk,Riesgo Estres Hidrico,0.298665048046422,9.337606964141357e-15,AUMENTA
+CLIMA,Biodiversidad,max_species_richness,Riqueza Sp. Maxima,flooding_risks,Riesgo Inundaciones,0.3748036262814812,6.07434030160995e-23,AUMENTA
+NUTRICION,Gobernanza,UAI_Crisk,UAI Riesgo Climatico,pol_deficit,Deficit Polinizacion,-0.24166816544421585,5.031994297839191e-10,REDUCE
+NUTRICION,Biodiversidad,forest_cover,Cobertura Forestal,pol_deficit,Deficit Polinizacion,-0.7653975126261965,3.4285138932859206e-125,REDUCE

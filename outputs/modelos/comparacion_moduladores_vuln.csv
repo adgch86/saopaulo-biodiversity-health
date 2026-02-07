@@ -1,0 +1,91 @@
+Variable_Vuln,Nombre_Vuln,Variable_X,Nombre_X,Variable_Y,Nombre_Y,r_Bajo,r_Alto,Diferencia,Direccion
+idx_vulnerabilidad,Indice Compuesto,idx_gobernanza,UAI General,persist_dengue,Persist. Dengue,0.26998800565967124,0.19216465114833994,0.0778233545113313,Bajo > Alto
+idx_vulnerabilidad,Indice Compuesto,idx_gobernanza,UAI General,persist_leptospirose,Persist. Leptospirosis,0.561411585707803,0.20214596153846387,0.35926562416933916,Bajo > Alto
+idx_vulnerabilidad,Indice Compuesto,idx_gobernanza,UAI General,incidence_mean_dengue,Incid. Dengue,0.0306879908027688,-0.09845109850868096,0.12913908931144977,Alto > Bajo
+idx_vulnerabilidad,Indice Compuesto,idx_gobernanza,UAI General,flooding_risks,Riesgo Inundaciones,0.2086686882955633,0.21424491708978746,0.005576228794224175,Alto > Bajo
+idx_vulnerabilidad,Indice Compuesto,idx_gobernanza,UAI General,hydric_stress_risk,Riesgo Estres Hidrico,0.07944149955949346,-0.09000642555796759,0.16944792511746104,Alto > Bajo
+idx_vulnerabilidad,Indice Compuesto,idx_gobernanza,UAI General,pol_deficit,Deficit Polinizacion,-0.12160815120674658,-0.22377972098112733,0.10217156977438076,Alto > Bajo
+idx_vulnerabilidad,Indice Compuesto,idx_biodiv,Indice Biodiversidad,persist_dengue,Persist. Dengue,-0.017498778205275425,-0.11495791246313389,0.09745913425785846,Alto > Bajo
+idx_vulnerabilidad,Indice Compuesto,idx_biodiv,Indice Biodiversidad,persist_leptospirose,Persist. Leptospirosis,0.38405828197588215,0.4362407584405167,0.05218247646463453,Alto > Bajo
+idx_vulnerabilidad,Indice Compuesto,idx_biodiv,Indice Biodiversidad,incidence_mean_dengue,Incid. Dengue,-0.46095534787123577,-0.5593711511990146,0.09841580332777883,Alto > Bajo
+idx_vulnerabilidad,Indice Compuesto,idx_biodiv,Indice Biodiversidad,flooding_risks,Riesgo Inundaciones,0.22633195608765733,0.353813544649796,0.12748158856213865,Alto > Bajo
+idx_vulnerabilidad,Indice Compuesto,idx_biodiv,Indice Biodiversidad,hydric_stress_risk,Riesgo Estres Hidrico,-0.007666586195178994,0.19873913365556678,0.20640571985074577,Alto > Bajo
+idx_vulnerabilidad,Indice Compuesto,idx_biodiv,Indice Biodiversidad,pol_deficit,Deficit Polinizacion,-0.49429909388634374,-0.7430169081810195,0.24871781429467577,Alto > Bajo
+idx_vulnerabilidad,Indice Compuesto,forest_cover,Cobertura Forestal,persist_dengue,Persist. Dengue,-0.06035341333472177,-0.08192062944378814,0.021567216109066367,Alto > Bajo
+idx_vulnerabilidad,Indice Compuesto,forest_cover,Cobertura Forestal,persist_leptospirose,Persist. Leptospirosis,0.3142822968335442,0.3529906469471179,0.03870835011357371,Alto > Bajo
+idx_vulnerabilidad,Indice Compuesto,forest_cover,Cobertura Forestal,incidence_mean_dengue,Incid. Dengue,-0.42473912155044924,-0.5108564470092531,0.0861173254588039,Alto > Bajo
+idx_vulnerabilidad,Indice Compuesto,forest_cover,Cobertura Forestal,flooding_risks,Riesgo Inundaciones,0.3471634782534719,0.40659089582510977,0.059427417571637886,Alto > Bajo
+idx_vulnerabilidad,Indice Compuesto,forest_cover,Cobertura Forestal,hydric_stress_risk,Riesgo Estres Hidrico,0.027953868250978255,0.03718762009974406,0.009233751848765803,Alto > Bajo
+idx_vulnerabilidad,Indice Compuesto,forest_cover,Cobertura Forestal,pol_deficit,Deficit Polinizacion,-0.7101218103953855,-0.8013717368585748,0.0912499264631893,Alto > Bajo
+pct_rural,% Rural,idx_gobernanza,UAI General,persist_dengue,Persist. Dengue,0.3543152353548294,0.15135274919508382,0.20296248615974558,Bajo > Alto
+pct_rural,% Rural,idx_gobernanza,UAI General,persist_leptospirose,Persist. Leptospirosis,0.6394765262495101,0.406636217245646,0.2328403090038641,Bajo > Alto
+pct_rural,% Rural,idx_gobernanza,UAI General,incidence_mean_dengue,Incid. Dengue,0.017958045176702884,-0.10663915734336622,0.1245972025200691,Alto > Bajo
+pct_rural,% Rural,idx_gobernanza,UAI General,flooding_risks,Riesgo Inundaciones,0.2526029545602832,0.19651629271761872,0.056086661842664476,Bajo > Alto
+pct_rural,% Rural,idx_gobernanza,UAI General,hydric_stress_risk,Riesgo Estres Hidrico,0.13435675541906347,0.002635423870213724,0.13172133154884974,Bajo > Alto
+pct_rural,% Rural,idx_gobernanza,UAI General,pol_deficit,Deficit Polinizacion,-0.2567207644353204,-0.2307015809535457,0.026019183481774677,Bajo > Alto
+pct_rural,% Rural,idx_biodiv,Indice Biodiversidad,persist_dengue,Persist. Dengue,0.06376451285437605,-0.1079757247534145,0.17174023760779056,Alto > Bajo
+pct_rural,% Rural,idx_biodiv,Indice Biodiversidad,persist_leptospirose,Persist. Leptospirosis,0.4086361742262251,0.45085320185460587,0.042217027628380754,Alto > Bajo
+pct_rural,% Rural,idx_biodiv,Indice Biodiversidad,incidence_mean_dengue,Incid. Dengue,-0.39094158274771185,-0.612074669757782,0.22113308701007017,Alto > Bajo
+pct_rural,% Rural,idx_biodiv,Indice Biodiversidad,flooding_risks,Riesgo Inundaciones,0.24171995545350772,0.22103531997122267,0.020684635482285052,Bajo > Alto
+pct_rural,% Rural,idx_biodiv,Indice Biodiversidad,hydric_stress_risk,Riesgo Estres Hidrico,0.078518394286068,0.23928657883087334,0.16076818454480535,Alto > Bajo
+pct_rural,% Rural,idx_biodiv,Indice Biodiversidad,pol_deficit,Deficit Polinizacion,-0.3695195937072241,-0.6859680262744815,0.3164484325672574,Alto > Bajo
+pct_rural,% Rural,forest_cover,Cobertura Forestal,persist_dengue,Persist. Dengue,0.14824661789488228,-0.09500767155696409,0.24325428945184635,Bajo > Alto
+pct_rural,% Rural,forest_cover,Cobertura Forestal,persist_leptospirose,Persist. Leptospirosis,0.4734240362035825,0.4728578193815204,0.0005662168220620933,Bajo > Alto
+pct_rural,% Rural,forest_cover,Cobertura Forestal,incidence_mean_dengue,Incid. Dengue,-0.3018497584859874,-0.5528557677424383,0.2510060092564509,Alto > Bajo
+pct_rural,% Rural,forest_cover,Cobertura Forestal,flooding_risks,Riesgo Inundaciones,0.3190982287363796,0.4650809247615273,0.14598269602514768,Alto > Bajo
+pct_rural,% Rural,forest_cover,Cobertura Forestal,hydric_stress_risk,Riesgo Estres Hidrico,0.10003678061362835,0.048354869129066495,0.05168191148456185,Bajo > Alto
+pct_rural,% Rural,forest_cover,Cobertura Forestal,pol_deficit,Deficit Polinizacion,-0.6844631833759496,-0.8627928060834674,0.17832962270751784,Alto > Bajo
+pct_pobreza,% Pobreza,idx_gobernanza,UAI General,persist_dengue,Persist. Dengue,0.14091183828929743,0.062487620355615406,0.07842421793368202,Bajo > Alto
+pct_pobreza,% Pobreza,idx_gobernanza,UAI General,persist_leptospirose,Persist. Leptospirosis,0.37124315481362924,0.14087679347545784,0.2303663613381714,Bajo > Alto
+pct_pobreza,% Pobreza,idx_gobernanza,UAI General,incidence_mean_dengue,Incid. Dengue,0.05226684062852414,-0.029475797088780818,0.08174263771730496,Bajo > Alto
+pct_pobreza,% Pobreza,idx_gobernanza,UAI General,flooding_risks,Riesgo Inundaciones,0.14517149206030905,0.02112892230165457,0.12404256975865448,Bajo > Alto
+pct_pobreza,% Pobreza,idx_gobernanza,UAI General,hydric_stress_risk,Riesgo Estres Hidrico,0.06342162066557938,-0.21473343555831403,0.2781550562238934,Alto > Bajo
+pct_pobreza,% Pobreza,idx_gobernanza,UAI General,pol_deficit,Deficit Polinizacion,-0.08120866491262171,-0.06936196009534963,0.011846704817272083,Bajo > Alto
+pct_pobreza,% Pobreza,idx_biodiv,Indice Biodiversidad,persist_dengue,Persist. Dengue,-0.10358902597604012,-0.25630240483643163,0.1527133788603915,Alto > Bajo
+pct_pobreza,% Pobreza,idx_biodiv,Indice Biodiversidad,persist_leptospirose,Persist. Leptospirosis,0.3031938423790377,0.226384407136964,0.07680943524207368,Bajo > Alto
+pct_pobreza,% Pobreza,idx_biodiv,Indice Biodiversidad,incidence_mean_dengue,Incid. Dengue,-0.4863689053104398,-0.46538071433746286,0.02098819097297694,Bajo > Alto
+pct_pobreza,% Pobreza,idx_biodiv,Indice Biodiversidad,flooding_risks,Riesgo Inundaciones,0.1708336494399553,0.2477975799949363,0.07696393055498099,Alto > Bajo
+pct_pobreza,% Pobreza,idx_biodiv,Indice Biodiversidad,hydric_stress_risk,Riesgo Estres Hidrico,-0.04908683251256799,0.19443049720706776,0.24351732971963574,Alto > Bajo
+pct_pobreza,% Pobreza,idx_biodiv,Indice Biodiversidad,pol_deficit,Deficit Polinizacion,-0.339546506880114,-0.7281257480637838,0.3885792411836698,Alto > Bajo
+pct_pobreza,% Pobreza,forest_cover,Cobertura Forestal,persist_dengue,Persist. Dengue,-0.09881680461165553,-0.2416771485558432,0.14286034394418767,Alto > Bajo
+pct_pobreza,% Pobreza,forest_cover,Cobertura Forestal,persist_leptospirose,Persist. Leptospirosis,0.352810000471642,0.13257650896981021,0.2202334915018318,Bajo > Alto
+pct_pobreza,% Pobreza,forest_cover,Cobertura Forestal,incidence_mean_dengue,Incid. Dengue,-0.40804001426293557,-0.4611515904301996,0.05311157616726403,Alto > Bajo
+pct_pobreza,% Pobreza,forest_cover,Cobertura Forestal,flooding_risks,Riesgo Inundaciones,0.3447393558325152,0.303514459494487,0.04122489633802817,Bajo > Alto
+pct_pobreza,% Pobreza,forest_cover,Cobertura Forestal,hydric_stress_risk,Riesgo Estres Hidrico,0.04755048369846298,-0.011001958931339423,0.0585524426298024,Bajo > Alto
+pct_pobreza,% Pobreza,forest_cover,Cobertura Forestal,pol_deficit,Deficit Polinizacion,-0.7456327849359458,-0.7253115189809671,0.02032126595497863,Bajo > Alto
+pct_preta,% Pob. Negra,idx_gobernanza,UAI General,persist_dengue,Persist. Dengue,0.2692952883785658,0.47267965912011645,0.20338437074155064,Alto > Bajo
+pct_preta,% Pob. Negra,idx_gobernanza,UAI General,persist_leptospirose,Persist. Leptospirosis,0.4803848977786017,0.6496270995195564,0.16924220174095472,Alto > Bajo
+pct_preta,% Pob. Negra,idx_gobernanza,UAI General,incidence_mean_dengue,Incid. Dengue,0.0036114260522215657,-0.024636115780965136,0.0282475418331867,Alto > Bajo
+pct_preta,% Pob. Negra,idx_gobernanza,UAI General,flooding_risks,Riesgo Inundaciones,0.0599183644820795,0.3182954646617003,0.2583771001796208,Alto > Bajo
+pct_preta,% Pob. Negra,idx_gobernanza,UAI General,hydric_stress_risk,Riesgo Estres Hidrico,0.18431873064236973,0.3181157617055604,0.13379703106319066,Alto > Bajo
+pct_preta,% Pob. Negra,idx_gobernanza,UAI General,pol_deficit,Deficit Polinizacion,-0.12814679143545554,-0.2402579641097722,0.11211117267431667,Alto > Bajo
+pct_preta,% Pob. Negra,idx_biodiv,Indice Biodiversidad,persist_dengue,Persist. Dengue,-0.19160640677705848,0.1630448931199106,0.3546512998969691,Bajo > Alto
+pct_preta,% Pob. Negra,idx_biodiv,Indice Biodiversidad,persist_leptospirose,Persist. Leptospirosis,0.2321804586341549,0.5019259285170661,0.26974546988291115,Alto > Bajo
+pct_preta,% Pob. Negra,idx_biodiv,Indice Biodiversidad,incidence_mean_dengue,Incid. Dengue,-0.6030560989156947,-0.3561749861141298,0.24688111280156488,Bajo > Alto
+pct_preta,% Pob. Negra,idx_biodiv,Indice Biodiversidad,flooding_risks,Riesgo Inundaciones,0.2118640681660362,0.3048722233060335,0.09300815513999727,Alto > Bajo
+pct_preta,% Pob. Negra,idx_biodiv,Indice Biodiversidad,hydric_stress_risk,Riesgo Estres Hidrico,0.15142466674634547,0.3038702859541024,0.15244561920775695,Alto > Bajo
+pct_preta,% Pob. Negra,idx_biodiv,Indice Biodiversidad,pol_deficit,Deficit Polinizacion,-0.6485409719327531,-0.48737515223231814,0.16116581970043492,Bajo > Alto
+pct_preta,% Pob. Negra,forest_cover,Cobertura Forestal,persist_dengue,Persist. Dengue,-0.3180308250239726,0.12015987020324237,0.438190695227215,Bajo > Alto
+pct_preta,% Pob. Negra,forest_cover,Cobertura Forestal,persist_leptospirose,Persist. Leptospirosis,0.07102892503695728,0.3965789424113995,0.3255500173744422,Alto > Bajo
+pct_preta,% Pob. Negra,forest_cover,Cobertura Forestal,incidence_mean_dengue,Incid. Dengue,-0.6402956233863789,-0.35236530677541195,0.28793031661096696,Bajo > Alto
+pct_preta,% Pob. Negra,forest_cover,Cobertura Forestal,flooding_risks,Riesgo Inundaciones,0.33185245660029006,0.33176095233457553,9.150426571452597e-05,Bajo > Alto
+pct_preta,% Pob. Negra,forest_cover,Cobertura Forestal,hydric_stress_risk,Riesgo Estres Hidrico,-0.028603711950144783,0.11435151140640225,0.14295522335654703,Alto > Bajo
+pct_preta,% Pob. Negra,forest_cover,Cobertura Forestal,pol_deficit,Deficit Polinizacion,-0.7540739189422758,-0.7782549287046697,0.0241810097623939,Alto > Bajo
+pct_indigena,% Pob. Indigena,idx_gobernanza,UAI General,persist_dengue,Persist. Dengue,0.22430181192436255,0.47549603655165107,0.2511942246272885,Alto > Bajo
+pct_indigena,% Pob. Indigena,idx_gobernanza,UAI General,persist_leptospirose,Persist. Leptospirosis,0.37727794684795224,0.6562707196429945,0.2789927727950423,Alto > Bajo
+pct_indigena,% Pob. Indigena,idx_gobernanza,UAI General,incidence_mean_dengue,Incid. Dengue,-0.021616396330004804,0.02332670799451671,0.04494310432452152,Alto > Bajo
+pct_indigena,% Pob. Indigena,idx_gobernanza,UAI General,flooding_risks,Riesgo Inundaciones,-0.0012924092828169175,0.4018226657251213,0.40311507500793825,Alto > Bajo
+pct_indigena,% Pob. Indigena,idx_gobernanza,UAI General,hydric_stress_risk,Riesgo Estres Hidrico,0.09047373472025062,0.1998911083580227,0.10941737363777208,Alto > Bajo
+pct_indigena,% Pob. Indigena,idx_gobernanza,UAI General,pol_deficit,Deficit Polinizacion,-0.0786049677769593,-0.2917919072371466,0.2131869394601873,Alto > Bajo
+pct_indigena,% Pob. Indigena,idx_biodiv,Indice Biodiversidad,persist_dengue,Persist. Dengue,-0.11451166006095534,0.05997202933196038,0.17448368939291573,Bajo > Alto
+pct_indigena,% Pob. Indigena,idx_biodiv,Indice Biodiversidad,persist_leptospirose,Persist. Leptospirosis,0.318049444241137,0.40715634886721747,0.08910690462608045,Alto > Bajo
+pct_indigena,% Pob. Indigena,idx_biodiv,Indice Biodiversidad,incidence_mean_dengue,Incid. Dengue,-0.4178294573643411,-0.4579825641768698,0.040153106812528705,Alto > Bajo
+pct_indigena,% Pob. Indigena,idx_biodiv,Indice Biodiversidad,flooding_risks,Riesgo Inundaciones,0.1643505196519922,0.3116320079618182,0.14728148830982601,Alto > Bajo
+pct_indigena,% Pob. Indigena,idx_biodiv,Indice Biodiversidad,hydric_stress_risk,Riesgo Estres Hidrico,0.22469630010589836,0.199170405099246,0.025525895006652366,Bajo > Alto
+pct_indigena,% Pob. Indigena,idx_biodiv,Indice Biodiversidad,pol_deficit,Deficit Polinizacion,-0.6062003429206211,-0.5547012842422518,0.051499058678369236,Bajo > Alto
+pct_indigena,% Pob. Indigena,forest_cover,Cobertura Forestal,persist_dengue,Persist. Dengue,-0.20457900991647263,0.09892461248428855,0.3035036224007612,Bajo > Alto
+pct_indigena,% Pob. Indigena,forest_cover,Cobertura Forestal,persist_leptospirose,Persist. Leptospirosis,-0.009929054117562923,0.45449702605759923,0.4644260801751621,Alto > Bajo
+pct_indigena,% Pob. Indigena,forest_cover,Cobertura Forestal,incidence_mean_dengue,Incid. Dengue,-0.40355481394956655,-0.3573268274442659,0.04622798650530063,Bajo > Alto
+pct_indigena,% Pob. Indigena,forest_cover,Cobertura Forestal,flooding_risks,Riesgo Inundaciones,0.1956829320151634,0.45099971745800194,0.25531678544283853,Alto > Bajo
+pct_indigena,% Pob. Indigena,forest_cover,Cobertura Forestal,hydric_stress_risk,Riesgo Estres Hidrico,-0.04216039008127389,0.05948485675206581,0.1016452468333397,Alto > Bajo
+pct_indigena,% Pob. Indigena,forest_cover,Cobertura Forestal,pol_deficit,Deficit Polinizacion,-0.7157028302214031,-0.8233972188142438,0.10769438859284064,Alto > Bajo

@@ -1,0 +1,161 @@
+Tipo_Riesgo,Variable_Y,Nombre_Y,Predictor_Tipo,Variable_X,Nombre_X,Spearman_r,p_value,n,Significativo
+SALUD,persist_dengue,Persistencia Dengue,Gobernanza,UAI_housing,UAI Vivienda,0.378883284853219,1.898954246949643e-23,645,***
+SALUD,persist_dengue,Persistencia Dengue,Gobernanza,UAI_env,UAI Ambiental,0.29804832400296283,1.0653896515283282e-14,645,***
+SALUD,persist_dengue,Persistencia Dengue,Gobernanza,UAI_food,UAI Alimentacion,-0.012112776012667791,0.7588122299924149,645,ns
+SALUD,persist_dengue,Persistencia Dengue,Gobernanza,UAI_mob,UAI Movilidad,0.37351258028825907,8.746178087289593e-23,645,***
+SALUD,persist_dengue,Persistencia Dengue,Gobernanza,UAI_Crisk,UAI Riesgo Climatico,0.258523390987938,2.6179529679206082e-11,645,***
+SALUD,persist_dengue,Persistencia Dengue,Gobernanza,idx_gobernanza,UAI General (Indice),0.38302859635257175,5.72834805181273e-24,645,***
+SALUD,persist_dengue,Persistencia Dengue,Biodiversidad,mean_species_richness,Riqueza Especies (Media),0.031145572501856685,0.429728281934586,645,ns
+SALUD,persist_dengue,Persistencia Dengue,Biodiversidad,max_species_richness,Riqueza Especies (Max),0.12004205843505003,0.0022594301252823303,645,**
+SALUD,persist_dengue,Persistencia Dengue,Biodiversidad,forest_cover,Cobertura Forestal,-0.06943092470900779,0.0780636798793061,645,ns
+SALUD,persist_dengue,Persistencia Dengue,Biodiversidad,idx_biodiv,Indice Biodiversidad,0.031145572501856685,0.429728281934586,645,ns
+SALUD,persist_leishmaniose,Persistencia Leishmaniosis,Gobernanza,UAI_housing,UAI Vivienda,0.3906452167163074,6.054158990997686e-25,645,***
+SALUD,persist_leishmaniose,Persistencia Leishmaniosis,Gobernanza,UAI_env,UAI Ambiental,0.32537657167170214,2.2651409958075603e-17,645,***
+SALUD,persist_leishmaniose,Persistencia Leishmaniosis,Gobernanza,UAI_food,UAI Alimentacion,0.07967052615106719,0.04310700762836308,645,*
+SALUD,persist_leishmaniose,Persistencia Leishmaniosis,Gobernanza,UAI_mob,UAI Movilidad,0.422009312301825,3.0547443346707034e-29,645,***
+SALUD,persist_leishmaniose,Persistencia Leishmaniosis,Gobernanza,UAI_Crisk,UAI Riesgo Climatico,0.3214271870982255,5.735677441380415e-17,645,***
+SALUD,persist_leishmaniose,Persistencia Leishmaniosis,Gobernanza,idx_gobernanza,UAI General (Indice),0.44393142725023055,1.5872127575193597e-32,645,***
+SALUD,persist_leishmaniose,Persistencia Leishmaniosis,Biodiversidad,mean_species_richness,Riqueza Especies (Media),-0.05640027432579637,0.1525019071858568,645,ns
+SALUD,persist_leishmaniose,Persistencia Leishmaniosis,Biodiversidad,max_species_richness,Riqueza Especies (Max),0.03542134762906021,0.3691175455598098,645,ns
+SALUD,persist_leishmaniose,Persistencia Leishmaniosis,Biodiversidad,forest_cover,Cobertura Forestal,0.04814385708401041,0.22207135093155128,645,ns
+SALUD,persist_leishmaniose,Persistencia Leishmaniosis,Biodiversidad,idx_biodiv,Indice Biodiversidad,-0.05640027432579637,0.1525019071858568,645,ns
+SALUD,persist_leptospirose,Persistencia Leptospirosis,Gobernanza,UAI_housing,UAI Vivienda,0.49811639477830844,9.55172383935787e-42,645,***
+SALUD,persist_leptospirose,Persistencia Leptospirosis,Gobernanza,UAI_env,UAI Ambiental,0.3543598363664112,1.6147782308706332e-20,645,***
+SALUD,persist_leptospirose,Persistencia Leptospirosis,Gobernanza,UAI_food,UAI Alimentacion,0.05929162787651972,0.13252388509787902,645,ns
+SALUD,persist_leptospirose,Persistencia Leptospirosis,Gobernanza,UAI_mob,UAI Movilidad,0.6527905362992551,1.3778524535915914e-79,645,***
+SALUD,persist_leptospirose,Persistencia Leptospirosis,Gobernanza,UAI_Crisk,UAI Riesgo Climatico,0.44832258132921066,3.261573811794809e-33,645,***
+SALUD,persist_leptospirose,Persistencia Leptospirosis,Gobernanza,idx_gobernanza,UAI General (Indice),0.5842740299189397,2.6405994809479634e-60,645,***
+SALUD,persist_leptospirose,Persistencia Leptospirosis,Biodiversidad,mean_species_richness,Riqueza Especies (Media),0.4278130049393892,4.352626646639922e-30,645,***
+SALUD,persist_leptospirose,Persistencia Leptospirosis,Biodiversidad,max_species_richness,Riqueza Especies (Max),0.5224687652006282,1.845913896938978e-46,645,***
+SALUD,persist_leptospirose,Persistencia Leptospirosis,Biodiversidad,forest_cover,Cobertura Forestal,0.26691744111345883,5.535426999105648e-12,645,***
+SALUD,persist_leptospirose,Persistencia Leptospirosis,Biodiversidad,idx_biodiv,Indice Biodiversidad,0.4278130049393892,4.352626646639922e-30,645,***
+SALUD,persist_malaria,Persistencia Malaria,Gobernanza,UAI_housing,UAI Vivienda,0.4613134578976509,2.634971604258447e-35,645,***
+SALUD,persist_malaria,Persistencia Malaria,Gobernanza,UAI_env,UAI Ambiental,0.2907898635509031,4.912230222339831e-14,645,***
+SALUD,persist_malaria,Persistencia Malaria,Gobernanza,UAI_food,UAI Alimentacion,0.067626456351642,0.08613779133942827,645,ns
+SALUD,persist_malaria,Persistencia Malaria,Gobernanza,UAI_mob,UAI Movilidad,0.5232518627862198,1.2829487121688042e-46,645,***
+SALUD,persist_malaria,Persistencia Malaria,Gobernanza,UAI_Crisk,UAI Riesgo Climatico,0.4015735172611394,2.1699330366487687e-26,645,***
+SALUD,persist_malaria,Persistencia Malaria,Gobernanza,idx_gobernanza,UAI General (Indice),0.4909232987516372,2.0009759370226864e-40,645,***
+SALUD,persist_malaria,Persistencia Malaria,Biodiversidad,mean_species_richness,Riqueza Especies (Media),0.1395159806467612,0.00037972464827208685,645,***
+SALUD,persist_malaria,Persistencia Malaria,Biodiversidad,max_species_richness,Riqueza Especies (Max),0.24169735699937245,5.007233142616941e-10,645,***
+SALUD,persist_malaria,Persistencia Malaria,Biodiversidad,forest_cover,Cobertura Forestal,0.14324636617390368,0.0002624562880988568,645,***
+SALUD,persist_malaria,Persistencia Malaria,Biodiversidad,idx_biodiv,Indice Biodiversidad,0.1395159806467612,0.00037972464827208685,645,***
+SALUD,incidence_mean_dengue,Incidencia Media Dengue,Gobernanza,UAI_housing,UAI Vivienda,0.03295706288893917,0.40337488074243133,645,ns
+SALUD,incidence_mean_dengue,Incidencia Media Dengue,Gobernanza,UAI_env,UAI Ambiental,-0.001835481200046057,0.9628917610339391,645,ns
+SALUD,incidence_mean_dengue,Incidencia Media Dengue,Gobernanza,UAI_food,UAI Alimentacion,-0.044881318573907696,0.2550341628074888,645,ns
+SALUD,incidence_mean_dengue,Incidencia Media Dengue,Gobernanza,UAI_mob,UAI Movilidad,-0.04131755132168008,0.2947548674755726,645,ns
+SALUD,incidence_mean_dengue,Incidencia Media Dengue,Gobernanza,UAI_Crisk,UAI Riesgo Climatico,-0.07621967835012029,0.05301482626780265,645,ns
+SALUD,incidence_mean_dengue,Incidencia Media Dengue,Gobernanza,idx_gobernanza,UAI General (Indice),-0.03686817811676749,0.34987219896594823,645,ns
+SALUD,incidence_mean_dengue,Incidencia Media Dengue,Biodiversidad,mean_species_richness,Riqueza Especies (Media),-0.4422404074183556,2.901442145549935e-32,645,***
+SALUD,incidence_mean_dengue,Incidencia Media Dengue,Biodiversidad,max_species_richness,Riqueza Especies (Max),-0.45448131548591075,3.4085190150788015e-34,645,***
+SALUD,incidence_mean_dengue,Incidencia Media Dengue,Biodiversidad,forest_cover,Cobertura Forestal,-0.45399767963171883,4.0767869909416935e-34,645,***
+SALUD,incidence_mean_dengue,Incidencia Media Dengue,Biodiversidad,idx_biodiv,Indice Biodiversidad,-0.4422404074183556,2.901442145549935e-32,645,***
+SALUD,incidence_mean_leishmaniose,Incidencia Media Leishmaniosis,Gobernanza,UAI_housing,UAI Vivienda,-0.1371267446273527,0.0004788037992450018,645,***
+SALUD,incidence_mean_leishmaniose,Incidencia Media Leishmaniosis,Gobernanza,UAI_env,UAI Ambiental,-0.05655193841746425,0.15140013382899792,645,ns
+SALUD,incidence_mean_leishmaniose,Incidencia Media Leishmaniosis,Gobernanza,UAI_food,UAI Alimentacion,0.054008851704069064,0.17068873367209733,645,ns
+SALUD,incidence_mean_leishmaniose,Incidencia Media Leishmaniosis,Gobernanza,UAI_mob,UAI Movilidad,-0.23494051256201962,1.5419493343683792e-09,645,***
+SALUD,incidence_mean_leishmaniose,Incidencia Media Leishmaniosis,Gobernanza,UAI_Crisk,UAI Riesgo Climatico,-0.15709046708080926,6.155551566811795e-05,645,***
+SALUD,incidence_mean_leishmaniose,Incidencia Media Leishmaniosis,Gobernanza,idx_gobernanza,UAI General (Indice),-0.14965708103366857,0.00013620991067067397,645,***
+SALUD,incidence_mean_leishmaniose,Incidencia Media Leishmaniosis,Biodiversidad,mean_species_richness,Riqueza Especies (Media),-0.4364625345035585,2.22177446448087e-31,645,***
+SALUD,incidence_mean_leishmaniose,Incidencia Media Leishmaniosis,Biodiversidad,max_species_richness,Riqueza Especies (Max),-0.48931711242250275,3.908274033795438e-40,645,***
+SALUD,incidence_mean_leishmaniose,Incidencia Media Leishmaniosis,Biodiversidad,forest_cover,Cobertura Forestal,-0.1640272272372884,2.8381470882379846e-05,645,***
+SALUD,incidence_mean_leishmaniose,Incidencia Media Leishmaniosis,Biodiversidad,idx_biodiv,Indice Biodiversidad,-0.4364625345035585,2.22177446448087e-31,645,***
+SALUD,incidence_mean_leptospirose,Incidencia Media Leptospirosis,Gobernanza,UAI_housing,UAI Vivienda,0.16086244271578906,4.0565924290859645e-05,645,***
+SALUD,incidence_mean_leptospirose,Incidencia Media Leptospirosis,Gobernanza,UAI_env,UAI Ambiental,0.11705078952726457,0.0029089885888417357,645,**
+SALUD,incidence_mean_leptospirose,Incidencia Media Leptospirosis,Gobernanza,UAI_food,UAI Alimentacion,0.025366667625903488,0.5201674464094731,645,ns
+SALUD,incidence_mean_leptospirose,Incidencia Media Leptospirosis,Gobernanza,UAI_mob,UAI Movilidad,0.2444530646494705,3.1340356959121846e-10,645,***
+SALUD,incidence_mean_leptospirose,Incidencia Media Leptospirosis,Gobernanza,UAI_Crisk,UAI Riesgo Climatico,0.1934058763238759,7.452842100173416e-07,645,***
+SALUD,incidence_mean_leptospirose,Incidencia Media Leptospirosis,Gobernanza,idx_gobernanza,UAI General (Indice),0.21746614726192795,2.4170220924726913e-08,645,***
+SALUD,incidence_mean_leptospirose,Incidencia Media Leptospirosis,Biodiversidad,mean_species_richness,Riqueza Especies (Media),0.3148568776319695,2.6106936102078915e-16,645,***
+SALUD,incidence_mean_leptospirose,Incidencia Media Leptospirosis,Biodiversidad,max_species_richness,Riqueza Especies (Max),0.3333754657711425,3.3079248318329153e-18,645,***
+SALUD,incidence_mean_leptospirose,Incidencia Media Leptospirosis,Biodiversidad,forest_cover,Cobertura Forestal,0.23570049104080062,1.3610334557113571e-09,645,***
+SALUD,incidence_mean_leptospirose,Incidencia Media Leptospirosis,Biodiversidad,idx_biodiv,Indice Biodiversidad,0.3148568776319695,2.6106936102078915e-16,645,***
+SALUD,incidence_mean_malaria,Incidencia Media Malaria,Gobernanza,UAI_housing,UAI Vivienda,0.23234704468849818,2.3530459751846464e-09,645,***
+SALUD,incidence_mean_malaria,Incidencia Media Malaria,Gobernanza,UAI_env,UAI Ambiental,0.10550898123838708,0.007320812262179651,645,**
+SALUD,incidence_mean_malaria,Incidencia Media Malaria,Gobernanza,UAI_food,UAI Alimentacion,0.0470746448838417,0.2325207578043633,645,ns
+SALUD,incidence_mean_malaria,Incidencia Media Malaria,Gobernanza,UAI_mob,UAI Movilidad,0.2623167002818845,1.3060748799582874e-11,645,***
+SALUD,incidence_mean_malaria,Incidencia Media Malaria,Gobernanza,UAI_Crisk,UAI Riesgo Climatico,0.2016448149193933,2.4127662361056414e-07,645,***
+SALUD,incidence_mean_malaria,Incidencia Media Malaria,Gobernanza,idx_gobernanza,UAI General (Indice),0.23271259970183328,2.2176270019726456e-09,645,***
+SALUD,incidence_mean_malaria,Incidencia Media Malaria,Biodiversidad,mean_species_richness,Riqueza Especies (Media),0.008019099167467323,0.8389254980607551,645,ns
+SALUD,incidence_mean_malaria,Incidencia Media Malaria,Biodiversidad,max_species_richness,Riqueza Especies (Max),0.04676773894519911,0.2355834341452836,645,ns
+SALUD,incidence_mean_malaria,Incidencia Media Malaria,Biodiversidad,forest_cover,Cobertura Forestal,0.074486890002654,0.05866572607889263,645,ns
+SALUD,incidence_mean_malaria,Incidencia Media Malaria,Biodiversidad,idx_biodiv,Indice Biodiversidad,0.008019099167467323,0.8389254980607551,645,ns
+SALUD,copresence_years,Anos Co-presencia Enfermedades,Gobernanza,UAI_housing,UAI Vivienda,0.5099097402631136,5.556174253246462e-44,645,***
+SALUD,copresence_years,Anos Co-presencia Enfermedades,Gobernanza,UAI_env,UAI Ambiental,0.38113640334177923,9.920645964221458e-24,645,***
+SALUD,copresence_years,Anos Co-presencia Enfermedades,Gobernanza,UAI_food,UAI Alimentacion,0.06788292564381487,0.08495077487785704,645,ns
+SALUD,copresence_years,Anos Co-presencia Enfermedades,Gobernanza,UAI_mob,UAI Movilidad,0.6100437200527972,5.261440489252202e-67,645,***
+SALUD,copresence_years,Anos Co-presencia Enfermedades,Gobernanza,UAI_Crisk,UAI Riesgo Climatico,0.4383839619785312,1.133922877103272e-31,645,***
+SALUD,copresence_years,Anos Co-presencia Enfermedades,Gobernanza,idx_gobernanza,UAI General (Indice),0.5867027184831134,6.541961360774816e-61,645,***
+SALUD,copresence_years,Anos Co-presencia Enfermedades,Biodiversidad,mean_species_richness,Riqueza Especies (Media),0.22858718076689172,4.304301593707025e-09,645,***
+SALUD,copresence_years,Anos Co-presencia Enfermedades,Biodiversidad,max_species_richness,Riqueza Especies (Max),0.3373639593652732,1.2406644916685945e-18,645,***
+SALUD,copresence_years,Anos Co-presencia Enfermedades,Biodiversidad,forest_cover,Cobertura Forestal,0.15431397498118588,8.316857620504088e-05,645,***
+SALUD,copresence_years,Anos Co-presencia Enfermedades,Biodiversidad,idx_biodiv,Indice Biodiversidad,0.22858718076689172,4.304301593707025e-09,645,***
+SALUD,idx_carga_enfermedad,Indice Carga Enfermedad,Gobernanza,UAI_housing,UAI Vivienda,0.03849940736829638,0.3289509728830634,645,ns
+SALUD,idx_carga_enfermedad,Indice Carga Enfermedad,Gobernanza,UAI_env,UAI Ambiental,0.023563884347000272,0.5502599986282466,645,ns
+SALUD,idx_carga_enfermedad,Indice Carga Enfermedad,Gobernanza,UAI_food,UAI Alimentacion,-0.0007773324077969774,0.9842798953456227,645,ns
+SALUD,idx_carga_enfermedad,Indice Carga Enfermedad,Gobernanza,UAI_mob,UAI Movilidad,-0.04455807415284346,0.25847581755605237,645,ns
+SALUD,idx_carga_enfermedad,Indice Carga Enfermedad,Gobernanza,UAI_Crisk,UAI Riesgo Climatico,-0.045565250803461514,0.247857321692098,645,ns
+SALUD,idx_carga_enfermedad,Indice Carga Enfermedad,Gobernanza,idx_gobernanza,UAI General (Indice),-0.00518075255374355,0.8955218070381548,645,ns
+SALUD,idx_carga_enfermedad,Indice Carga Enfermedad,Biodiversidad,mean_species_richness,Riqueza Especies (Media),-0.40685081227424713,4.157700303027757e-27,645,***
+SALUD,idx_carga_enfermedad,Indice Carga Enfermedad,Biodiversidad,max_species_richness,Riqueza Especies (Max),-0.41705553017287583,1.564406682699042e-28,645,***
+SALUD,idx_carga_enfermedad,Indice Carga Enfermedad,Biodiversidad,forest_cover,Cobertura Forestal,-0.3563128495805244,9.637895101142722e-21,645,***
+SALUD,idx_carga_enfermedad,Indice Carga Enfermedad,Biodiversidad,idx_biodiv,Indice Biodiversidad,-0.40685081227424713,4.157700303027757e-27,645,***
+CLIMA,flooding_exposure,Exposicion Inundaciones,Gobernanza,UAI_housing,UAI Vivienda,0.16787913529908582,1.8209580134143813e-05,645,***
+CLIMA,flooding_exposure,Exposicion Inundaciones,Gobernanza,UAI_env,UAI Ambiental,0.1042866901568414,0.008033779168866802,645,**
+CLIMA,flooding_exposure,Exposicion Inundaciones,Gobernanza,UAI_food,UAI Alimentacion,-0.1179219790866453,0.002704150064794046,645,**
+CLIMA,flooding_exposure,Exposicion Inundaciones,Gobernanza,UAI_mob,UAI Movilidad,0.16271492392772133,3.2939104217475894e-05,645,***
+CLIMA,flooding_exposure,Exposicion Inundaciones,Gobernanza,UAI_Crisk,UAI Riesgo Climatico,0.12287518346526045,0.0017693395375543586,645,**
+CLIMA,flooding_exposure,Exposicion Inundaciones,Gobernanza,idx_gobernanza,UAI General (Indice),0.13365415978567388,0.0006662828879671148,645,***
+CLIMA,flooding_exposure,Exposicion Inundaciones,Biodiversidad,mean_species_richness,Riqueza Especies (Media),-0.07890248599488099,0.045165332605911095,645,*
+CLIMA,flooding_exposure,Exposicion Inundaciones,Biodiversidad,max_species_richness,Riqueza Especies (Max),0.014364028485822886,0.7157741862185718,645,ns
+CLIMA,flooding_exposure,Exposicion Inundaciones,Biodiversidad,forest_cover,Cobertura Forestal,-0.05557652003233577,0.1585926987881176,645,ns
+CLIMA,flooding_exposure,Exposicion Inundaciones,Biodiversidad,idx_biodiv,Indice Biodiversidad,-0.07890248599488099,0.045165332605911095,645,*
+CLIMA,flooding_risks,Riesgo Inundaciones,Gobernanza,UAI_housing,UAI Vivienda,0.20284548084701662,2.0389280678613538e-07,645,***
+CLIMA,flooding_risks,Riesgo Inundaciones,Gobernanza,UAI_env,UAI Ambiental,0.11363797664458954,0.003854690533235862,645,**
+CLIMA,flooding_risks,Riesgo Inundaciones,Gobernanza,UAI_food,UAI Alimentacion,-0.02005287398653404,0.6112127525464315,645,ns
+CLIMA,flooding_risks,Riesgo Inundaciones,Gobernanza,UAI_mob,UAI Movilidad,0.26331610438011765,1.0854095653863551e-11,645,***
+CLIMA,flooding_risks,Riesgo Inundaciones,Gobernanza,UAI_Crisk,UAI Riesgo Climatico,0.264022858579,9.518101276773852e-12,645,***
+CLIMA,flooding_risks,Riesgo Inundaciones,Gobernanza,idx_gobernanza,UAI General (Indice),0.23930581011091062,7.484930870306853e-10,645,***
+CLIMA,flooding_risks,Riesgo Inundaciones,Biodiversidad,mean_species_richness,Riqueza Especies (Media),0.2719111002682018,2.1395094356449846e-12,645,***
+CLIMA,flooding_risks,Riesgo Inundaciones,Biodiversidad,max_species_richness,Riqueza Especies (Max),0.3748036262814812,6.07434030160995e-23,645,***
+CLIMA,flooding_risks,Riesgo Inundaciones,Biodiversidad,forest_cover,Cobertura Forestal,0.3513375849395758,3.5635850833148316e-20,645,***
+CLIMA,flooding_risks,Riesgo Inundaciones,Biodiversidad,idx_biodiv,Indice Biodiversidad,0.2719111002682018,2.1395094356449846e-12,645,***
+CLIMA,hydric_stress_exp,Exposicion Estres Hidrico,Gobernanza,UAI_housing,UAI Vivienda,0.42781577838084733,4.348536118781134e-30,645,***
+CLIMA,hydric_stress_exp,Exposicion Estres Hidrico,Gobernanza,UAI_env,UAI Ambiental,0.33161902131550597,5.071620074802408e-18,645,***
+CLIMA,hydric_stress_exp,Exposicion Estres Hidrico,Gobernanza,UAI_food,UAI Alimentacion,-0.06278291595173117,0.11116754526639137,645,ns
+CLIMA,hydric_stress_exp,Exposicion Estres Hidrico,Gobernanza,UAI_mob,UAI Movilidad,0.5718387272397003,2.79227308166561e-57,645,***
+CLIMA,hydric_stress_exp,Exposicion Estres Hidrico,Gobernanza,UAI_Crisk,UAI Riesgo Climatico,0.3923232628772976,3.6607989369347187e-25,645,***
+CLIMA,hydric_stress_exp,Exposicion Estres Hidrico,Gobernanza,idx_gobernanza,UAI General (Indice),0.4710143231670665,6.285689747214415e-37,645,***
+CLIMA,hydric_stress_exp,Exposicion Estres Hidrico,Biodiversidad,mean_species_richness,Riqueza Especies (Media),0.4035670179797106,1.1665016279373282e-26,645,***
+CLIMA,hydric_stress_exp,Exposicion Estres Hidrico,Biodiversidad,max_species_richness,Riqueza Especies (Max),0.48594341528272783,1.576419526066927e-39,645,***
+CLIMA,hydric_stress_exp,Exposicion Estres Hidrico,Biodiversidad,forest_cover,Cobertura Forestal,0.10055533367001962,0.010609187618517523,645,*
+CLIMA,hydric_stress_exp,Exposicion Estres Hidrico,Biodiversidad,idx_biodiv,Indice Biodiversidad,0.4035670179797106,1.1665016279373282e-26,645,***
+CLIMA,hydric_stress_risk,Riesgo Estres Hidrico,Gobernanza,UAI_housing,UAI Vivienda,0.22527681628866977,7.2622921158920044e-09,645,***
+CLIMA,hydric_stress_risk,Riesgo Estres Hidrico,Gobernanza,UAI_env,UAI Ambiental,0.13309058916327396,0.0007024751548177825,645,***
+CLIMA,hydric_stress_risk,Riesgo Estres Hidrico,Gobernanza,UAI_food,UAI Alimentacion,-0.05629318984120741,0.15328348834618175,645,ns
+CLIMA,hydric_stress_risk,Riesgo Estres Hidrico,Gobernanza,UAI_mob,UAI Movilidad,0.298665048046422,9.337606964141357e-15,645,***
+CLIMA,hydric_stress_risk,Riesgo Estres Hidrico,Gobernanza,UAI_Crisk,UAI Riesgo Climatico,0.16149834332871688,3.777676791182507e-05,645,***
+CLIMA,hydric_stress_risk,Riesgo Estres Hidrico,Gobernanza,idx_gobernanza,UAI General (Indice),0.21619060738564727,2.929087252855957e-08,645,***
+CLIMA,hydric_stress_risk,Riesgo Estres Hidrico,Biodiversidad,mean_species_richness,Riqueza Especies (Media),0.22523905887544254,7.305410557594497e-09,645,***
+CLIMA,hydric_stress_risk,Riesgo Estres Hidrico,Biodiversidad,max_species_richness,Riqueza Especies (Max),0.2510398365357038,9.990337032563045e-11,645,***
+CLIMA,hydric_stress_risk,Riesgo Estres Hidrico,Biodiversidad,forest_cover,Cobertura Forestal,0.020157160224459222,0.6093599487171719,645,ns
+CLIMA,hydric_stress_risk,Riesgo Estres Hidrico,Biodiversidad,idx_biodiv,Indice Biodiversidad,0.22523905887544254,7.305410557594497e-09,645,***
+CLIMA,idx_clima,Indice Riesgo Climatico,Gobernanza,UAI_housing,UAI Vivienda,0.2712437739360298,2.432087044775027e-12,645,***
+CLIMA,idx_clima,Indice Riesgo Climatico,Gobernanza,UAI_env,UAI Ambiental,0.16175674266992068,3.6696125969927756e-05,645,***
+CLIMA,idx_clima,Indice Riesgo Climatico,Gobernanza,UAI_food,UAI Alimentacion,-0.041906271298943476,0.2879226765125911,645,ns
+CLIMA,idx_clima,Indice Riesgo Climatico,Gobernanza,UAI_mob,UAI Movilidad,0.37206918016376245,1.3121341939784548e-22,645,***
+CLIMA,idx_clima,Indice Riesgo Climatico,Gobernanza,UAI_Crisk,UAI Riesgo Climatico,0.2607936596180936,1.729037198038084e-11,645,***
+CLIMA,idx_clima,Indice Riesgo Climatico,Gobernanza,idx_gobernanza,UAI General (Indice),0.28941849222360627,6.524820129363747e-14,645,***
+CLIMA,idx_clima,Indice Riesgo Climatico,Biodiversidad,mean_species_richness,Riqueza Especies (Media),0.3255872190241914,2.1548015054424987e-17,645,***
+CLIMA,idx_clima,Indice Riesgo Climatico,Biodiversidad,max_species_richness,Riqueza Especies (Max),0.4018467111079727,1.993485242642461e-26,645,***
+CLIMA,idx_clima,Indice Riesgo Climatico,Biodiversidad,forest_cover,Cobertura Forestal,0.20828002432928233,9.395382402563191e-08,645,***
+CLIMA,idx_clima,Indice Riesgo Climatico,Biodiversidad,idx_biodiv,Indice Biodiversidad,0.3255872190241914,2.1548015054424987e-17,645,***
+NUTRICION,pol_deficit,Deficit de Polinizacion,Gobernanza,UAI_housing,UAI Vivienda,-0.12313771748003988,0.0017292596295573946,645,**
+NUTRICION,pol_deficit,Deficit de Polinizacion,Gobernanza,UAI_env,UAI Ambiental,-0.05417200740028102,0.16939858521801882,645,ns
+NUTRICION,pol_deficit,Deficit de Polinizacion,Gobernanza,UAI_food,UAI Alimentacion,-0.010449428147017626,0.7911057374262771,645,ns
+NUTRICION,pol_deficit,Deficit de Polinizacion,Gobernanza,UAI_mob,UAI Movilidad,-0.2250965119557647,7.470447219471273e-09,645,***
+NUTRICION,pol_deficit,Deficit de Polinizacion,Gobernanza,UAI_Crisk,UAI Riesgo Climatico,-0.24166816544421585,5.031994297839191e-10,645,***
+NUTRICION,pol_deficit,Deficit de Polinizacion,Gobernanza,idx_gobernanza,UAI General (Indice),-0.1857770043607423,2.03002112366754e-06,645,***
+NUTRICION,pol_deficit,Deficit de Polinizacion,Biodiversidad,mean_species_richness,Riqueza Especies (Media),-0.5672254341628035,3.4309622955225494e-56,645,***
+NUTRICION,pol_deficit,Deficit de Polinizacion,Biodiversidad,max_species_richness,Riqueza Especies (Max),-0.5847253399116494,2.0392959490599034e-60,645,***
+NUTRICION,pol_deficit,Deficit de Polinizacion,Biodiversidad,forest_cover,Cobertura Forestal,-0.7653975126261965,3.4285138932859206e-125,645,***
+NUTRICION,pol_deficit,Deficit de Polinizacion,Biodiversidad,idx_biodiv,Indice Biodiversidad,-0.5672254341628035,3.4309622955225494e-56,645,***

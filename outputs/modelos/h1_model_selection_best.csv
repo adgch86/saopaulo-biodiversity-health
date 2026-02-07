@@ -1,0 +1,29 @@
+outcome,outcome_label,predictor_dimension,selected_variable,selected_label,selected_is_composite,aic,coef,p_value,r2_marginal,n_equivalent,all_equivalent
+incidence_mean_dengue,Dengue,Gobernanza,idx_gobernanza_100,Gobernanza (idx),True,9683.703257599886,3.8773941269235004,3.3518484537897076e-05,0.33524824973884176,3,"Gobernanza (idx), UAI Movilidad, UAI Vivienda"
+incidence_mean_dengue,Dengue,Riesgo Climático,fire_risk_index,Riesgo Fuego (idx),False,9673.1603065633,7.972078568104903,1.2473637440136563e-07,0.35693015815966456,1,Riesgo Fuego (idx)
+incidence_mean_dengue,Dengue,Biodiversidad,idx_biodiv,Biodiv (idx),True,9690.78986796439,-6.02371783837411,0.0015301324538015088,0.3537558547982596,2,"Biodiv (idx), Riqueza Spp"
+incidence_mean_dengue,Dengue,Vulnerabilidad,pct_rural,% Rural,False,9684.162313722138,-6.365989251645156,4.5557417482500194e-05,0.3491221593853128,1,% Rural
+incidence_mean_malaria,Malaria,Gobernanza,UAI_Crisk,UAI Riesgo Clim.,False,3451.0745494338917,-1.3315247159778347,0.03541941591561526,0.03575803317784846,1,UAI Riesgo Clim.
+incidence_mean_malaria,Malaria,Riesgo Climático,fire_risk_index,Riesgo Fuego (idx),False,3448.62191098549,-0.03026807025817272,0.0082512032921645,0.03486093043306519,1,Riesgo Fuego (idx)
+incidence_mean_malaria,Malaria,Biodiversidad,forest_cover,Cobertura Forestal,False,3436.43547766325,0.04130838747751389,1.9292209211802095e-05,0.054019710066892566,2,"Cobertura Forestal, Déf. Polinización"
+incidence_mean_malaria,Malaria,Vulnerabilidad,pct_indigena,% Pob. Indígena,False,3455.015355601696,0.14219405296787196,0.48480660738017745,0.028218880065483957,5,"% Pob. Indígena, % Pobreza, % Pob. Negra, % Rural, Vulnerab. (idx)"
+incidence_mean_leptospirose,Leptospirosis,Gobernanza,idx_gobernanza_100,Gobernanza (idx),True,5040.728989076526,0.02224562032603532,0.39708522192900175,0.1596559988925351,6,"Gobernanza (idx), UAI Movilidad, UAI Vivienda, UAI Riesgo Clim., UAI Ambiental, UAI Alimentación"
+incidence_mean_leptospirose,Leptospirosis,Riesgo Climático,fire_risk_index,Riesgo Fuego (idx),False,5038.7872302558535,-0.06802275273239519,0.10233101812969554,0.1615100254359234,3,"Riesgo Fuego (idx), Riesgo Inundación, Clima (idx)"
+incidence_mean_leptospirose,Leptospirosis,Biodiversidad,idx_biodiv,Biodiv (idx),True,5035.851242374976,0.10819048718362308,0.016869682609294133,0.16450039421769944,3,"Biodiv (idx), Riqueza Spp, Cobertura Forestal"
+incidence_mean_leptospirose,Leptospirosis,Vulnerabilidad,pct_pobreza,% Pobreza,False,5040.110204917866,0.7024902708242643,0.24733902095481053,0.16069872471361474,5,"% Pobreza, Vulnerab. (idx), % Rural, % Pob. Negra, % Pob. Indígena"
+incidence_mean_leishmaniose,Leishmaniasis,Gobernanza,UAI_mob,UAI Movilidad,False,5134.604500778101,-2.0631994157991334,0.3339242520218145,0.2531452368146105,6,"UAI Movilidad, UAI Ambiental, UAI Alimentación, UAI Vivienda, UAI Riesgo Clim., Gobernanza (idx)"
+incidence_mean_leishmaniose,Leishmaniasis,Riesgo Climático,hydric_stress_risk,Estrés Hídrico,False,5118.22004966938,-16.46159671233181,2.9488275566358197e-05,0.2694705257793503,1,Estrés Hídrico
+incidence_mean_leishmaniose,Leishmaniasis,Biodiversidad,forest_cover,Cobertura Forestal,False,5124.74899151229,0.1607971351729019,0.0011592908699183595,0.2582343697584075,1,Cobertura Forestal
+incidence_mean_leishmaniose,Leishmaniasis,Vulnerabilidad,idx_vulnerabilidad,Vulnerab. (idx),True,5103.877664758818,0.3647829860950636,1.296606258005119e-08,0.2805943421917157,1,Vulnerab. (idx)
+incidence_diarrhea_mean,Diarrea,Gobernanza,UAI_mob,UAI Movilidad,False,7962.188669450994,-29.449118147155033,0.13373403236661338,0.11646217888756487,4,"UAI Movilidad, UAI Vivienda, Gobernanza (idx), UAI Riesgo Clim."
+incidence_diarrhea_mean,Diarrea,Riesgo Climático,fire_risk_index,Riesgo Fuego (idx),False,7958.827512908401,0.9354718050884774,0.017610118407475756,0.12204614697818524,1,Riesgo Fuego (idx)
+incidence_diarrhea_mean,Diarrea,Biodiversidad,idx_biodiv,Biodiv (idx),True,7951.423302602603,-1.6069968070142098,0.00012621373887554895,0.12249228358551219,2,"Biodiv (idx), Riqueza Spp"
+incidence_diarrhea_mean,Diarrea,Vulnerabilidad,idx_vulnerabilidad,Vulnerab. (idx),True,7953.988156461943,-1.9223536366138538,0.0011620280151979055,0.12936237403343975,2,"Vulnerab. (idx), % Pobreza"
+health_death_circ_mean,Mort. Cardiovasc.,Gobernanza,UAI_mob,UAI Movilidad,False,6685.144414501388,-15.111564332624113,0.035583277757727176,0.18717990742056972,1,UAI Movilidad
+health_death_circ_mean,Mort. Cardiovasc.,Riesgo Climático,fire_risk_index,Riesgo Fuego (idx),False,6685.278773212567,-0.30746017329078645,0.038267838302998854,0.18705420266415468,1,Riesgo Fuego (idx)
+health_death_circ_mean,Mort. Cardiovasc.,Biodiversidad,mean_species_richness,Riqueza Spp,False,6687.607808432987,-0.045979292062474274,0.16076294222273846,0.18463269672905702,4,"Riqueza Spp, Biodiv (idx), Déf. Polinización, Cobertura Forestal"
+health_death_circ_mean,Mort. Cardiovasc.,Vulnerabilidad,pct_preta,% Pob. Negra,False,6629.955186395449,-7.598786300212493,2.9535706511593197e-15,0.24223222132751093,1,% Pob. Negra
+health_hosp_resp_mean,Hosp. Respiratoria,Gobernanza,UAI_mob,UAI Movilidad,False,9597.57248856732,-139.52001138574255,0.04834160122345008,0.2289537101631751,2,"UAI Movilidad, UAI Riesgo Clim."
+health_hosp_resp_mean,Hosp. Respiratoria,Riesgo Climático,flooding_risks,Riesgo Inundación,False,9599.299251067756,-124.00979893536986,0.13866773383041975,0.22638607645729567,4,"Riesgo Inundación, Riesgo Fuego (idx), Clima (idx), Estrés Hídrico"
+health_hosp_resp_mean,Hosp. Respiratoria,Biodiversidad,forest_cover,Cobertura Forestal,False,9586.511495367515,-5.85555984104503,5.6487831826220585e-05,0.2417558948978893,1,Cobertura Forestal
+health_hosp_resp_mean,Hosp. Respiratoria,Vulnerabilidad,pct_preta,% Pob. Negra,False,9587.401689887785,-36.72815876379827,0.00015784831514615425,0.23904022196064756,1,% Pob. Negra

@@ -1,0 +1,40 @@
+
+RESUMEN DE HALLAZGOS: ANALISIS DE HIPOTESIS
+============================================
+
+HIPOTESIS ORIGINALES:
+H1: Mayor gobernanza -> menor riesgo ambiental,
+    especialmente en municipios con baja vulnerabilidad social
+H2: Mayor biodiversidad -> menor riesgo ambiental,
+    especialmente en municipios con baja vulnerabilidad social
+
+RESULTADOS:
+
+1. PARADOJA DE LA GOBERNANZA
+   - La gobernanza reduce riesgo de SALUD (r=-0.45***)
+   - Pero aumenta riesgo CLIMATICO (r=+0.44***)
+   - Razon: ciudades urbanizadas tienen mejor salud pero mas exposicion climatica
+
+2. ROL PROTECTOR DE BIODIVERSIDAD
+   - Reduce riesgo de salud (r=-0.53***)
+   - Reduce deficit de polinizacion (r=-0.66***)
+   - Pero areas biodiversas tienen mas eventos climaticos (r=+0.34***)
+
+3. EFECTO COMPENSATORIO (HALLAZGO CLAVE)
+   - Contrario a la hipotesis: el efecto protector de gobernanza
+     es MAS FUERTE en municipios con ALTA vulnerabilidad
+   - Gobernanza vs Riesgo Salud:
+     * Baja vulnerabilidad: r=-0.29
+     * Alta vulnerabilidad: r=-0.61***
+   - Interpretacion: La gobernanza compensa la vulnerabilidad social
+
+4. BIODIVERSIDAD COMO FACTOR UNIVERSAL
+   - Efecto consistente en todos los niveles de vulnerabilidad
+   - Especialmente protector para deficit de polinizacion
+
+IMPLICACIONES PARA POLITICAS:
+1. Priorizar inversiones en gobernanza en municipios vulnerables
+   (mayor retorno relativo)
+2. Conservar biodiversidad como estrategia de salud publica
+3. Separar acciones para riesgo climatico (infraestructura verde)
+   de acciones para riesgo de salud (vigilancia epidemiologica)

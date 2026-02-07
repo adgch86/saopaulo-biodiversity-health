@@ -1,0 +1,5 @@
+Modelo,Interaccion,Coef_interaccion,p_interaccion,R2,R2_adj,N
+Biodiv -> Fuego * Rural,forest_cover × pct_rural,0.12,1e-05,0.2099,0.205,645
+Biodiv -> Fuego * Pobreza,forest_cover × pct_pobreza,0.2024,3e-05,0.2102,0.2053,645
+Fuego -> Mort_CV * Pobreza,fire_risk × pct_pobreza,-0.1025,0.02125,0.0601,0.0527,645
+Fuego -> Mort_CV * Rural,fire_risk × pct_rural,-0.0542,0.23128,0.0543,0.0469,645

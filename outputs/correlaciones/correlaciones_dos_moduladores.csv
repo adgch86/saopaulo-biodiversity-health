@@ -1,0 +1,37 @@
+Variable_X,Variable_Y,Modulador,Tercil,r,p
+UAI General,Carga Enfermedad,% Pob. Negra,Bajo,0.014064092226775574,0.8375502176566477
+UAI General,Carga Enfermedad,% Pob. Negra,Medio,-0.09379524768243262,0.17058901696184167
+UAI General,Carga Enfermedad,% Pob. Negra,Alto,0.02714362230838587,0.6922847604073568
+UAI General,Carga Enfermedad,Idx Vulnerabilidad,Baja,0.0489587777798201,0.4751529302787375
+UAI General,Carga Enfermedad,Idx Vulnerabilidad,Media,-0.09856588447118161,0.1497701057058075
+UAI General,Carga Enfermedad,Idx Vulnerabilidad,Alta,0.0038019094936741294,0.9558021454434209
+UAI Movilidad,Riesgo Climatico,% Pob. Negra,Bajo,0.22835043902312593,0.0007423593132921443
+UAI Movilidad,Riesgo Climatico,% Pob. Negra,Medio,0.3126102834948383,2.9432838216487835e-06
+UAI Movilidad,Riesgo Climatico,% Pob. Negra,Alto,0.4904586929362148,2.0590038214500377e-14
+UAI Movilidad,Riesgo Climatico,Idx Vulnerabilidad,Baja,0.23664976079257366,0.0004659921227125738
+UAI Movilidad,Riesgo Climatico,Idx Vulnerabilidad,Media,0.2840836553229112,2.3509573482896904e-05
+UAI Movilidad,Riesgo Climatico,Idx Vulnerabilidad,Alta,0.1366812758805673,0.045299538224596
+UAI Riesgo Climatico,Deficit Polinizacion,% Pob. Negra,Bajo,-0.12333294552232657,0.07111065462672089
+UAI Riesgo Climatico,Deficit Polinizacion,% Pob. Negra,Medio,-0.25800930842344766,0.00013019619158045694
+UAI Riesgo Climatico,Deficit Polinizacion,% Pob. Negra,Alto,-0.2628755711801512,9.584713040093958e-05
+UAI Riesgo Climatico,Deficit Polinizacion,Idx Vulnerabilidad,Baja,-0.24705447861769278,0.00025391015718047576
+UAI Riesgo Climatico,Deficit Polinizacion,Idx Vulnerabilidad,Media,-0.2766026007774085,3.911033435129166e-05
+UAI Riesgo Climatico,Deficit Polinizacion,Idx Vulnerabilidad,Alta,-0.2474383209169962,0.00024816080914146193
+Indice Biodiversidad,Carga Enfermedad,% Pob. Negra,Bajo,-0.5956688159578836,4.892783911546538e-22
+Indice Biodiversidad,Carga Enfermedad,% Pob. Negra,Medio,-0.36077905769277213,5.2193987588273524e-08
+Indice Biodiversidad,Carga Enfermedad,% Pob. Negra,Alto,-0.2767031321693352,3.884749571962637e-05
+Indice Biodiversidad,Carga Enfermedad,Idx Vulnerabilidad,Baja,-0.4589195585500736,1.3488335879343137e-12
+Indice Biodiversidad,Carga Enfermedad,Idx Vulnerabilidad,Media,-0.35181482286459465,1.1648615332666078e-07
+Indice Biodiversidad,Carga Enfermedad,Idx Vulnerabilidad,Alta,-0.44286870004105383,9.664519845308027e-12
+Riqueza Especies (Max),Riesgo Climatico,% Pob. Negra,Bajo,0.25841460070181327,0.00012694571870452203
+Riqueza Especies (Max),Riesgo Climatico,% Pob. Negra,Medio,0.3793325423151692,9.144485059771083e-09
+Riqueza Especies (Max),Riesgo Climatico,% Pob. Negra,Alto,0.48060069543799255,7.970904728725236e-14
+Riqueza Especies (Max),Riesgo Climatico,Idx Vulnerabilidad,Baja,0.21880694794794825,0.0012428811315995819
+Riqueza Especies (Max),Riesgo Climatico,Idx Vulnerabilidad,Media,0.4445966207777177,7.856812893968129e-12
+Riqueza Especies (Max),Riesgo Climatico,Idx Vulnerabilidad,Alta,0.33273215966358033,5.933197284388181e-07
+Cobertura Forestal,Deficit Polinizacion,% Pob. Negra,Bajo,-0.7540739189422758,9.334617151944513e-41
+Cobertura Forestal,Deficit Polinizacion,% Pob. Negra,Medio,-0.73694093315157,4.374275440779759e-38
+Cobertura Forestal,Deficit Polinizacion,% Pob. Negra,Alto,-0.7782549287046697,6.347824674379938e-45
+Cobertura Forestal,Deficit Polinizacion,Idx Vulnerabilidad,Baja,-0.7101218103953855,2.6747261993316923e-34
+Cobertura Forestal,Deficit Polinizacion,Idx Vulnerabilidad,Media,-0.7604497750654251,8.305441963759379e-42
+Cobertura Forestal,Deficit Polinizacion,Idx Vulnerabilidad,Alta,-0.8013717368585748,1.974311472620741e-49

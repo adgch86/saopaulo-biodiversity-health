@@ -1,0 +1,5 @@
+Path,Coef,SE,p,R2
+idx_gobernanza -> forest_cover,0.0609,0.0507,0.22991,0.1966
+UAI_Crisk -> forest_cover,0.1179,0.0421,0.0052,0.2045
+idx_gobernanza -> fire_incidence,0.0854,0.051,0.09479,0.1899
+UAI_Crisk -> fire_incidence,-0.119,0.0426,0.00535,0.1961
