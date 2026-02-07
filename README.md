@@ -12,14 +12,29 @@ Analysis of correlations between biodiversity, climate risks, universal access t
 
 ```
 saopaulo-biodiversity-health/
-├── data/
-│   ├── raw/           # Datos crudos (CSVs - no en git)
-│   ├── processed/     # Datos procesados (pickles)
-│   └── geo/           # Datos geograficos (shapefiles - no en git)
-├── docs/              # Documentacion y metadata
-├── outputs/figures/   # Visualizaciones generadas
-├── src/               # Codigo Python (futuro)
-└── notebooks/         # Jupyter notebooks (futuro)
+├── data/              # Datasets (raw, processed, geo - no en git)
+├── docs/
+│   ├── informes/      # Reportes e informes
+│   ├── metodologia/   # Documentacion metodologica
+│   ├── negocio/       # Modelos de negocio y oportunidades
+│   ├── workshop/      # Materiales del workshop
+│   └── sesiones/      # Resumen de sesiones
+├── outputs/
+│   ├── dataset/       # Dataset integrado (municipios_integrado.csv)
+│   ├── correlaciones/ # Resultados de correlaciones
+│   ├── modelos/       # Modelos mixtos, SEM, mediacion
+│   ├── dengue/        # Datos de dengue/DATASUS
+│   ├── clasificacion/ # Rankings, gaps, cuadrantes
+│   ├── h1-h6_*/       # Resultados por hipotesis
+│   └── figures/       # Visualizaciones generadas
+├── scripts/
+│   ├── analisis/      # Scripts de analisis (H1-H6)
+│   ├── datos/         # Creacion/procesamiento de datasets
+│   ├── visualizacion/ # Mapas, dashboards, graficos
+│   ├── utils/         # Sync, automation, helpers
+│   └── R/             # Scripts de R
+├── presentaciones/    # PPTX, DOCX del workshop
+└── terrarisk-workshop/ # App web (Next.js + FastAPI)
 ```
 
 ## Datos
@@ -105,8 +120,8 @@ print(df['cuadrante'].value_counts())
 
 ## Documentacion
 
-- `docs/metadata.xlsx` - Definiciones de variables con fuentes
-- `docs/INFORME_ANALISIS_CORRELACIONES.md` - Analisis completo de correlaciones
+- `docs/metodologia/metadata.xlsx` - Definiciones de variables con fuentes
+- `docs/informes/INFORME_ANALISIS_CORRELACIONES.md` - Analisis completo de correlaciones
 
 ## FAIR Compliance
 
@@ -132,7 +147,7 @@ This project follows [FAIR principles](https://www.go-fair.org/fair-principles/)
 | [data/metadata.json](data/metadata.json) | Structured metadata |
 | [data/schema.json](data/schema.json) | JSON Schema for validation |
 | [data/vocabulary_mapping.json](data/vocabulary_mapping.json) | Standard vocabulary mappings |
-| [docs/METHODOLOGY_IVM.md](docs/METHODOLOGY_IVM.md) | IVM index methodology |
+| [docs/metodologia/METHODOLOGY_IVM.md](docs/metodologia/METHODOLOGY_IVM.md) | IVM index methodology |
 
 ## Author
 

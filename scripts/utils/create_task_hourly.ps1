@@ -1,5 +1,5 @@
 $taskName = "SyncAdrianDavidToDrive"
-$scriptPath = "C:\Users\arlex\Documents\Adrian David\scripts\sync_to_drive.ps1"
+$scriptPath = "C:\Users\arlex\Documents\Adrian David\scripts\utils\sync_to_drive.ps1"
 
 # Eliminar tarea existente si hay
 Unregister-ScheduledTask -TaskName $taskName -Confirm:$false -ErrorAction SilentlyContinue
