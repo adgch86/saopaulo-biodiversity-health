@@ -5,7 +5,7 @@ REM Science Team - Dr. Adrian David González Chaves
 REM =============================================================================
 
 cd /d "C:\Users\arlex\Documents\Adrian David"
-python scripts\watch_papers_daily.py
+python scripts\utils\watch_papers_daily.py
 
 REM Mantener ventana abierta si hay error
 if %ERRORLEVEL% neq 0 (

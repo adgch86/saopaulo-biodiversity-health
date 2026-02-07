@@ -2,7 +2,7 @@
 # Science Team - Dr. Adrian David González Chaves
 
 $taskName = "Watch Papers Daily - Science Team"
-$batPath = "C:\Users\arlex\Documents\Adrian David\scripts\run_watch_papers.bat"
+$batPath = "C:\Users\arlex\Documents\Adrian David\scripts\utils\run_watch_papers.bat"
 $workDir = "C:\Users\arlex\Documents\Adrian David"
 
 # Crear acción
