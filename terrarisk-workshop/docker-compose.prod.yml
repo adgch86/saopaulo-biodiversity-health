@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: terrarisk-api
+    ports:
+      - "8002:8000"
+    volumes:
+      # Persistir datos de mapas bivariados generados en workshop
+      - ./backend/data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+      - ENVIRONMENT=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - terrarisk-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # Build-time variable para API URL
+        - NEXT_PUBLIC_API_URL=http://api:8000
+    container_name: terrarisk-frontend
+    ports:
+      - "4001:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      # Runtime variable - apunta al servicio interno 'api'
+      - NEXT_PUBLIC_API_URL=http://api:8000
+      - NODE_ENV=production
+    restart: unless-stopped
+    networks:
+      - terrarisk-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  terrarisk-network:
+    driver: bridge
+    name: terrarisk-network
