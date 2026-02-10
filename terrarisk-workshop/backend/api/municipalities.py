@@ -107,23 +107,32 @@ async def get_choropleth_data(variable: str):
 
     # Variable name mapping (frontend names to CSV column names)
     variable_mapping = {
-        'UAI_Crisk': 'UAI_Crisk',
+        # Governance (2 credits)
         'gobernanza_100': 'idx_gobernanza_100',
-        'biodiversity': 'idx_biodiv',
-        'forest_cover': 'forest_cover',
-        'natural_habitat': 'forest_cover',  # Using forest_cover as proxy
-        'pollination_deficit': 'pol_deficit',
-        'fire_risk_index': 'fire_risk_index',
-        'flooding_risk': 'flooding_risks',
-        'hydric_stress_r': 'hydric_stress_risk',
+        'UAI_Crisk': 'UAI_Crisk',
+        # Biodiversity
+        'forest_cover': 'forest_cover',                     # 1 credit
+        'mean_species_richness': 'mean_species_richness',   # 2 credits
+        'pollination_deficit': 'pol_deficit',               # 2 credits
+        'idx_biodiv': 'idx_biodiv',                         # 4 credits (composite)
+        # Climate
+        'flooding_risk': 'flooding_risks',                  # 1 credit
+        'fire_risk_index': 'fire_risk_index',               # 3 credits
+        'hydric_stress_r': 'hydric_stress_risk',            # 3 credits
+        'idx_clima': 'idx_clima',                           # 4 credits (composite)
+        # Health (3 credits)
         'dengue': 'incidence_mean_dengue',
-        'leishmaniose': 'incidence_mean_leishmaniose',
         'incidence_diarr': 'incidence_diarrhea_mean',
         'death_circ_mean': 'health_death_circ_mean',
         'hosp_resp_mean': 'health_hosp_resp_mean',
-        'vulnerabilidad': 'idx_vulnerabilidad',
-        'pct_pobreza': 'pct_pobreza',
-        'pct_rural': 'pct_rural',
+        'idx_carga_enfermedad': 'idx_carga_enfermedad',     # 4 credits (composite)
+        # Social
+        'population': 'population',                         # 1 credit
+        'pct_rural': 'pct_rural',                           # 1 credit
+        'pct_urbana': 'pct_urbana',                         # 1 credit
+        'pct_pobreza': 'pct_pobreza',                       # 2 credits
+        'vulnerabilidad': 'idx_vulnerabilidad',             # 2 credits
+        # Legacy/utility
         'pct_preta': 'pct_preta',
     }
 

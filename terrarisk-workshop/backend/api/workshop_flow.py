@@ -21,7 +21,8 @@ from core.database import (
     get_rankings,
     save_selected_actions,
     get_selected_actions,
-    get_group
+    get_group,
+    list_groups
 )
 
 router = APIRouter()
@@ -78,36 +79,46 @@ def _load_csv():
     return df, name_col, code_col, str(csv_path)
 
 
-# Variable mapping (shared)
+# Variable mapping: layer_id -> CSV column name
 VARIABLE_MAPPING = {
+    # Governance (2 credits)
     'governance_general': 'idx_gobernanza_100',
     'governance_climatic': 'UAI_Crisk',
-    'biodiversity': 'idx_biodiv',
-    'natural_habitat': 'forest_cover',
-    'pollination': 'pol_deficit',
-    'fire_risk': 'fire_risk_index',
-    'flooding': 'flooding_risks',
-    'hydric_stress': 'hydric_stress_risk',
+    # Biodiversity
+    'forest_cover': 'forest_cover',                     # 1 credit
+    'biodiversity': 'mean_species_richness',            # 2 credits
+    'pollination': 'pol_deficit',                       # 2 credits
+    'composite_biodiversity': 'idx_biodiv',             # 4 credits
+    # Climate
+    'flooding': 'flooding_risks',                       # 1 credit
+    'fire_risk': 'fire_risk_index',                     # 3 credits
+    'hydric_stress': 'hydric_stress_risk',              # 3 credits
+    'composite_climate': 'idx_clima',                   # 4 credits
+    # Health (3 credits)
     'dengue': 'incidence_mean_dengue',
     'diarrhea': 'incidence_diarrhea_mean',
     'cv_mortality': 'health_death_circ_mean',
     'resp_hosp': 'health_hosp_resp_mean',
-    'leishmaniasis': 'incidence_mean_leishmaniose',
-    'poverty': 'pct_pobreza',
-    'vulnerability': 'idx_vulnerabilidad'
+    'composite_health': 'idx_carga_enfermedad',         # 4 credits
+    # Social
+    'population': 'population',                         # 1 credit
+    'rural': 'pct_rural',                               # 1 credit
+    'urban': 'pct_urbana',                              # 1 credit
+    'poverty': 'pct_pobreza',                           # 2 credits
+    'vulnerability': 'idx_vulnerabilidad',              # 2 credits
 }
 
 # Category to layer mapping
 CATEGORY_LAYERS = {
     "governance": ["governance_general", "governance_climatic"],
-    "biodiversity": ["biodiversity", "natural_habitat", "pollination"],
-    "climate": ["fire_risk", "flooding", "hydric_stress"],
-    "health": ["dengue", "diarrhea", "cv_mortality", "resp_hosp", "leishmaniasis"],
-    "social": ["poverty", "vulnerability"]
+    "biodiversity": ["forest_cover", "biodiversity", "pollination", "composite_biodiversity"],
+    "climate": ["flooding", "fire_risk", "hydric_stress", "composite_climate"],
+    "health": ["dengue", "diarrhea", "cv_mortality", "resp_hosp", "composite_health"],
+    "social": ["population", "rural", "urban", "poverty", "vulnerability"],
 }
 
 # Risk layers (higher = worse) vs protective (higher = better)
-PROTECTIVE_LAYERS = {"governance_general", "governance_climatic", "biodiversity", "natural_habitat"}
+PROTECTIVE_LAYERS = {"governance_general", "governance_climatic", "biodiversity", "forest_cover"}
 
 
 def get_workshop_data():
@@ -203,14 +214,7 @@ async def get_workshop_municipalities():
             # Build risk summary by category (average normalized score per category)
             risk_summary = {}
 
-            # Category mapping
-            category_map = {
-                "governance": ["governance_general", "governance_climatic"],
-                "biodiversity": ["biodiversity", "natural_habitat", "pollination"],
-                "climate": ["fire_risk", "flooding", "hydric_stress"],
-                "health": ["dengue", "diarrhea", "cv_mortality", "resp_hosp", "leishmaniasis"],
-                "social": ["poverty", "vulnerability"]
-            }
+            category_map = CATEGORY_LAYERS
 
             for category, layers_list in category_map.items():
                 values = []
@@ -832,3 +836,90 @@ async def get_perspective_change(group_id: str):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error computing perspective change: {str(e)}")
+
+
+@router.get("/group-comparison")
+async def get_group_comparison():
+    """
+    Compare all groups in the workshop: purchased layers, rankings, average values.
+
+    Returns:
+        - groups: List of group data with layers, rankings, and average values
+        - totalGroups: Number of groups
+    """
+    try:
+        data = get_workshop_data()
+        df = data["df"]
+        name_col = data["name_col"]
+        code_col = data["code_col"]
+
+        all_groups = list_groups()
+        initial_credits = 10  # from workshop config
+
+        results = []
+
+        for grp in all_groups:
+            group_id = grp["id"]
+            purchased = grp.get("purchasedLayers", [])
+
+            # Count layers by category
+            layers_by_category = {}
+            for cat, layer_list in CATEGORY_LAYERS.items():
+                layers_by_category[cat] = sum(1 for lid in purchased if lid in layer_list)
+
+            # Get rankings if they exist
+            rankings = get_rankings(group_id)
+            initial_ranking = rankings.get("initial")
+            revised_ranking = rankings.get("revised")
+
+            def _enrich_ranking(ranking_data):
+                """Add municipality names to ranking entries"""
+                if not ranking_data:
+                    return None
+                enriched = []
+                for entry in ranking_data:
+                    row = df[df[code_col].astype(str).str.strip() == str(entry["code"])]
+                    name = str(row.iloc[0][name_col]) if not row.empty else entry["code"]
+                    enriched.append({
+                        "code": entry["code"],
+                        "position": entry["position"],
+                        "name": name,
+                    })
+                return enriched
+
+            ranking_with_names = _enrich_ranking(initial_ranking)
+            revised_with_names = _enrich_ranking(revised_ranking)
+
+            # Calculate average values for purchased layers across workshop municipalities
+            average_values = {}
+            for layer_id in purchased:
+                col_name = VARIABLE_MAPPING.get(layer_id)
+                if not col_name or col_name not in df.columns:
+                    continue
+
+                col = pd.to_numeric(df[col_name], errors="coerce")
+                valid = col.dropna()
+                if len(valid) > 0:
+                    average_values[layer_id] = round(float(valid.mean()), 2)
+
+            credits_spent = initial_credits - grp.get("credits", initial_credits)
+
+            results.append({
+                "id": group_id,
+                "name": grp.get("name", group_id),
+                "credits": grp.get("credits", 0),
+                "creditsSpent": max(0, credits_spent),
+                "purchasedLayers": purchased,
+                "layersByCategory": layers_by_category,
+                "ranking": ranking_with_names,
+                "revisedRanking": revised_with_names,
+                "averageValues": average_values,
+            })
+
+        return {
+            "groups": results,
+            "totalGroups": len(results),
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error computing group comparison: {str(e)}")

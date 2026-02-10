@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { useWorkshopStore } from '@/lib/store';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,12 +9,24 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import VulnerabilityComparison from './VulnerabilityComparison';
-import PerspectiveChange from './PerspectiveChange';
 
 export default function RankingComparison() {
   const t = useTranslations('workshopFlow');
   const tActions = useTranslations('actionNames');
-  const { comparison, setWorkshopPhase } = useWorkshopStore();
+  const { comparison, setWorkshopPhase, workshopMunicipalities } = useWorkshopStore();
+
+  // Lookup municipality name from store as fallback
+  const getMuniName = (code: string, fallbackName: string) => {
+    if (fallbackName) return fallbackName;
+    const muni = workshopMunicipalities.find((m) => m.code === code);
+    return muni ? muni.name : code;
+  };
+
+  // Normalize relevanceScore: find max to scale to 0-100%
+  const maxRelevance = useMemo(() => {
+    if (!comparison) return 1;
+    return Math.max(...comparison.suggestedActions.map((a) => a.relevanceScore), 1);
+  }, [comparison]);
 
   if (!comparison) {
     return (
@@ -122,7 +135,9 @@ export default function RankingComparison() {
                     <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs lg:text-sm flex-shrink-0">
                       {entry.position}
                     </div>
-                    <span className="text-xs lg:text-sm font-medium text-gray-800 truncate">{entry.name}</span>
+                    <span className="text-xs lg:text-sm font-medium text-gray-800 truncate">
+                      {getMuniName(entry.code, entry.name)}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -146,7 +161,9 @@ export default function RankingComparison() {
                       {entry.position}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-xs lg:text-sm font-medium text-gray-800 truncate">{entry.name}</div>
+                      <div className="text-xs lg:text-sm font-medium text-gray-800 truncate">
+                        {getMuniName(entry.code, entry.name)}
+                      </div>
                       <div className="text-xs text-gray-500">Score: {entry.compositeScore.toFixed(2)}</div>
                     </div>
                   </div>
@@ -167,7 +184,9 @@ export default function RankingComparison() {
                   key={diff.code}
                   className="flex items-center justify-between p-2.5 lg:p-3 bg-gray-50 rounded-lg"
                 >
-                  <span className="text-xs lg:text-sm font-medium text-gray-800 truncate flex-1 min-w-0 mr-2">{diff.name}</span>
+                  <span className="text-xs lg:text-sm font-medium text-gray-800 truncate flex-1 min-w-0 mr-2">
+                    {getMuniName(diff.code, diff.name)}
+                  </span>
                   <div className="flex items-center gap-1 lg:gap-2 flex-shrink-0">
                     <Badge variant="outline" className="text-xs">
                       #{diff.userPosition}
@@ -256,7 +275,7 @@ export default function RankingComparison() {
                             <span className="truncate">{tActions(action.id)}</span>
                           </div>
                           <Badge variant="outline" className="text-xs ml-2 flex-shrink-0">
-                            {Math.round(action.relevanceScore * 100)}%
+                            {Math.round((action.relevanceScore / maxRelevance) * 100)}%
                           </Badge>
                         </div>
                       </div>
@@ -272,14 +291,18 @@ export default function RankingComparison() {
 
         <VulnerabilityComparison />
 
-        <PerspectiveChange />
-
-        <div className="flex justify-center pt-4">
+        <div className="flex justify-center gap-4 pt-4">
           <Button
             variant="outline"
-            onClick={() => setWorkshopPhase('explore')}
+            onClick={() => setWorkshopPhase('step2')}
           >
             {t('backToExploration')}
+          </Button>
+          <Button
+            className="bg-purple-600 hover:bg-purple-700"
+            onClick={() => setWorkshopPhase('step5')}
+          >
+            {t('continueToStep5')}
           </Button>
         </div>
       </div>

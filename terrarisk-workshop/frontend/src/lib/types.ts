@@ -109,7 +109,7 @@ export const CATEGORY_CONFIG: Record<LayerCategory, { label: string; color: stri
 
 // Workshop Flow Types
 
-export type WorkshopPhase = 'ranking' | 'explore' | 'revised' | 'results';
+export type WorkshopPhase = 'step1' | 'step1_results' | 'step2' | 'step2_results' | 'step3' | 'step4' | 'step5';
 
 export interface WorkshopMunicipality {
   code: string;
@@ -156,8 +156,26 @@ export const QUADRANT_CONFIG: Record<string, {label: string; color: string; bgCo
 };
 
 export const PHASE_CONFIG: Record<WorkshopPhase, {step: number; icon: string}> = {
-  ranking: { step: 1, icon: '1' },
-  explore: { step: 2, icon: '2' },
-  revised: { step: 3, icon: '3' },
-  results: { step: 4, icon: '4' },
+  step1: { step: 1, icon: '1' },
+  step1_results: { step: 1, icon: '1' },
+  step2: { step: 2, icon: '2' },
+  step2_results: { step: 2, icon: '2' },
+  step3: { step: 3, icon: '3' },
+  step4: { step: 4, icon: '4' },
+  step5: { step: 5, icon: '5' },
 };
+
+export interface GroupComparisonData {
+  groups: Array<{
+    id: string;
+    name: string;
+    credits: number;
+    creditsSpent: number;
+    purchasedLayers: string[];
+    layersByCategory: Record<string, number>;
+    ranking: Array<{code: string; position: number; name: string}> | null;
+    revisedRanking: Array<{code: string; position: number; name: string}> | null;
+    averageValues: Record<string, number>;
+  }>;
+  totalGroups: number;
+}

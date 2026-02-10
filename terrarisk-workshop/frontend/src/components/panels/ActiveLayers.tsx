@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Separator } from '@/components/ui/separator';
+import { CATEGORY_CONFIG } from '@/lib/types';
 
 export default function ActiveLayers() {
   const t = useTranslations('layers');
@@ -17,7 +18,7 @@ export default function ActiveLayers() {
     setLayerOpacity,
     bivariateMode,
     setBivariateMode,
-    setBivariateImageUrl,
+    setBivariateData,
   } = useWorkshopStore();
 
   const activeLayerData = activeLayers
@@ -27,7 +28,6 @@ export default function ActiveLayers() {
   const handleGenerateBivariate = async () => {
     if (activeLayers.length !== 2) return;
 
-    setBivariateMode(true);
     try {
       const res = await fetch('/api/bivariate', {
         method: 'POST',
@@ -37,17 +37,29 @@ export default function ActiveLayers() {
           layer2Id: activeLayers[1],
         }),
       });
+
+      if (!res.ok) {
+        console.error('Bivariate generation failed');
+        return;
+      }
+
       const data = await res.json();
-      setBivariateImageUrl(data.imageUrl);
+      setBivariateData({
+        values: data.values,
+        terciles1: data.terciles1,
+        terciles2: data.terciles2,
+        layer1Name: data.layer1Name,
+        layer2Name: data.layer2Name,
+      });
+      setBivariateMode(true);
     } catch (err) {
       console.error('Failed to generate bivariate:', err);
-      setBivariateMode(false);
     }
   };
 
   const handleExitBivariate = () => {
     setBivariateMode(false);
-    setBivariateImageUrl(null);
+    setBivariateData(null);
   };
 
   if (activeLayerData.length === 0) {
@@ -106,21 +118,42 @@ export default function ActiveLayers() {
                 </button>
               </div>
               {!bivariateMode && (
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-500 w-16">{t('opacity')}</span>
-                  <Slider
-                    value={[opacity * 100]}
-                    onValueChange={([value]) =>
-                      setLayerOpacity(layer.id, value / 100)
-                    }
-                    min={10}
-                    max={100}
-                    step={5}
-                    className="flex-1"
-                  />
-                  <span className="text-xs text-gray-500 w-8">
-                    {Math.round(opacity * 100)}%
-                  </span>
+                <div className="space-y-1.5">
+                  {/* Opacity preview bar */}
+                  <div className="relative h-3 rounded-full overflow-hidden bg-gray-100 border border-gray-200">
+                    {/* Checkerboard pattern background to visualize transparency */}
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        backgroundImage: 'repeating-conic-gradient(#e5e7eb 0% 25%, transparent 0% 50%)',
+                        backgroundSize: '8px 8px',
+                      }}
+                    />
+                    {/* Color overlay at current opacity */}
+                    <div
+                      className="absolute inset-0 rounded-full transition-opacity duration-150"
+                      style={{
+                        backgroundColor: CATEGORY_CONFIG[layer.category as keyof typeof CATEGORY_CONFIG]?.color ?? '#7B1FA2',
+                        opacity: opacity,
+                      }}
+                    />
+                  </div>
+                  {/* Slider + percentage */}
+                  <div className="flex items-center gap-2">
+                    <Slider
+                      value={[opacity * 100]}
+                      onValueChange={([value]) =>
+                        setLayerOpacity(layer.id, value / 100)
+                      }
+                      min={10}
+                      max={100}
+                      step={5}
+                      className="flex-1"
+                    />
+                    <span className="text-xs font-medium text-gray-600 w-10 text-right">
+                      {Math.round(opacity * 100)}%
+                    </span>
+                  </div>
                 </div>
               )}
             </div>

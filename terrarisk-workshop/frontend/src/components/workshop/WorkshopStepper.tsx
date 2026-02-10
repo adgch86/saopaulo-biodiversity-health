@@ -2,40 +2,52 @@
 
 import { useTranslations } from 'next-intl';
 import { useWorkshopStore } from '@/lib/store';
-import { PHASE_CONFIG, type WorkshopPhase } from '@/lib/types';
+import type { WorkshopPhase } from '@/lib/types';
+
+// Map each phase to its visual step (1-5)
+const PHASE_TO_STEP: Record<WorkshopPhase, number> = {
+  step1: 1,
+  step1_results: 1,
+  step2: 2,
+  step2_results: 2,
+  step3: 3,
+  step4: 4,
+  step5: 5,
+};
 
 export default function WorkshopStepper() {
   const t = useTranslations('workshopFlow');
   const { workshopPhase, setWorkshopPhase, initialRanking } = useWorkshopStore();
 
-  const phases: Array<{ key: WorkshopPhase; title: string }> = [
-    { key: 'ranking', title: t('phase1Title') },
-    { key: 'explore', title: t('phase2Title') },
-    { key: 'revised', title: t('phase3Title') },
-    { key: 'results', title: t('phase4Title') },
+  const steps: Array<{ step: number; title: string; phases: WorkshopPhase[] }> = [
+    { step: 1, title: t('step1Title'), phases: ['step1', 'step1_results'] },
+    { step: 2, title: t('step2Title'), phases: ['step2', 'step2_results'] },
+    { step: 3, title: t('step3Title'), phases: ['step3'] },
+    { step: 4, title: t('step4Title'), phases: ['step4'] },
+    { step: 5, title: t('step5Title'), phases: ['step5'] },
   ];
 
-  const currentPhaseIndex = phases.findIndex((p) => p.key === workshopPhase);
+  const currentStep = PHASE_TO_STEP[workshopPhase];
 
-  const handlePhaseClick = (phase: WorkshopPhase, index: number) => {
-    if (index <= currentPhaseIndex) {
-      setWorkshopPhase(phase);
+  const handleStepClick = (step: typeof steps[number]) => {
+    if (step.step <= currentStep && initialRanking.length > 0) {
+      setWorkshopPhase(step.phases[0]);
     }
   };
 
   return (
     <div className="h-16 bg-white border-b border-gray-200 flex items-center px-8">
       <div className="flex items-center justify-between w-full max-w-6xl mx-auto">
-        {phases.map((phase, index) => {
-          const isActive = phase.key === workshopPhase;
-          const isCompleted = index < currentPhaseIndex;
-          const isUpcoming = index > currentPhaseIndex;
-          const canClick = index <= currentPhaseIndex && initialRanking.length > 0;
+        {steps.map((step, index) => {
+          const isActive = step.step === currentStep;
+          const isCompleted = step.step < currentStep;
+          const isUpcoming = step.step > currentStep;
+          const canClick = step.step <= currentStep && initialRanking.length > 0;
 
           return (
-            <div key={phase.key} className="flex items-center flex-1">
+            <div key={step.step} className="flex items-center flex-1">
               <button
-                onClick={() => handlePhaseClick(phase.key, index)}
+                onClick={() => handleStepClick(step)}
                 disabled={!canClick}
                 className={`flex items-center gap-3 transition-all ${
                   canClick ? 'cursor-pointer' : 'cursor-not-allowed'
@@ -64,7 +76,7 @@ export default function WorkshopStepper() {
                       />
                     </svg>
                   ) : (
-                    PHASE_CONFIG[phase.key].icon
+                    step.step
                   )}
                 </div>
                 <div className="text-left">
@@ -73,17 +85,17 @@ export default function WorkshopStepper() {
                       isActive ? 'text-purple-600' : isCompleted ? 'text-green-600' : 'text-gray-500'
                     }`}
                   >
-                    {phase.title.split(':')[0]}
+                    {step.title.split(':')[0]}
                   </div>
                   <div className="text-xs text-gray-500">
-                    {phase.title.split(':')[1]?.trim()}
+                    {step.title.split(':')[1]?.trim()}
                   </div>
                 </div>
               </button>
-              {index < phases.length - 1 && (
+              {index < steps.length - 1 && (
                 <div
                   className={`flex-1 h-0.5 mx-4 transition-all ${
-                    index < currentPhaseIndex ? 'bg-green-600' : 'bg-gray-300'
+                    step.step < currentStep ? 'bg-green-600' : 'bg-gray-300'
                   }`}
                 />
               )}

@@ -10,20 +10,24 @@ import type { LayerCategory } from '@/lib/types';
 const RISK_CATEGORY_MAP: Record<string, LayerCategory> = {
   governance_general: 'governance',
   governance_climatic: 'governance',
+  forest_cover: 'biodiversity',
   biodiversity: 'biodiversity',
-  natural_habitat: 'biodiversity',
   pollination: 'biodiversity',
+  composite_biodiversity: 'biodiversity',
   flooding: 'climate',
   fire_risk: 'climate',
   hydric_stress: 'climate',
+  composite_climate: 'climate',
   dengue: 'health',
   diarrhea: 'health',
   cv_mortality: 'health',
   resp_hosp: 'health',
-  leishmaniasis: 'health',
+  composite_health: 'health',
+  population: 'social',
+  rural: 'social',
+  urban: 'social',
   poverty: 'social',
   vulnerability: 'social',
-  rural: 'social',
 };
 
 // Layout constants

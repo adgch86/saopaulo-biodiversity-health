@@ -5,13 +5,12 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useWorkshopStore } from '@/lib/store';
 import Header from '@/components/layout/Header';
-import Sidebar from '@/components/layout/Sidebar';
-import MapViewer from '@/components/map/MapViewer';
 import WorkshopStepper from '@/components/workshop/WorkshopStepper';
-import MunicipalityRanking from '@/components/workshop/MunicipalityRanking';
-import ActionsSelector from '@/components/workshop/ActionsSelector';
-import BipartiteNetwork from '@/components/workshop/BipartiteNetwork';
+import Step1View from '@/components/workshop/Step1View';
+import GroupComparison from '@/components/workshop/GroupComparison';
+import Step3View from '@/components/workshop/Step3View';
 import RankingComparison from '@/components/workshop/RankingComparison';
+import PerspectiveChange from '@/components/workshop/PerspectiveChange';
 import { Button } from '@/components/ui/button';
 import type { RankingEntry } from '@/lib/types';
 
@@ -30,10 +29,9 @@ export default function WorkshopPage() {
     setInitialRanking,
     setRevisedRanking,
     setComparison,
+    setGroupComparison,
   } = useWorkshopStore();
   const [isLoading, setIsLoading] = useState(true);
-  const [showPhaseTransition, setShowPhaseTransition] = useState(false);
-  const [phase3RightTab, setPhase3RightTab] = useState<'actions' | 'network'>('actions');
 
   // Redirect if no group
   useEffect(() => {
@@ -80,7 +78,7 @@ export default function WorkshopPage() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const handleInitialRanking = async (ranking: RankingEntry[]) => {
+  const handleStep1Ranking = async (ranking: RankingEntry[]) => {
     if (!group) return;
 
     try {
@@ -92,14 +90,26 @@ export default function WorkshopPage() {
 
       if (response.ok) {
         setInitialRanking(ranking);
-        setShowPhaseTransition(true);
+
+        // Fetch group comparison data
+        try {
+          const compResponse = await fetch('/api/workshop/group-comparison');
+          if (compResponse.ok) {
+            const compData = await compResponse.json();
+            setGroupComparison(compData);
+          }
+        } catch (error) {
+          console.error('Error fetching group comparison:', error);
+        }
+
+        setWorkshopPhase('step1_results');
       }
     } catch (error) {
       console.error('Error saving initial ranking:', error);
     }
   };
 
-  const handleRevisedRanking = async (ranking: RankingEntry[]) => {
+  const handleStep2Ranking = async (ranking: RankingEntry[]) => {
     if (!group) return;
 
     try {
@@ -111,6 +121,19 @@ export default function WorkshopPage() {
 
       if (response.ok) {
         setRevisedRanking(ranking);
+
+        // Fetch group comparison data for step2_results
+        try {
+          const compResponse = await fetch('/api/workshop/group-comparison');
+          if (compResponse.ok) {
+            const compData = await compResponse.json();
+            setGroupComparison(compData);
+          }
+        } catch (error) {
+          console.error('Error fetching group comparison:', error);
+        }
+
+        setWorkshopPhase('step2_results');
       }
     } catch (error) {
       console.error('Error saving revised ranking:', error);
@@ -121,28 +144,21 @@ export default function WorkshopPage() {
     if (!group) return;
 
     try {
-      // Save selected actions
       await fetch('/api/workshop/actions/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ groupId: group.id, selectedActions: actionIds }),
       });
 
-      // Get comparison results
       const compResponse = await fetch(`/api/workshop/comparison/${group.id}`);
       if (compResponse.ok) {
         const comparisonData = await compResponse.json();
         setComparison(comparisonData);
-        setWorkshopPhase('results');
+        setWorkshopPhase('step4');
       }
     } catch (error) {
       console.error('Error submitting actions:', error);
     }
-  };
-
-  const handleContinueToExploration = () => {
-    setShowPhaseTransition(false);
-    setWorkshopPhase('explore');
   };
 
   if (isLoading) {
@@ -156,124 +172,58 @@ export default function WorkshopPage() {
     );
   }
 
-  if (showPhaseTransition) {
-    return (
-      <div className="h-screen w-screen flex flex-col overflow-hidden bg-gradient-to-br from-purple-50 to-blue-50">
-        <Header />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="max-w-2xl mx-auto text-center p-8">
-            <div className="w-20 h-20 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
-              {tf('phase1Title')}
-            </h2>
-            <p className="text-gray-600 mb-8">
-              {tf('phase2Desc')}
-            </p>
-            <Button
-              size="lg"
-              className="bg-purple-600 hover:bg-purple-700"
-              onClick={handleContinueToExploration}
-            >
-              {tf('continueToExploration')}
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="h-screen w-screen flex flex-col overflow-hidden">
       <Header />
       <WorkshopStepper />
 
-      {workshopPhase === 'ranking' && (
-        <MunicipalityRanking phase="initial" onSubmit={handleInitialRanking} />
+      {/* Step 1: Combined ranking + map */}
+      {workshopPhase === 'step1' && (
+        <Step1View onSubmit={handleStep1Ranking} />
       )}
 
-      {workshopPhase === 'explore' && (
-        <>
-          <div className="flex-1 flex overflow-hidden">
-            <main className="flex-1 relative">
-              <MapViewer />
-            </main>
-            <Sidebar />
-          </div>
-
-          <footer className="h-16 bg-white border-t border-gray-200 flex items-center justify-between px-8">
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-600">{t('legend')}:</span>
-              <div className="flex items-center gap-1">
-                <span className="w-3 h-3 rounded" style={{ backgroundColor: '#2E7D32' }} />
-                <span className="text-sm text-gray-600">{t('lowRisk')}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="w-3 h-3 rounded" style={{ backgroundColor: '#FFC107' }} />
-                <span className="text-sm text-gray-600">{t('medium')}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="w-3 h-3 rounded" style={{ backgroundColor: '#C62828' }} />
-                <span className="text-sm text-gray-600">{t('highRisk')}</span>
-              </div>
-            </div>
-            <Button
-              className="bg-purple-600 hover:bg-purple-700"
-              onClick={() => setWorkshopPhase('revised')}
-            >
-              {tf('continueToRevision')}
-            </Button>
-          </footer>
-        </>
+      {/* Step 1 Results: Group comparison */}
+      {workshopPhase === 'step1_results' && (
+        <GroupComparison phase="step1" onContinue={() => setWorkshopPhase('step2')} />
       )}
 
-      {workshopPhase === 'revised' && (
-        <div className="flex-1 flex overflow-hidden">
-          <div className="w-1/2 overflow-auto">
-            <MunicipalityRanking phase="revised" onSubmit={handleRevisedRanking} />
-          </div>
-          <div className="w-1/2 flex flex-col overflow-hidden border-l">
-            {/* Tab switcher */}
-            <div className="flex border-b border-gray-200 bg-white shrink-0">
-              <button
-                className={`flex-1 px-4 py-2.5 text-sm font-medium transition-colors ${
-                  phase3RightTab === 'actions'
-                    ? 'text-purple-700 border-b-2 border-purple-600 bg-purple-50/50'
-                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-                }`}
-                onClick={() => setPhase3RightTab('actions')}
-              >
-                {tf('selectActions')}
-              </button>
-              <button
-                className={`flex-1 px-4 py-2.5 text-sm font-medium transition-colors ${
-                  phase3RightTab === 'network'
-                    ? 'text-purple-700 border-b-2 border-purple-600 bg-purple-50/50'
-                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-                }`}
-                onClick={() => setPhase3RightTab('network')}
-              >
-                {tf('pearcNetwork')}
-              </button>
-            </div>
-            {/* Tab content */}
-            <div className="flex-1 overflow-auto">
-              {phase3RightTab === 'actions' ? (
-                <ActionsSelector onSubmit={handleActionsSubmit} />
-              ) : (
-                <BipartiteNetwork />
-              )}
-            </div>
-          </div>
+      {/* Step 2: Second round - same layout as step 1 */}
+      {workshopPhase === 'step2' && (
+        <Step1View onSubmit={handleStep2Ranking} />
+      )}
+
+      {/* Step 2 Results: Group comparison with changes */}
+      {workshopPhase === 'step2_results' && (
+        <GroupComparison phase="step2" onContinue={() => setWorkshopPhase('step3')} />
+      )}
+
+      {/* Step 3: PEARC Network + Map + Actions */}
+      {workshopPhase === 'step3' && (
+        <Step3View onSubmit={handleActionsSubmit} />
+      )}
+
+      {/* Step 4: Ranking TerraRisk + actions comparison */}
+      {workshopPhase === 'step4' && (
+        <div className="flex-1 overflow-hidden">
+          <RankingComparison />
         </div>
       )}
 
-      {workshopPhase === 'results' && (
+      {/* Step 5: Perspective change */}
+      {workshopPhase === 'step5' && (
         <div className="flex-1 overflow-auto">
-          <RankingComparison />
+          <div className="max-w-4xl mx-auto p-4 lg:p-8 space-y-6 lg:space-y-8">
+            <div>
+              <h1 className="text-2xl lg:text-3xl font-bold text-gray-800 mb-1 lg:mb-2">{tf('step5Title')}</h1>
+              <p className="text-sm lg:text-base text-gray-600">{tf('step5Desc')}</p>
+            </div>
+            <PerspectiveChange />
+            <div className="flex justify-center pt-4 pb-8">
+              <Button variant="outline" onClick={() => setWorkshopPhase('step4')}>
+                {tf('backToExploration')}
+              </Button>
+            </div>
+          </div>
         </div>
       )}
     </div>

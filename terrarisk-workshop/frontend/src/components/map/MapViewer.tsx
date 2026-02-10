@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { useWorkshopStore } from '@/lib/store';
 import { SP_CENTER, SP_BOUNDS } from '@/lib/types';
 
@@ -19,9 +19,9 @@ const NEGATIVE_COLORS = ['#2E7D32', '#FFC107', '#C62828']; // Green -> Yellow ->
 // Variables where higher values are worse
 const NEGATIVE_VARS = [
   'fire_risk_index', 'flooding_risk', 'hydric_stress_r',
-  'dengue', 'leishmaniose', 'incidence_diarr',
-  'death_circ_mean', 'hosp_resp_mean',
-  'vulnerabilidad', 'pct_pobreza', 'pollination_deficit'
+  'dengue', 'incidence_diarr', 'death_circ_mean', 'hosp_resp_mean',
+  'vulnerabilidad', 'pct_pobreza', 'pollination_deficit',
+  'idx_clima', 'idx_carga_enfermedad',
 ];
 
 function getColor(value: number | null, terciles: [number, number], variable: string): string {
@@ -32,6 +32,28 @@ function getColor(value: number | null, terciles: [number, number], variable: st
   if (value <= terciles[0]) return colors[0];
   if (value <= terciles[1]) return colors[1];
   return colors[2];
+}
+
+// 3x3 bivariate color matrix (V1 row, V2 column)
+// Low-Low is light, High-High is dark
+const BIVARIATE_COLORS = [
+  ['#e8e8e8', '#b5c0da', '#6c83b5'],  // V1 Low
+  ['#b8d6be', '#90b2b3', '#567994'],  // V1 Med
+  ['#73ae80', '#5a9178', '#2a5a5b'],  // V1 High
+];
+
+function getBivariateColor(
+  v1: number | null,
+  v2: number | null,
+  t1: [number, number],
+  t2: [number, number],
+): string {
+  if (v1 === null || v2 === null) return '#cccccc';
+
+  const row = v1 <= t1[0] ? 0 : v1 <= t1[1] ? 1 : 2;
+  const col = v2 <= t2[0] ? 0 : v2 <= t2[1] ? 1 : 2;
+
+  return BIVARIATE_COLORS[row][col];
 }
 
 export default function MapViewer() {
@@ -48,13 +70,25 @@ export default function MapViewer() {
     setHoveredMunicipalityCode,
     setSelectedMunicipality,
     group,
+    layerOpacity,
+    workshopMunicipalities,
+    bivariateMode,
+    bivariateData,
   } = useWorkshopStore();
 
-  // Get the first active and unlocked layer's variable
-  const activeVariable = activeLayers
+  // Get the first active and unlocked layer
+  const activeLayerObj = activeLayers
     .map(id => layers.find(l => l.id === id))
-    .find(layer => layer && (layer.isFree || group?.purchasedLayers.includes(layer.id)))
-    ?.variable || null;
+    .find(layer => layer && (layer.isFree || group?.purchasedLayers.includes(layer.id)));
+
+  const activeVariable = activeLayerObj?.variable || null;
+  const activeLayerId = activeLayerObj?.id || null;
+
+  // Workshop municipality codes (6-digit)
+  const workshopCodes = useMemo(
+    () => new Set(workshopMunicipalities.map(m => m.code)),
+    [workshopMunicipalities]
+  );
 
   // Fetch choropleth data when active variable changes
   useEffect(() => {
@@ -149,57 +183,100 @@ export default function MapViewer() {
       mapInstance.removeLayer(geoJsonLayerRef.current);
     }
 
-    // Create new GeoJSON layer with colors
+    // Dynamic opacity from store (for the active layer)
+    const currentOpacity = activeLayerId
+      ? (layerOpacity[activeLayerId] ?? 0.75)
+      : 0.7;
+
+    // Create new GeoJSON layer - only color the 10 workshop municipalities
     const newGeoJsonLayer = L.geoJSON(geoData, {
       style: (feature) => {
-        if (!feature || !choroplethData) {
+        const fullCode = feature?.properties?.CD_MUN;
+        const code = fullCode ? fullCode.substring(0, 6) : null;
+        const isWorkshop = code ? workshopCodes.has(code) : false;
+
+        // Non-workshop municipalities: light gray, no fill
+        if (!isWorkshop) {
           return {
-            weight: 0.5,
-            color: '#666',
-            fillOpacity: 0,
-            fillColor: 'transparent',
+            weight: 0.3,
+            color: '#ccc',
+            fillOpacity: 0.02,
+            fillColor: '#f5f5f5',
           };
         }
 
-        // GeoJSON uses 7-digit codes, API uses 6-digit codes
-        const fullCode = feature.properties?.CD_MUN;
-        const code = fullCode ? fullCode.substring(0, 6) : null;
+        // Workshop municipalities: colored if data available
+        if (bivariateMode && bivariateData && code) {
+          const pair = bivariateData.values[code];
+          const fillColor = pair
+            ? getBivariateColor(pair[0], pair[1], bivariateData.terciles1 as [number, number], bivariateData.terciles2 as [number, number])
+            : '#cccccc';
+          return {
+            weight: 1.5,
+            color: '#333',
+            fillOpacity: currentOpacity,
+            fillColor,
+          };
+        }
+
+        if (!choroplethData) {
+          return {
+            weight: 1.5,
+            color: '#7B1FA2',
+            fillOpacity: 0.15,
+            fillColor: '#E1BEE7',
+          };
+        }
+
         const value = code ? choroplethData.values[code] : null;
         const fillColor = getColor(value, choroplethData.terciles, choroplethData.variable);
 
         return {
-          weight: 0.5,
-          color: '#666',
-          fillOpacity: 0.7,
+          weight: 1.5,
+          color: '#333',
+          fillOpacity: currentOpacity,
           fillColor,
         };
       },
       onEachFeature: (feature, layer) => {
         const props = feature.properties;
-        // GeoJSON uses 7-digit codes, API uses 6-digit codes
         const code6 = props.CD_MUN ? props.CD_MUN.substring(0, 6) : null;
+        const isWorkshop = code6 ? workshopCodes.has(code6) : false;
+
+        // Only add interactivity to workshop municipalities
+        if (!isWorkshop) return;
 
         layer.on({
           mouseover: () => {
             setHoveredMunicipalityCode(code6);
             (layer as L.Path).setStyle({
-              weight: 2,
+              weight: 3,
               color: '#7B1FA2',
-              fillOpacity: 0.85,
+              fillOpacity: Math.min(currentOpacity + 0.15, 1),
             });
             (layer as L.Path).bringToFront();
           },
           mouseout: () => {
             setHoveredMunicipalityCode(null);
-            const value = choroplethData ? choroplethData.values[code6!] : null;
-            const fillColor = choroplethData
-              ? getColor(value, choroplethData.terciles, choroplethData.variable)
-              : 'transparent';
+            let fillColor = '#E1BEE7';
+            let fillOpacity = 0.15;
+
+            if (bivariateMode && bivariateData && code6) {
+              const pair = bivariateData.values[code6];
+              fillColor = pair
+                ? getBivariateColor(pair[0], pair[1], bivariateData.terciles1 as [number, number], bivariateData.terciles2 as [number, number])
+                : '#cccccc';
+              fillOpacity = currentOpacity;
+            } else if (choroplethData) {
+              const value = choroplethData.values[code6!];
+              fillColor = getColor(value, choroplethData.terciles, choroplethData.variable);
+              fillOpacity = currentOpacity;
+            }
 
             (layer as L.Path).setStyle({
-              weight: 0.5,
-              color: '#666',
-              fillOpacity: choroplethData ? 0.7 : 0,
+              weight: 1.5,
+              color: '#333',
+              fillOpacity,
               fillColor,
             });
           },
@@ -207,11 +284,11 @@ export default function MapViewer() {
         });
 
         // Tooltip with value
-        let tooltipContent = props.NM_MUN;
+        let tooltipContent = `<strong>${props.NM_MUN}</strong>`;
         if (choroplethData && code6) {
           const value = choroplethData.values[code6];
           if (value !== null && value !== undefined) {
-            tooltipContent += `<br/><strong>${value.toFixed(2)}</strong>`;
+            tooltipContent += `<br/>${value.toFixed(2)}`;
           }
         }
 
@@ -223,7 +300,55 @@ export default function MapViewer() {
     }).addTo(mapInstance);
 
     geoJsonLayerRef.current = newGeoJsonLayer;
-  }, [mapInstance, isLoaded, geoData, choroplethData, handleMunicipalityClick, setHoveredMunicipalityCode]);
+
+    // Add permanent name labels for the 10 workshop municipalities
+    const labelLayerGroup = L.layerGroup();
+
+    geoData.features.forEach((feature: GeoJSON.Feature) => {
+      const fullCode = feature.properties?.CD_MUN;
+      const code = fullCode ? fullCode.substring(0, 6) : null;
+      if (!code || !workshopCodes.has(code)) return;
+
+      // Calculate centroid from polygon
+      const coords = feature.geometry;
+      let lat = 0, lng = 0, count = 0;
+
+      const processCoords = (ring: number[][]) => {
+        ring.forEach(([x, y]) => { lng += x; lat += y; count++; });
+      };
+
+      if (coords.type === 'Polygon') {
+        processCoords((coords as GeoJSON.Polygon).coordinates[0]);
+      } else if (coords.type === 'MultiPolygon') {
+        (coords as GeoJSON.MultiPolygon).coordinates.forEach(poly => processCoords(poly[0]));
+      }
+
+      if (count > 0) {
+        const center: [number, number] = [lat / count, lng / count];
+        const name = feature.properties?.NM_MUN || '';
+
+        const label = L.marker(center, {
+          icon: L.divIcon({
+            className: 'workshop-label',
+            html: `<span>${name}</span>`,
+            iconSize: [0, 0],
+            iconAnchor: [0, 0],
+          }),
+          interactive: false,
+        });
+
+        labelLayerGroup.addLayer(label);
+      }
+    });
+
+    labelLayerGroup.addTo(mapInstance);
+
+    // Cleanup: store label layer ref to remove it later
+    return () => {
+      mapInstance.removeLayer(labelLayerGroup);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mapInstance, isLoaded, geoData, choroplethData, handleMunicipalityClick, setHoveredMunicipalityCode, workshopCodes, layerOpacity, activeLayerId, bivariateMode, bivariateData]);
 
   return (
     <div className="w-full h-full relative">
@@ -236,7 +361,41 @@ export default function MapViewer() {
       )}
 
       {/* Legend */}
-      {choroplethData && (
+      {bivariateMode && bivariateData ? (
+        <div className="absolute bottom-4 left-4 z-[1000] bg-white p-3 rounded shadow-lg">
+          <div className="text-xs font-semibold mb-2 text-gray-700">Mapa Bivariado</div>
+          <div className="flex gap-2">
+            {/* Y-axis label */}
+            <div className="flex flex-col justify-between text-[10px] text-gray-500 pr-1">
+              <span>Alto</span>
+              <span>Bajo</span>
+            </div>
+            {/* 3x3 grid */}
+            <div>
+              <div className="grid grid-cols-3 gap-0.5">
+                {[2, 1, 0].map(row => (
+                  [0, 1, 2].map(col => (
+                    <span
+                      key={`${row}-${col}`}
+                      className="w-5 h-5 rounded-sm"
+                      style={{ backgroundColor: BIVARIATE_COLORS[row][col] }}
+                    />
+                  ))
+                ))}
+              </div>
+              {/* X-axis label */}
+              <div className="flex justify-between text-[10px] text-gray-500 mt-1">
+                <span>Bajo</span>
+                <span>Alto</span>
+              </div>
+            </div>
+          </div>
+          <div className="mt-2 space-y-0.5 text-[10px] text-gray-600">
+            <div className="truncate">X: {bivariateData.layer1Name}</div>
+            <div className="truncate">Y: {bivariateData.layer2Name}</div>
+          </div>
+        </div>
+      ) : choroplethData ? (
         <div className="absolute bottom-4 left-4 z-[1000] bg-white p-3 rounded shadow-lg">
           <div className="text-xs font-semibold mb-2 text-gray-700">
             {layers.find(l => l.variable === choroplethData.variable)?.name || choroplethData.variable}
@@ -260,7 +419,7 @@ export default function MapViewer() {
             ))}
           </div>
         </div>
-      )}
+      ) : null}
 
       {/* Map controls */}
       <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
@@ -302,6 +461,20 @@ export default function MapViewer() {
         }
         .leaflet-container {
           background: #e5e7eb;
+        }
+        .workshop-label {
+          background: none !important;
+          border: none !important;
+          box-shadow: none !important;
+        }
+        .workshop-label span {
+          display: block;
+          white-space: nowrap;
+          font-size: 11px;
+          font-weight: 600;
+          color: #1a1a1a;
+          text-shadow: 1px 1px 2px white, -1px -1px 2px white, 1px -1px 2px white, -1px 1px 2px white;
+          pointer-events: none;
         }
       `}</style>
     </div>

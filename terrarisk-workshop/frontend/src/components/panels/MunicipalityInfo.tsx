@@ -18,7 +18,7 @@ const VARIABLE_GROUPS = {
   },
   biodiversity: {
     label: 'Biodiversidad',
-    variables: ['biodiversity', 'forest_cover', 'natural_habitat', 'pollination_deficit'],
+    variables: ['mean_species_richness', 'forest_cover', 'pollination_deficit', 'idx_biodiv'],
   },
   climate: {
     label: 'Riesgo Climatico',
@@ -28,7 +28,6 @@ const VARIABLE_GROUPS = {
     label: 'Salud',
     variables: [
       'dengue',
-      'leishmaniose',
       'incidence_diarr',
       'death_circ_mean',
       'hosp_resp_mean',
@@ -36,7 +35,7 @@ const VARIABLE_GROUPS = {
   },
   social: {
     label: 'Social',
-    variables: ['vulnerabilidad', 'pct_pobreza', 'pct_rural', 'pct_preta'],
+    variables: ['vulnerabilidad', 'pct_pobreza', 'pct_rural', 'pct_urbana', 'population'],
   },
 };
 
@@ -48,13 +47,17 @@ const VARIABLE_LABELS: Record<string, string> = {
   pol_def: 'Politicas Definidas',
   biodiversity: 'Riqueza de Especies',
   forest_cover: 'Cobertura Forestal',
-  natural_habitat: 'Habitat Natural',
+  mean_species_richness: 'Riqueza Media de Especies',
+  idx_biodiv: 'Indice Compuesto Biodiversidad',
   pollination_deficit: 'Deficit de Polinizacion',
   fire_risk_index: 'Indice de Riesgo de Incendio',
   flooding_risk: 'Riesgo de Inundacion',
   hydric_stress_r: 'Estres Hidrico',
   dengue: 'Incidencia de Dengue',
-  leishmaniose: 'Incidencia de Leishmaniasis',
+  idx_carga_enfermedad: 'Indice Compuesto Salud',
+  idx_clima: 'Indice Compuesto Clima',
+  pct_urbana: 'Porcentaje Urbano',
+  population: 'Poblacion',
   incidence_diarr: 'Incidencia de Diarrea',
   death_circ_mean: 'Mortalidad Cardiovascular',
   hosp_resp_mean: 'Hospitalizacion Respiratoria',

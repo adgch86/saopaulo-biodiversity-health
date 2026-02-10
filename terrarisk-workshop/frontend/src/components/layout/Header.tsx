@@ -10,7 +10,7 @@ import type { Locale } from '@/i18n/config';
 export default function Header() {
   const t = useTranslations('workshop');
   const locale = useLocale() as Locale;
-  const { group, resetGroup, toggleSidebar, isSidebarOpen } = useWorkshopStore();
+  const { group, resetGroup } = useWorkshopStore();
 
   return (
     <header className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4 shadow-sm">
@@ -38,27 +38,6 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Toggle sidebar button */}
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={toggleSidebar}
-          className="hidden md:flex"
-        >
-          <svg
-            className={`w-5 h-5 transition-transform ${isSidebarOpen ? '' : 'rotate-180'}`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
-            />
-          </svg>
-        </Button>
       </div>
 
       {/* Group info, credits, language */}

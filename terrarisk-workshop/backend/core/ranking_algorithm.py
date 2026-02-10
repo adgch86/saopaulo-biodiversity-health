@@ -54,31 +54,45 @@ def compute_platform_ranking(csv_path: str, municipality_names: list[str]) -> li
 
     # Variable mapping (layer_id -> CSV column name)
     variable_mapping = {
-        'fire_risk': 'fire_risk_index',
+        # Governance (2 credits)
+        'governance_general': 'idx_gobernanza_100',
+        'governance_climatic': 'UAI_Crisk',
+        # Biodiversity
+        'forest_cover': 'forest_cover',
+        'biodiversity': 'mean_species_richness',
+        'pollination': 'pol_deficit',
+        'composite_biodiversity': 'idx_biodiv',
+        # Climate
         'flooding': 'flooding_risks',
+        'fire_risk': 'fire_risk_index',
         'hydric_stress': 'hydric_stress_risk',
+        'composite_climate': 'idx_clima',
+        # Health
         'dengue': 'incidence_mean_dengue',
         'diarrhea': 'incidence_diarrhea_mean',
         'cv_mortality': 'health_death_circ_mean',
         'resp_hosp': 'health_hosp_resp_mean',
-        'leishmaniasis': 'incidence_mean_leishmaniose',
+        'composite_health': 'idx_carga_enfermedad',
+        # Social
+        'population': 'population',
+        'rural': 'pct_rural',
+        'urban': 'pct_urbana',
         'poverty': 'pct_pobreza',
         'vulnerability': 'idx_vulnerabilidad',
-        'governance_general': 'idx_gobernanza_100',
-        'governance_climatic': 'UAI_Crisk',
-        'biodiversity': 'idx_biodiv',
-        'natural_habitat': 'forest_cover'
     }
 
     # Risk dimensions (higher = worse)
     risk_dims = [
-        'fire_risk', 'flooding', 'hydric_stress', 'dengue', 'diarrhea',
-        'cv_mortality', 'resp_hosp', 'leishmaniasis', 'poverty', 'vulnerability'
+        'fire_risk', 'flooding', 'hydric_stress',
+        'dengue', 'diarrhea', 'cv_mortality', 'resp_hosp',
+        'poverty', 'vulnerability', 'pollination',
+        'composite_climate', 'composite_health',
     ]
 
     # Protective dimensions (lower = worse)
     protective_dims = [
-        'governance_general', 'governance_climatic', 'biodiversity', 'natural_habitat'
+        'governance_general', 'governance_climatic',
+        'biodiversity', 'forest_cover', 'composite_biodiversity',
     ]
 
     # Normalize all dimensions

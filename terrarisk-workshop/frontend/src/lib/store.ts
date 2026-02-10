@@ -1,7 +1,7 @@
 // TerraRisk Workshop - Zustand Store
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Group, Layer, Municipality, MunicipalityBasic, WorkshopPhase, WorkshopMunicipality, RankingEntry, PEARCAction, RankingComparison } from './types';
+import type { Group, Layer, Municipality, MunicipalityBasic, WorkshopPhase, WorkshopMunicipality, RankingEntry, PEARCAction, RankingComparison, GroupComparisonData } from './types';
 
 interface WorkshopState {
   // Group state
@@ -36,6 +36,14 @@ interface WorkshopState {
   setBivariateMode: (mode: boolean) => void;
   bivariateImageUrl: string | null;
   setBivariateImageUrl: (url: string | null) => void;
+  bivariateData: {
+    values: Record<string, [number | null, number | null]>;
+    terciles1: [number, number];
+    terciles2: [number, number];
+    layer1Name: string;
+    layer2Name: string;
+  } | null;
+  setBivariateData: (data: WorkshopState['bivariateData']) => void;
 
   // Credits animation
   creditAnimation: boolean;
@@ -61,6 +69,8 @@ interface WorkshopState {
   toggleAction: (actionId: string) => void;
   comparison: RankingComparison | null;
   setComparison: (comparison: RankingComparison | null) => void;
+  groupComparison: GroupComparisonData | null;
+  setGroupComparison: (data: GroupComparisonData | null) => void;
 
   // Actions
   purchaseLayer: (layerId: string) => Promise<boolean>;
@@ -81,15 +91,17 @@ export const useWorkshopStore = create<WorkshopState>()(
       activeTab: 'layers',
       bivariateMode: false,
       bivariateImageUrl: null,
+      bivariateData: null,
       creditAnimation: false,
       layerOpacity: {},
-      workshopPhase: 'ranking',
+      workshopPhase: 'step1',
       workshopMunicipalities: [],
       initialRanking: [],
       revisedRanking: [],
       pearcActions: [],
       selectedActions: [],
       comparison: null,
+      groupComparison: null,
 
       // Setters
       setGroup: (group) => set({ group }),
@@ -101,6 +113,7 @@ export const useWorkshopStore = create<WorkshopState>()(
       setActiveTab: (tab) => set({ activeTab: tab }),
       setBivariateMode: (mode) => set({ bivariateMode: mode }),
       setBivariateImageUrl: (url) => set({ bivariateImageUrl: url }),
+      setBivariateData: (data) => set({ bivariateData: data }),
 
       toggleLayer: (layerId) => set((state) => {
         const isActive = state.activeLayers.includes(layerId);
@@ -140,6 +153,7 @@ export const useWorkshopStore = create<WorkshopState>()(
         };
       }),
       setComparison: (comparison) => set({ comparison }),
+      setGroupComparison: (data) => set({ groupComparison: data }),
 
       // Purchase layer
       purchaseLayer: async (layerId) => {
@@ -176,11 +190,13 @@ export const useWorkshopStore = create<WorkshopState>()(
         selectedMunicipality: null,
         bivariateMode: false,
         bivariateImageUrl: null,
-        workshopPhase: 'ranking',
+        bivariateData: null,
+        workshopPhase: 'step1',
         initialRanking: [],
         revisedRanking: [],
         selectedActions: [],
         comparison: null,
+        groupComparison: null,
       }),
     }),
     {
@@ -192,6 +208,7 @@ export const useWorkshopStore = create<WorkshopState>()(
         initialRanking: state.initialRanking,
         revisedRanking: state.revisedRanking,
         selectedActions: state.selectedActions,
+        groupComparison: state.groupComparison,
       }),
     }
   )

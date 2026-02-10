@@ -8,7 +8,7 @@ PEARC_ACTIONS = [
         "id": "reforestation",
         "category": "biodiversity",
         "links": {
-            "natural_habitat": 3,
+            "forest_cover": 3,
             "biodiversity": 3,
             "pollination": 3,
             "fire_risk": 2,
@@ -31,7 +31,7 @@ PEARC_ACTIONS = [
         "category": "health",
         "links": {
             "dengue": 3,
-            "leishmaniasis": 3
+            "diarrhea": 2
         }
     },
     {
@@ -48,7 +48,7 @@ PEARC_ACTIONS = [
         "category": "biodiversity",
         "links": {
             "biodiversity": 3,
-            "natural_habitat": 3,
+            "forest_cover": 3,
             "pollination": 2,
             "fire_risk": 1
         }
@@ -96,7 +96,7 @@ PEARC_ACTIONS = [
         "id": "land_use_zoning",
         "category": "governance",
         "links": {
-            "natural_habitat": 3,
+            "forest_cover": 3,
             "fire_risk": 2,
             "flooding": 2,
             "biodiversity": 1
@@ -126,9 +126,9 @@ PEARC_ACTIONS = [
         "category": "biodiversity",
         "links": {
             "biodiversity": 3,
-            "natural_habitat": 2,
+            "forest_cover": 2,
             "pollination": 2,
-            "leishmaniasis": 1
+            "dengue": 1
         }
     },
     {

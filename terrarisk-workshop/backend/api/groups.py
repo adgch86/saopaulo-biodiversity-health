@@ -78,10 +78,6 @@ async def purchase_layer(group_id: str, request: PurchaseLayerRequest):
     if request.layerId in group["purchasedLayers"]:
         raise HTTPException(status_code=400, detail="Capa ya comprada")
 
-    # Check if free
-    if layer.get("isFree"):
-        raise HTTPException(status_code=400, detail="Esta capa es gratuita")
-
     # Check credits
     cost = layer.get("cost", 1)
     if group["credits"] < cost:

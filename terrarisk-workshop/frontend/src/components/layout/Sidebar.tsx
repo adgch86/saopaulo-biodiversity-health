@@ -9,9 +9,7 @@ import MunicipalityInfo from '@/components/panels/MunicipalityInfo';
 
 export default function Sidebar() {
   const t = useTranslations('workshop');
-  const { isSidebarOpen, activeTab, setActiveTab } = useWorkshopStore();
-
-  if (!isSidebarOpen) return null;
+  const { activeTab, setActiveTab } = useWorkshopStore();
 
   return (
     <aside className="w-80 bg-white border-l border-gray-200 flex flex-col overflow-hidden">
