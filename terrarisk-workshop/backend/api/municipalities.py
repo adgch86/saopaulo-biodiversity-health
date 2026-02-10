@@ -1,9 +1,9 @@
 """
-TerraRisk Workshop - Municipalities API
+TerraRisk Workshop - Municipalities API (Protected)
 """
 
 import os
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Request
 import pandas as pd
 
 from core.config import DATA_DIR
@@ -174,7 +174,7 @@ async def get_choropleth_data(variable: str):
 
 @router.get("/{code}")
 async def get_municipality_by_code(code: str):
-    """Get full municipality data by code"""
+    """Get municipality data by code - ONLY public-facing fields, not raw dataset"""
     df = get_municipalities_df()
 
     if df.empty:
@@ -183,6 +183,7 @@ async def get_municipality_by_code(code: str):
     # Find code column
     code_col = next((c for c in ['cod_ibge', 'CD_MUN', 'codigo'] if c in df.columns), None)
     name_col = next((c for c in ['Municipio', 'nome', 'NM_MUN', 'municipio', 'name'] if c in df.columns), None)
+    region_col = next((c for c in ['nome_mesorregiao', 'regiao', 'REGIAO', 'region'] if c in df.columns), None)
 
     if not code_col:
         raise HTTPException(status_code=500, detail="Formato de datos incorrecto")
@@ -195,19 +196,32 @@ async def get_municipality_by_code(code: str):
 
     row = row.iloc[0]
 
-    # Convert to dict, handling NaN values
-    data = {}
-    for col in df.columns:
-        val = row[col]
-        if pd.isna(val):
-            data[col] = None
-        elif isinstance(val, (int, float)):
-            data[col] = float(val) if isinstance(val, float) else int(val)
-        else:
-            data[col] = str(val)
+    # PROTECTED: Only return allowed fields, never the full dataset
+    ALLOWED_FIELDS = {
+        'population', 'pct_rural', 'pct_urbana',
+        'cuadrante',
+        # Layer variables are only returned if the group has purchased them
+        # (handled by the frontend)
+    }
 
-    return {
+    data = {}
+    for col in ALLOWED_FIELDS:
+        if col in df.columns:
+            val = row[col]
+            if pd.isna(val):
+                data[col] = None
+            elif isinstance(val, (int, float)):
+                data[col] = float(val) if isinstance(val, float) else int(val)
+            else:
+                data[col] = str(val)
+
+    result = {
         "code": str(row[code_col]),
         "name": row[name_col] if name_col else "Unknown",
-        "data": data
+        "data": data,
     }
+
+    if region_col and region_col in df.columns:
+        result["region"] = str(row[region_col])
+
+    return result

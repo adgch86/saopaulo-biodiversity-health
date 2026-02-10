@@ -3,10 +3,16 @@ TerraRisk Workshop - FastAPI Backend
 Main application entry point
 """
 
-from fastapi import FastAPI
+from dotenv import load_dotenv
+load_dotenv()
+
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
 import os
+import time
+from collections import defaultdict
 
 from api.groups import router as groups_router
 from api.layers import router as layers_router
@@ -19,17 +25,61 @@ from core.database import init_db
 app = FastAPI(
     title="TerraRisk Workshop API",
     description="API for the TerraRisk Workshop - SEMIL-USP 2026",
-    version="1.0.0"
+    version="1.0.0",
+    docs_url=None,   # Disable Swagger docs in production
+    redoc_url=None,   # Disable ReDoc in production
 )
 
-# CORS middleware
+# --- CORS: Only allow our frontend ---
+ALLOWED_ORIGINS = os.getenv(
+    "ALLOWED_ORIGINS",
+    "http://localhost:3000,https://terrarisk.arlexperalta.com"
+).split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "DELETE"],
+    allow_headers=["Content-Type", "X-API-Key"],
 )
+
+# --- Rate Limiting ---
+_rate_limit_store: dict[str, list[float]] = defaultdict(list)
+RATE_LIMIT_REQUESTS = 60   # max requests
+RATE_LIMIT_WINDOW = 60     # per 60 seconds
+SCRAPING_THRESHOLD = 20    # burst requests in 5 seconds = likely scraping
+
+
+@app.middleware("http")
+async def rate_limit_middleware(request: Request, call_next):
+    """Rate limit by IP to prevent scraping"""
+    client_ip = request.client.host if request.client else "unknown"
+    now = time.time()
+
+    # Clean old entries
+    _rate_limit_store[client_ip] = [
+        t for t in _rate_limit_store[client_ip] if now - t < RATE_LIMIT_WINDOW
+    ]
+
+    # Check for scraping pattern (burst)
+    recent = [t for t in _rate_limit_store[client_ip] if now - t < 5]
+    if len(recent) >= SCRAPING_THRESHOLD:
+        return JSONResponse(
+            status_code=429,
+            content={"detail": "Too many requests. Automated access detected."}
+        )
+
+    # Check rate limit
+    if len(_rate_limit_store[client_ip]) >= RATE_LIMIT_REQUESTS:
+        return JSONResponse(
+            status_code=429,
+            content={"detail": "Rate limit exceeded. Try again later."}
+        )
+
+    _rate_limit_store[client_ip].append(now)
+    response = await call_next(request)
+    return response
 
 # Static files for maps
 maps_dir = os.path.join(os.path.dirname(__file__), "data", "maps")
