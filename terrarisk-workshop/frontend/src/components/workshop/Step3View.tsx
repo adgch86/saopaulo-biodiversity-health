@@ -41,7 +41,7 @@ export default function Step3View({ onSubmit }: Props) {
     const categories = ['governance', 'biodiversity', 'climate', 'health', 'social'] as const;
     const purchasedCats = new Set<string>();
 
-    group.purchasedLayers.forEach((layerId) => {
+    (group.purchasedLayers || []).forEach((layerId) => {
       const layer = layers.find((l) => l.id === layerId);
       if (layer) purchasedCats.add(layer.category);
     });

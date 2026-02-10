@@ -70,7 +70,7 @@ export default function MunicipalityRanking({ phase, onSubmit }: Props) {
   const getRankPosition = (code: string) => ranking.find((r) => r.code === code)?.position;
 
   const purchasedLayerVariables = layers
-    .filter((l) => group?.purchasedLayers.includes(l.id) || l.isFree)
+    .filter((l) => group?.purchasedLayers?.includes(l.id) || l.isFree)
     .map((l) => l.variable);
 
   return (

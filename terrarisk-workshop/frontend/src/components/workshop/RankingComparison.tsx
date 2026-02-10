@@ -22,6 +22,16 @@ export default function RankingComparison() {
     return muni ? muni.name : code;
   };
 
+  // Lookup compositeScore from platformRanking by municipality code
+  const scoreByCode = useMemo(() => {
+    if (!comparison) return new Map<string, number>();
+    const map = new Map<string, number>();
+    comparison.platformRanking.forEach((entry) => {
+      map.set(entry.code, entry.compositeScore);
+    });
+    return map;
+  }, [comparison]);
+
   // Normalize relevanceScore: find max to scale to 0-100%
   const maxRelevance = useMemo(() => {
     if (!comparison) return 1;
@@ -130,16 +140,26 @@ export default function RankingComparison() {
             </CardHeader>
             <CardContent className="p-0">
               <div className="divide-y divide-gray-200">
-                {comparison.userRanking.map((entry) => (
-                  <div key={entry.code} className="flex items-center gap-2 lg:gap-3 p-2.5 lg:p-4 hover:bg-gray-50">
-                    <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs lg:text-sm flex-shrink-0">
-                      {entry.position}
+                {comparison.userRanking.map((entry) => {
+                  const score = scoreByCode.get(entry.code);
+                  return (
+                    <div key={entry.code} className="flex items-center gap-2 lg:gap-3 p-2.5 lg:p-4 hover:bg-gray-50">
+                      <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs lg:text-sm flex-shrink-0">
+                        {entry.position}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs lg:text-sm font-medium text-gray-800 truncate">
+                          {getMuniName(entry.code, entry.name)}
+                        </div>
+                      </div>
+                      {score !== undefined && (
+                        <Badge variant="outline" className="text-xs font-semibold text-blue-700 border-blue-300 flex-shrink-0">
+                          {score.toFixed(2)}
+                        </Badge>
+                      )}
                     </div>
-                    <span className="text-xs lg:text-sm font-medium text-gray-800 truncate">
-                      {getMuniName(entry.code, entry.name)}
-                    </span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </CardContent>
           </Card>
@@ -164,8 +184,10 @@ export default function RankingComparison() {
                       <div className="text-xs lg:text-sm font-medium text-gray-800 truncate">
                         {getMuniName(entry.code, entry.name)}
                       </div>
-                      <div className="text-xs text-gray-500">Score: {entry.compositeScore.toFixed(2)}</div>
                     </div>
+                    <Badge variant="outline" className="text-xs font-semibold text-purple-700 border-purple-300 flex-shrink-0">
+                      {entry.compositeScore.toFixed(2)}
+                    </Badge>
                   </div>
                 ))}
               </div>

@@ -164,7 +164,7 @@ export const useWorkshopStore = create<WorkshopState>()(
         if (!layer || layer.isFree) return false;
 
         if (state.group.credits < layer.cost) return false;
-        if (state.group.purchasedLayers.includes(layerId)) return false;
+        if (state.group.purchasedLayers?.includes(layerId)) return false;
 
         try {
           const response = await fetch(`/api/groups/${state.group.id}/purchase`, {

@@ -31,12 +31,12 @@ const RISK_CATEGORY_MAP: Record<string, LayerCategory> = {
 };
 
 // Layout constants
-const SVG_WIDTH = 900;
-const NODE_RADIUS = 10;
-const LEFT_X = 180;
-const RIGHT_X = SVG_WIDTH - 180;
-const TOP_PADDING = 40;
-const LABEL_OFFSET = 14;
+const SVG_WIDTH = 1100;
+const NODE_RADIUS = 11;
+const LEFT_X = 280;
+const RIGHT_X = SVG_WIDTH - 260;
+const TOP_PADDING = 50;
+const LABEL_OFFSET = 16;
 
 export default function BipartiteNetwork() {
   const tActions = useTranslations('actionNames');
@@ -72,19 +72,19 @@ export default function BipartiteNetwork() {
   // Calculate node positions
   const actionSpacing = useMemo(() => {
     const count = sortedActions.length;
-    if (count <= 1) return 40;
-    return Math.min(40, (600 - TOP_PADDING * 2) / (count - 1));
+    if (count <= 1) return 46;
+    return Math.min(46, (700 - TOP_PADDING * 2) / (count - 1));
   }, [sortedActions.length]);
 
   const riskSpacing = useMemo(() => {
     const count = riskDimensions.length;
-    if (count <= 1) return 40;
-    return Math.min(40, (600 - TOP_PADDING * 2) / (count - 1));
+    if (count <= 1) return 46;
+    return Math.min(46, (700 - TOP_PADDING * 2) / (count - 1));
   }, [riskDimensions.length]);
 
   const svgHeight = useMemo(() => {
     const maxNodes = Math.max(sortedActions.length, riskDimensions.length);
-    return Math.max(400, TOP_PADDING * 2 + maxNodes * 40 + 20);
+    return Math.max(500, TOP_PADDING * 2 + maxNodes * 46 + 20);
   }, [sortedActions.length, riskDimensions.length]);
 
   const getActionY = useCallback(
@@ -210,7 +210,7 @@ export default function BipartiteNetwork() {
             x={LEFT_X}
             y={16}
             textAnchor="middle"
-            className="fill-gray-500 text-[11px] font-semibold uppercase tracking-wider"
+            className="fill-gray-500 text-[15px] font-semibold uppercase tracking-wider"
           >
             {tNetwork('actions')}
           </text>
@@ -218,7 +218,7 @@ export default function BipartiteNetwork() {
             x={RIGHT_X}
             y={16}
             textAnchor="middle"
-            className="fill-gray-500 text-[11px] font-semibold uppercase tracking-wider"
+            className="fill-gray-500 text-[15px] font-semibold uppercase tracking-wider"
           >
             {tNetwork('riskDimensions')}
           </text>
@@ -315,7 +315,7 @@ export default function BipartiteNetwork() {
                     y={y}
                     textAnchor="end"
                     dominantBaseline="middle"
-                    className={`text-[10px] pointer-events-none transition-all duration-200 ${
+                    className={`text-[15px] pointer-events-none transition-all duration-200 ${
                       isHighlighted || isSelected
                         ? 'fill-gray-900 font-semibold'
                         : isDimmed
@@ -365,7 +365,7 @@ export default function BipartiteNetwork() {
                     y={y}
                     textAnchor="start"
                     dominantBaseline="middle"
-                    className={`text-[10px] pointer-events-none transition-all duration-200 ${
+                    className={`text-[15px] pointer-events-none transition-all duration-200 ${
                       isHighlighted
                         ? 'fill-gray-900 font-semibold'
                         : isDimmed

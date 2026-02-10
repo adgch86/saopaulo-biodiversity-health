@@ -59,6 +59,7 @@ function SortableRankingCard({
     transition,
     zIndex: isDragging ? 50 : 'auto',
     opacity: isDragging ? 0.8 : 1,
+    touchAction: 'none',
   } as React.CSSProperties;
 
   const showRadar = radarValues && purchasedCategories && purchasedCategories.size > 0;
@@ -67,14 +68,16 @@ function SortableRankingCard({
     <div
       ref={setNodeRef}
       style={style}
+      {...attributes}
+      {...listeners}
       className={`
-        rounded-lg border bg-white
+        rounded-lg border bg-white cursor-grab active:cursor-grabbing
         ${isDragging ? 'shadow-lg ring-2 ring-purple-400' : 'shadow-sm border-gray-200'}
         transition-shadow
       `}
     >
       {/* Header row: badge + name + controls */}
-      <div className="flex items-center gap-3 px-4 py-3">
+      <div className="flex items-center gap-3 px-4 py-3 pointer-events-none">
         <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
           {entry.position}
         </div>
@@ -83,12 +86,7 @@ function SortableRankingCard({
             {muni.name}
           </span>
         </div>
-        <div
-          {...attributes}
-          {...listeners}
-          className="cursor-grab active:cursor-grabbing p-1 text-gray-300 hover:text-gray-500 flex-shrink-0"
-          title="Arrastra para reordenar"
-        >
+        <div className="p-1 text-gray-300 flex-shrink-0">
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M7 8l5-5 5 5M7 16l5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -98,7 +96,7 @@ function SortableRankingCard({
             e.stopPropagation();
             onRemove(entry.code);
           }}
-          className="p-1 text-red-400 hover:text-red-600 transition flex-shrink-0"
+          className="p-1 text-red-400 hover:text-red-600 transition flex-shrink-0 pointer-events-auto"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M6 18L18 6M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
@@ -108,7 +106,7 @@ function SortableRankingCard({
 
       {/* Radar chart (only in step2) */}
       {showRadar && (
-        <div className="px-2 pb-3">
+        <div className="px-2 pb-3 pointer-events-none">
           <MiniRadarChart
             values={radarValues!}
             purchasedCategories={purchasedCategories!}
@@ -140,7 +138,7 @@ export default function Step1View({ onSubmit }: Props) {
 
   // Determine which categories have purchased layers
   const purchasedCategories = useMemo(() => {
-    if (!group || !isStep2) return new Set<string>();
+    if (!group || !isStep2 || !group.purchasedLayers) return new Set<string>();
     const cats = new Set<string>();
     group.purchasedLayers.forEach((layerId) => {
       const layer = layers.find((l) => l.id === layerId);

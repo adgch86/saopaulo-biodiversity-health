@@ -61,7 +61,7 @@ function StrategyPanel() {
   if (!group) return null;
 
   const purchasedLayers = layers.filter(
-    (l) => group.purchasedLayers.includes(l.id) || l.isFree
+    (l) => group.purchasedLayers?.includes(l.id) || l.isFree
   );
 
   // Count by category

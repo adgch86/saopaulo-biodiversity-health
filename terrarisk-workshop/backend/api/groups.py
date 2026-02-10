@@ -11,6 +11,7 @@ from core.database import (
     get_group,
     list_groups,
     update_group_credits,
+    reset_group_credits,
     record_purchase,
 )
 from core.config import LAYERS_CONFIG
@@ -92,4 +93,15 @@ async def purchase_layer(group_id: str, request: PurchaseLayerRequest):
     # Record purchase
     record_purchase(group_id, request.layerId, cost)
 
+    return updated_group
+
+
+@router.post("/{group_id}/reset-credits")
+async def reset_credits(group_id: str):
+    """Reset group credits to initial value (for step2)"""
+    group = get_group(group_id)
+    if not group:
+        raise HTTPException(status_code=404, detail="Grupo no encontrado")
+
+    updated_group = reset_group_credits(group_id)
     return updated_group

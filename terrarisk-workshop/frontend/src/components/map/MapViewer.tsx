@@ -79,7 +79,7 @@ export default function MapViewer() {
   // Get the first active and unlocked layer
   const activeLayerObj = activeLayers
     .map(id => layers.find(l => l.id === id))
-    .find(layer => layer && (layer.isFree || group?.purchasedLayers.includes(layer.id)));
+    .find(layer => layer && (layer.isFree || group?.purchasedLayers?.includes(layer.id)));
 
   const activeVariable = activeLayerObj?.variable || null;
   const activeLayerId = activeLayerObj?.id || null;

@@ -54,7 +54,7 @@ export default function LayerSelector() {
     const layer = layers.find((l) => l.id === layerId);
     if (!layer) return false;
     if (layer.isFree) return true;
-    return group?.purchasedLayers.includes(layerId) ?? false;
+    return group?.purchasedLayers?.includes(layerId) ?? false;
   };
 
   const handleLayerClick = (layerId: string) => {

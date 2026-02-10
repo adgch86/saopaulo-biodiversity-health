@@ -20,6 +20,7 @@ export default function WorkshopPage() {
   const router = useRouter();
   const {
     group,
+    setGroup,
     workshopPhase,
     setWorkshopPhase,
     setLayers,
@@ -60,6 +61,24 @@ export default function WorkshopPage() {
       })
       .catch(console.error);
   }, [group, setLayers, setMunicipalities, setWorkshopMunicipalities, setPearcActions]);
+
+  // Reset credits to 10 when entering step2 so group gets a fresh round
+  useEffect(() => {
+    if (workshopPhase === 'step2' && group?.id) {
+      fetch(`/api/groups/${group.id}/reset-credits`, { method: 'POST' })
+        .then((res) => {
+          if (!res.ok) throw new Error(`Reset credits failed: ${res.status}`);
+          return res.json();
+        })
+        .then((freshGroup) => {
+          if (freshGroup?.id && freshGroup?.purchasedLayers) {
+            setGroup(freshGroup);
+          }
+        })
+        .catch(console.error);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workshopPhase, group?.id, setGroup]);
 
   // Fullscreen shortcut
   useEffect(() => {

@@ -145,7 +145,7 @@ export default function GroupComparison({ phase, onContinue }: Props) {
                         <span className="text-purple-600 font-medium">{group.creditsSpent} gastados</span>
                       </td>
                       <td className="py-2.5 px-3 text-center">
-                        <Badge variant="outline">{group.purchasedLayers.length}</Badge>
+                        <Badge variant="outline">{group.purchasedLayers?.length ?? 0}</Badge>
                       </td>
                       {Object.keys(CATEGORY_CONFIG).map((cat) => (
                         <td key={cat} className="py-2.5 px-3 text-center">
