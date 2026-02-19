@@ -11,6 +11,8 @@ services:
     volumes:
       # Persistir datos de mapas bivariados generados en workshop
       - ./backend/data:/app/data
+    env_file:
+      - .env
     environment:
       - PYTHONUNBUFFERED=1
       - ENVIRONMENT=production

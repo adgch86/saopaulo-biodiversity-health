@@ -20,11 +20,12 @@ export default function LayerSelector() {
   const { layers, group, activeLayers, toggleLayer, purchaseLayer } =
     useWorkshopStore();
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
-    new Set(['governance', 'climate'])
+    new Set(['governance', 'climate', 'coringa'])
   );
   const [purchaseDialogLayer, setPurchaseDialogLayer] = useState<string | null>(
     null
   );
+  const [infoDialogLayer, setInfoDialogLayer] = useState<string | null>(null);
   const [isPurchasing, setIsPurchasing] = useState(false);
 
   const toggleCategory = (category: string) => {
@@ -39,16 +40,18 @@ export default function LayerSelector() {
     });
   };
 
-  const layersByCategory = layers.reduce(
-    (acc, layer) => {
-      if (!acc[layer.category]) {
-        acc[layer.category] = [];
-      }
-      acc[layer.category].push(layer);
-      return acc;
-    },
-    {} as Record<LayerCategory, typeof layers>
-  );
+  const layersByCategory = layers
+    .filter(layer => !layer.background)
+    .reduce(
+      (acc, layer) => {
+        if (!acc[layer.category]) {
+          acc[layer.category] = [];
+        }
+        acc[layer.category].push(layer);
+        return acc;
+      },
+      {} as Record<LayerCategory, typeof layers>
+    );
 
   const isLayerUnlocked = (layerId: string) => {
     const layer = layers.find((l) => l.id === layerId);
@@ -58,12 +61,9 @@ export default function LayerSelector() {
   };
 
   const handleLayerClick = (layerId: string) => {
-    console.log('[LayerSelector] Click on layer:', layerId);
-    console.log('[LayerSelector] isUnlocked:', isLayerUnlocked(layerId));
     if (isLayerUnlocked(layerId)) {
       toggleLayer(layerId);
     } else {
-      console.log('[LayerSelector] Opening purchase dialog for:', layerId);
       setPurchaseDialogLayer(layerId);
     }
   };
@@ -80,12 +80,13 @@ export default function LayerSelector() {
   };
 
   const purchaseLayer_ = layers.find((l) => l.id === purchaseDialogLayer);
+  const infoLayer_ = layers.find((l) => l.id === infoDialogLayer);
 
   return (
     <>
       <ScrollArea className="h-[calc(100vh-280px)]">
         <div className="space-y-2 pr-4">
-          {(Object.keys(CATEGORY_CONFIG) as LayerCategory[]).map((category) => {
+          {(Object.keys(CATEGORY_CONFIG) as LayerCategory[]).filter((c) => c !== 'background').map((category) => {
             const config = CATEGORY_CONFIG[category];
             const categoryLayers = layersByCategory[category] || [];
             const isExpanded = expandedCategories.has(category);
@@ -129,9 +130,16 @@ export default function LayerSelector() {
                 </CardHeader>
                 {isExpanded && (
                   <CardContent className="p-2 space-y-1">
-                    {categoryLayers.map((layer) => {
+                    {categoryLayers.map((layer, layerIndex) => {
                       const isUnlocked = isLayerUnlocked(layer.id);
                       const isActive = activeLayers.includes(layer.id);
+                      const isHidden = layer.hidden && !isUnlocked;
+                      const displayName = isHidden
+                        ? `Camada Misteriosa ${['I', 'II', 'III', 'IV'][layerIndex] || layerIndex + 1}`
+                        : layer.name;
+                      const displayDesc = isHidden
+                        ? 'Informação desconhecida. Compre esta camada para revelar seu conteúdo.'
+                        : layer.description;
 
                       return (
                         <div
@@ -140,6 +148,7 @@ export default function LayerSelector() {
                             p-2 rounded-md cursor-pointer transition-all
                             ${isActive ? 'bg-purple-100 ring-2 ring-purple-400' : 'hover:bg-gray-50'}
                             ${!isUnlocked ? 'opacity-75' : ''}
+                            ${isHidden ? 'border border-dashed border-amber-400' : ''}
                           `}
                           onClick={(e) => {
                             e.stopPropagation();
@@ -172,6 +181,8 @@ export default function LayerSelector() {
                                     </svg>
                                   )}
                                 </div>
+                              ) : isHidden ? (
+                                <span className="text-base">?</span>
                               ) : (
                                 <svg
                                   className="w-4 h-4 text-gray-400"
@@ -187,14 +198,26 @@ export default function LayerSelector() {
                                   />
                                 </svg>
                               )}
-                              <span className="text-sm font-medium">
-                                {layer.name}
+                              <span className={`text-sm font-medium ${isHidden ? 'italic text-amber-700' : ''}`}>
+                                {displayName}
                               </span>
                             </div>
                             <div className="flex items-center gap-1">
+                              {!isHidden && (
+                                <button
+                                  className="w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center text-[10px] font-bold text-gray-500 hover:bg-gray-200 hover:text-gray-700 transition shrink-0"
+                                  title="Informações da camada"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setInfoDialogLayer(layer.id);
+                                  }}
+                                >
+                                  i
+                                </button>
+                              )}
                               {layer.isFree ? (
                                 <Badge variant="outline" className="text-xs text-green-600">
-                                  Gratis
+                                  Grátis
                                 </Badge>
                               ) : !isUnlocked ? (
                                 <Badge variant="outline" className="text-xs">
@@ -204,7 +227,7 @@ export default function LayerSelector() {
                             </div>
                           </div>
                           <p className="text-xs text-gray-500 mt-1 ml-6">
-                            {layer.description}
+                            {displayDesc}
                           </p>
                         </div>
                       );
@@ -218,22 +241,30 @@ export default function LayerSelector() {
       </ScrollArea>
 
       {/* Purchase Dialog */}
-      {console.log('[LayerSelector] Dialog state - purchaseDialogLayer:', purchaseDialogLayer)}
       <Dialog
         open={!!purchaseDialogLayer}
         onOpenChange={(open) => {
-          console.log('[LayerSelector] Dialog onOpenChange:', open);
           if (!open) setPurchaseDialogLayer(null);
         }}
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Desbloquear Capa</DialogTitle>
+            <DialogTitle>{purchaseLayer_?.hidden ? 'Revelar Camada Misteriosa' : 'Desbloquear Camada'}</DialogTitle>
             <DialogDescription>
               {purchaseLayer_ && (
                 <>
-                  Deseas desbloquear <strong>{purchaseLayer_.name}</strong> por{' '}
-                  <strong>{purchaseLayer_.cost} creditos</strong>?
+                  {purchaseLayer_.hidden ? (
+                    <>
+                      Deseja revelar esta <strong>Camada Misteriosa</strong> por{' '}
+                      <strong>{purchaseLayer_.cost} créditos</strong>?
+                      A informação será revelada ao comprar.
+                    </>
+                  ) : (
+                    <>
+                      Deseja desbloquear <strong>{purchaseLayer_.name}</strong> por{' '}
+                      <strong>{purchaseLayer_.cost} créditos</strong>?
+                    </>
+                  )}
                 </>
               )}
             </DialogDescription>
@@ -241,14 +272,14 @@ export default function LayerSelector() {
           <div className="py-4">
             {purchaseLayer_ && (
               <div className="text-sm text-gray-600">
-                <p>{purchaseLayer_.description}</p>
+                <p>{purchaseLayer_.hidden ? 'Conteúdo desconhecido — será revelado ao comprar.' : purchaseLayer_.description}</p>
                 <p className="mt-2">
-                  Creditos actuales:{' '}
+                  Créditos atuais:{' '}
                   <strong>{group?.credits ?? 0}</strong>
                 </p>
                 {group && group.credits < purchaseLayer_.cost && (
                   <p className="mt-2 text-red-500">
-                    No tienes suficientes creditos
+                    Você não tem créditos suficientes
                   </p>
                 )}
               </div>
@@ -270,6 +301,42 @@ export default function LayerSelector() {
               }
             >
               {isPurchasing ? 'Desbloqueando...' : 'Desbloquear'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Layer Info Dialog */}
+      <Dialog
+        open={!!infoDialogLayer}
+        onOpenChange={(open) => {
+          if (!open) setInfoDialogLayer(null);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{infoLayer_?.name}</DialogTitle>
+            <DialogDescription>{infoLayer_?.description}</DialogDescription>
+          </DialogHeader>
+          {infoLayer_ && (
+            <div className="space-y-3 text-sm">
+              <div>
+                <h4 className="font-semibold text-gray-700 mb-1">Fonte dos dados</h4>
+                <p className="text-gray-600">{infoLayer_.source || 'Não informada'}</p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-700 mb-1">Fórmula / Metodologia</h4>
+                <p className="text-gray-600">{infoLayer_.formula || 'Não informada'}</p>
+              </div>
+              <div className="flex items-center gap-4 text-xs text-gray-400 pt-2 border-t">
+                <span>Variável: <code className="bg-gray-100 px-1 rounded">{infoLayer_.variable}</code></span>
+                <span>Escala: {infoLayer_.colorScale === 'positive' ? 'Positiva (maior = melhor)' : infoLayer_.colorScale === 'negative' ? 'Negativa (maior = pior)' : 'Neutra'}</span>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setInfoDialogLayer(null)}>
+              Fechar
             </Button>
           </DialogFooter>
         </DialogContent>

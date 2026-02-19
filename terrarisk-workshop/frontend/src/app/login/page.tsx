@@ -39,7 +39,7 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0a0e13] flex items-center justify-center p-4">
+    <main className="min-h-screen bg-risk-bg flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -49,18 +49,18 @@ export default function LoginPage() {
                 d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-[#e8edf3] tracking-tight" style={{ fontFamily: 'Instrument Serif, serif' }}>
+          <h1 className="text-2xl font-bold text-risk-text tracking-tight" style={{ fontFamily: 'Instrument Serif, serif' }}>
             TerraRisk
           </h1>
-          <p className="text-sm text-[#6b7a8d] mt-1" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+          <p className="text-sm text-risk-muted mt-1" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
             {isAdmin ? 'ADMIN ACCESS' : 'PROTECTED PLATFORM'}
           </p>
         </div>
 
         {/* Login form */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="bg-[#151d28] border border-[rgba(255,255,255,0.06)] rounded-xl p-6">
-            <label className="block text-xs font-medium text-[#6b7a8d] uppercase tracking-widest mb-2"
+          <div className="bg-risk-surface border border-[rgba(255,255,255,0.06)] rounded-xl p-6">
+            <label className="block text-xs font-medium text-risk-muted uppercase tracking-widest mb-2"
               style={{ fontFamily: 'JetBrains Mono, monospace' }}>
               {isAdmin ? 'Admin Password' : 'Access Password'}
             </label>
@@ -69,7 +69,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter password"
-              className="w-full px-4 py-3 bg-[#0a0e13] border border-[rgba(255,255,255,0.1)] rounded-lg text-[#e8edf3] placeholder-[#3d4a58] focus:outline-none focus:border-[#22d3ee] focus:ring-1 focus:ring-[#22d3ee]/30 transition-colors"
+              className="w-full px-4 py-3 bg-risk-bg border border-[rgba(255,255,255,0.1)] rounded-lg text-risk-text placeholder-risk-dim focus:outline-none focus:border-risk-accent focus:ring-1 focus:ring-risk-accent/30 transition-colors"
               autoFocus
             />
 
@@ -94,10 +94,10 @@ export default function LoginPage() {
 
         {/* Footer */}
         <div className="text-center mt-8">
-          <p className="text-[10px] text-[#3d4a58] uppercase tracking-widest" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+          <p className="text-[10px] text-risk-dim uppercase tracking-widest" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
             TERRAX &middot; TERRARISK &middot; 2026
           </p>
-          <p className="text-[10px] text-[#3d4a58] mt-1">
+          <p className="text-[10px] text-risk-dim mt-1">
             Authorized access only
           </p>
         </div>

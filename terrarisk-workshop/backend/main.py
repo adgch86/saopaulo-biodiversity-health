@@ -6,11 +6,22 @@ Main application entry point
 from dotenv import load_dotenv
 load_dotenv()
 
+import os
+import sentry_sdk
+
+# Initialize Sentry BEFORE creating FastAPI app
+sentry_sdk.init(
+    dsn=os.getenv("SENTRY_DSN", ""),
+    traces_sample_rate=0.2,
+    profiles_sample_rate=0.1,
+    environment=os.getenv("ENVIRONMENT", "production"),
+    enable_tracing=True,
+)
+
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
-import os
 import time
 from collections import defaultdict
 
@@ -31,9 +42,10 @@ app = FastAPI(
 )
 
 # --- CORS: Only allow our frontend ---
+# Default to production-only origins. Set ALLOWED_ORIGINS env var to add localhost for dev.
 ALLOWED_ORIGINS = os.getenv(
     "ALLOWED_ORIGINS",
-    "http://localhost:3000,https://terrarisk.arlexperalta.com"
+    "https://terrarisk.arlexperalta.com"
 ).split(",")
 
 app.add_middleware(
@@ -46,9 +58,9 @@ app.add_middleware(
 
 # --- Rate Limiting ---
 _rate_limit_store: dict[str, list[float]] = defaultdict(list)
-RATE_LIMIT_REQUESTS = 60   # max requests
+RATE_LIMIT_REQUESTS = 100  # max requests per 60s window (workshop loads ~15 concurrent calls per step)
 RATE_LIMIT_WINDOW = 60     # per 60 seconds
-SCRAPING_THRESHOLD = 20    # burst requests in 5 seconds = likely scraping
+SCRAPING_THRESHOLD = 30    # burst requests in 5 seconds = likely scraping (workshop needs ~15 concurrent)
 
 
 @app.middleware("http")

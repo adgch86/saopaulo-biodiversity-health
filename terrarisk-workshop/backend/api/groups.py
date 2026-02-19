@@ -98,7 +98,7 @@ async def purchase_layer(group_id: str, request: PurchaseLayerRequest):
 
 @router.post("/{group_id}/reset-credits")
 async def reset_credits(group_id: str):
-    """Reset group credits to initial value (for step2)"""
+    """Reset group credits to initial value (called by frontend on step2 entry)"""
     group = get_group(group_id)
     if not group:
         raise HTTPException(status_code=404, detail="Grupo no encontrado")

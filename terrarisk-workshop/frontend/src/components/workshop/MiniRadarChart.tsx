@@ -9,10 +9,10 @@
 import { CATEGORY_CONFIG, type LayerCategory } from '@/lib/types';
 
 const CATEGORIES: { key: LayerCategory; label: string }[] = [
-  { key: 'governance', label: 'Gob' },
+  { key: 'governance', label: 'Gov' },
   { key: 'biodiversity', label: 'Bio' },
   { key: 'social', label: 'Social' },
-  { key: 'health', label: 'Salud' },
+  { key: 'health', label: 'Saúde' },
   { key: 'climate', label: 'Clima' },
 ];
 

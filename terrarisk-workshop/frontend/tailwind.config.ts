@@ -49,6 +49,18 @@ const config: Config = {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
+  			},
+  			risk: {
+  				bg: '#0a0e13',
+  				surface: '#151d28',
+  				text: '#e8edf3',
+  				muted: '#6b7a8d',
+  				dim: '#3d4a58',
+  				accent: '#22d3ee',
+  				border: '#333',
+  				'map-bg': '#e5e7eb',
+  				'highlight': '#7B1FA2',
+  				'highlight-light': '#E1BEE7',
   			}
   		},
   		borderRadius: {

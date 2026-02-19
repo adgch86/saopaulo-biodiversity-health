@@ -19,6 +19,7 @@ export default function ActiveLayers() {
     bivariateMode,
     setBivariateMode,
     setBivariateData,
+    group,
   } = useWorkshopStore();
 
   const activeLayerData = activeLayers
@@ -26,7 +27,7 @@ export default function ActiveLayers() {
     .filter(Boolean);
 
   const handleGenerateBivariate = async () => {
-    if (activeLayers.length !== 2) return;
+    if (activeLayers.length !== 2 || !group?.id) return;
 
     try {
       const res = await fetch('/api/bivariate', {
@@ -35,6 +36,7 @@ export default function ActiveLayers() {
         body: JSON.stringify({
           layer1Id: activeLayers[0],
           layer2Id: activeLayers[1],
+          groupId: group.id,
         }),
       });
 

@@ -11,6 +11,180 @@ import type { LayerCategory } from '@/lib/types';
 import MapViewer from '@/components/map/MapViewer';
 import BipartiteNetwork from './BipartiteNetwork';
 
+// Radar chart showing mean ± std dev across 10 municipalities
+const RADAR_CATEGORIES: { key: string; label: string }[] = [
+  { key: 'governance', label: 'Gov' },
+  { key: 'biodiversity', label: 'Bio' },
+  { key: 'climate', label: 'Clima' },
+  { key: 'health', label: 'Saúde' },
+  { key: 'social', label: 'Social' },
+];
+
+function AverageRadarChart({
+  means,
+  stdDevs,
+  purchasedCats,
+  title,
+}: {
+  means: Record<string, number>;
+  stdDevs: Record<string, number>;
+  purchasedCats: Set<string>;
+  title: string;
+}) {
+  const size = 240;
+  const cx = size / 2;
+  const cy = size / 2;
+  const maxR = size / 2 - 30;
+  const n = RADAR_CATEGORIES.length;
+  const angles = RADAR_CATEGORIES.map((_, i) => (Math.PI * 2 * i) / n - Math.PI / 2);
+
+  const polar = (angle: number, r: number): [number, number] => [
+    cx + r * Math.cos(angle),
+    cy + r * Math.sin(angle),
+  ];
+
+  // Background rings at 25%, 50%, 75%, 100%
+  const rings = [25, 50, 75, 100];
+
+  // Std dev band: upper and lower bounds
+  const upperPts = angles.map((a, i) => {
+    const cat = RADAR_CATEGORIES[i].key;
+    if (!purchasedCats.has(cat)) return polar(a, maxR * 0.05);
+    const val = Math.min((means[cat] ?? 0) + (stdDevs[cat] ?? 0), 100) / 100;
+    return polar(a, maxR * Math.max(val, 0.05));
+  });
+
+  const lowerPts = angles.map((a, i) => {
+    const cat = RADAR_CATEGORIES[i].key;
+    if (!purchasedCats.has(cat)) return polar(a, maxR * 0.05);
+    const val = Math.max((means[cat] ?? 0) - (stdDevs[cat] ?? 0), 0) / 100;
+    return polar(a, maxR * Math.max(val, 0.05));
+  });
+
+  // Mean polygon
+  const meanPts = angles.map((a, i) => {
+    const cat = RADAR_CATEGORIES[i].key;
+    if (!purchasedCats.has(cat)) return polar(a, maxR * 0.05);
+    const val = (means[cat] ?? 0) / 100;
+    return polar(a, maxR * Math.max(val, 0.05));
+  });
+
+  // Band path: upper clockwise + lower counterclockwise
+  const bandPath =
+    upperPts.map(([x, y], i) => `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`).join(' ') +
+    ' ' +
+    [...lowerPts].reverse().map(([x, y], i) => `${i === 0 ? 'L' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`).join(' ') +
+    'Z';
+
+  return (
+    <div className="mt-3 p-3 bg-white rounded-lg border border-gray-200">
+      <h4 className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2 text-center">
+        {title}
+      </h4>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="block mx-auto">
+        {/* Background rings */}
+        {rings.map((ring) => {
+          const r = (ring / 100) * maxR;
+          const pts = angles.map((a) => polar(a, r));
+          return (
+            <polygon
+              key={ring}
+              points={pts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' ')}
+              fill="none"
+              stroke="#e5e7eb"
+              strokeWidth={ring === 50 ? 1 : 0.5}
+              strokeDasharray={ring === 50 ? 'none' : '2 2'}
+            />
+          );
+        })}
+
+        {/* Axes + labels */}
+        {angles.map((angle, i) => {
+          const cat = RADAR_CATEGORIES[i];
+          const isPurchased = purchasedCats.has(cat.key);
+          const [ex, ey] = polar(angle, maxR);
+          const [lx, ly] = polar(angle, maxR + 18);
+          const catColor = CATEGORY_CONFIG[cat.key as LayerCategory]?.color || '#9ca3af';
+
+          return (
+            <g key={cat.key}>
+              <line x1={cx} y1={cy} x2={ex} y2={ey} stroke={isPurchased ? '#c4b5fd' : '#e5e7eb'} strokeWidth={0.8} />
+              <text
+                x={lx} y={ly}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fill={isPurchased ? catColor : '#d1d5db'}
+                className="text-[9px] font-medium"
+              >
+                {cat.label}
+              </text>
+            </g>
+          );
+        })}
+
+        {/* Std dev band (gray) */}
+        <path d={bandPath} fill="rgba(156, 163, 175, 0.25)" stroke="none" />
+
+        {/* Mean polygon (purple) */}
+        <polygon
+          points={meanPts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' ')}
+          fill="rgba(139, 92, 246, 0.2)"
+          stroke="#7c3aed"
+          strokeWidth={2}
+        />
+
+        {/* Mean dots */}
+        {meanPts.map(([px, py], i) => {
+          if (!purchasedCats.has(RADAR_CATEGORIES[i].key)) return null;
+          return <circle key={i} cx={px} cy={py} r={3} fill="#7c3aed" stroke="white" strokeWidth={1.5} />;
+        })}
+
+        {/* Ring value labels */}
+        {[50, 100].map((ring) => {
+          const r = (ring / 100) * maxR;
+          return (
+            <text key={ring} x={cx + 3} y={cy - r - 2} className="text-[7px] fill-gray-400">
+              {ring}
+            </text>
+          );
+        })}
+      </svg>
+
+      {/* Legend */}
+      <div className="flex items-center justify-center gap-4 mt-2 text-[10px] text-gray-500">
+        <span className="flex items-center gap-1">
+          <span className="w-3 h-1.5 rounded-sm bg-purple-500 inline-block" />
+          Média
+        </span>
+        <span className="flex items-center gap-1">
+          <span className="w-3 h-1.5 rounded-sm bg-gray-300 inline-block" />
+          Desvio padrão (±σ)
+        </span>
+      </div>
+
+      {/* Score values */}
+      <div className="mt-2 space-y-0.5">
+        {RADAR_CATEGORIES.map((cat) => {
+          if (!purchasedCats.has(cat.key)) return null;
+          const config = CATEGORY_CONFIG[cat.key as LayerCategory];
+          if (!config) return null;
+          return (
+            <div key={cat.key} className="flex items-center justify-between text-xs px-1">
+              <span className="flex items-center gap-1.5" style={{ color: config.color }}>
+                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: config.color }} />
+                {config.label}
+              </span>
+              <span className="text-gray-600">
+                {(means[cat.key] ?? 0).toFixed(0)} <span className="text-gray-400">± {(stdDevs[cat.key] ?? 0).toFixed(0)}</span>
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 interface Props {
   onSubmit: (actionIds: string[]) => void;
 }
@@ -34,8 +208,8 @@ export default function Step3View({ onSubmit }: Props) {
     }
   };
 
-  // Compute mean risk values across 10 municipalities for purchased dimensions
-  const meanChart = useMemo(() => {
+  // Compute mean + stdDev risk values across 10 municipalities (normalized 0-100)
+  const radarStats = useMemo(() => {
     if (!group || workshopMunicipalities.length === 0) return null;
 
     const categories = ['governance', 'biodiversity', 'climate', 'health', 'social'] as const;
@@ -48,19 +222,38 @@ export default function Step3View({ onSubmit }: Props) {
 
     if (purchasedCats.size === 0) return null;
 
-    const means: Record<string, number> = {};
+    // Min-max per category for normalization to 0-100
+    const mins: Record<string, number> = {};
+    const maxs: Record<string, number> = {};
     categories.forEach((cat) => {
-      if (!purchasedCats.has(cat)) return;
-      const sum = workshopMunicipalities.reduce(
-        (acc, m) => acc + m.riskSummary[cat],
-        0
-      );
-      means[cat] = sum / workshopMunicipalities.length;
+      let min = Infinity;
+      let max = -Infinity;
+      workshopMunicipalities.forEach((m) => {
+        const val = m.riskSummary[cat];
+        if (val < min) min = val;
+        if (val > max) max = val;
+      });
+      mins[cat] = min;
+      maxs[cat] = max;
     });
 
-    const maxMean = Math.max(...Object.values(means), 1);
+    // Normalize all values to 0-100, compute mean and stdDev
+    const means: Record<string, number> = {};
+    const stdDevs: Record<string, number> = {};
+    const n = workshopMunicipalities.length;
 
-    return { means, maxMean };
+    categories.forEach((cat) => {
+      const range = maxs[cat] - mins[cat];
+      const normValues = workshopMunicipalities.map((m) =>
+        range > 0 ? ((m.riskSummary[cat] - mins[cat]) / range) * 100 : 50
+      );
+      const mean = normValues.reduce((a, v) => a + v, 0) / n;
+      const variance = normValues.reduce((a, v) => a + (v - mean) ** 2, 0) / n;
+      means[cat] = mean;
+      stdDevs[cat] = Math.sqrt(variance);
+    });
+
+    return { means, stdDevs, purchasedCats };
   }, [group, workshopMunicipalities, layers]);
 
   const getCategoryColor = (category: string) => {
@@ -88,12 +281,12 @@ export default function Step3View({ onSubmit }: Props) {
     <div className="flex-1 flex flex-col overflow-hidden">
       <div className="flex-1 flex overflow-hidden">
         {/* LEFT: Bipartite Network */}
-        <div className="flex-[4] min-w-[400px] overflow-hidden border-r border-gray-200">
+        <div className="flex-[6] min-w-[500px] overflow-hidden border-r border-gray-200">
           <BipartiteNetwork />
         </div>
 
         {/* CENTER: Map */}
-        <div className="flex-[5] relative">
+        <div className="flex-[3] relative">
           <MapViewer />
         </div>
 
@@ -178,44 +371,14 @@ export default function Step3View({ onSubmit }: Props) {
                 );
               })}
 
-              {/* Mean Values Bar Chart */}
-              {meanChart && (
-                <div className="mt-3 p-3 bg-white rounded-lg border border-gray-200">
-                  <h4 className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-3">
-                    {t('avgRiskDimensions')}
-                  </h4>
-                  <div className="space-y-2.5">
-                    {Object.entries(meanChart.means).map(([cat, val]) => {
-                      const config = CATEGORY_CONFIG[cat as LayerCategory];
-                      if (!config) return null;
-                      const barWidth = (val / meanChart.maxMean) * 100;
-                      return (
-                        <div key={cat}>
-                          <div className="flex items-center justify-between text-xs mb-1">
-                            <span className="flex items-center gap-1.5 font-medium" style={{ color: config.color }}>
-                              <span
-                                className="w-2.5 h-2.5 rounded-full flex-shrink-0"
-                                style={{ backgroundColor: config.color }}
-                              />
-                              {config.label}
-                            </span>
-                            <span className="text-gray-600 font-semibold">{val.toFixed(1)}</span>
-                          </div>
-                          <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div
-                              className="h-full rounded-full transition-all duration-500"
-                              style={{
-                                width: `${barWidth}%`,
-                                backgroundColor: config.color,
-                                opacity: 0.7,
-                              }}
-                            />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
+              {/* Average Radar Chart with Std Dev band */}
+              {radarStats && (
+                <AverageRadarChart
+                  means={radarStats.means}
+                  stdDevs={radarStats.stdDevs}
+                  purchasedCats={radarStats.purchasedCats}
+                  title={t('avgRiskDimensions')}
+                />
               )}
             </div>
           </ScrollArea>

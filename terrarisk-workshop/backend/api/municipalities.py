@@ -6,7 +6,8 @@ import os
 from fastapi import APIRouter, HTTPException, Query, Request
 import pandas as pd
 
-from core.config import DATA_DIR
+from core.config import DATA_DIR, LAYERS_CONFIG
+from core.database import get_group
 
 router = APIRouter()
 
@@ -92,8 +93,23 @@ async def search_municipalities(q: str = Query(..., min_length=2)):
 
 
 @router.get("/choropleth/{variable}")
-async def get_choropleth_data(variable: str):
-    """Get values for a variable across all municipalities for choropleth mapping"""
+async def get_choropleth_data(variable: str, group_id: str = Query(..., description="Group ID for purchase verification")):
+    """Get values for a variable across all municipalities for choropleth mapping.
+    Requires a valid group_id that has purchased the corresponding layer."""
+
+    # --- AUTH: Verify group exists and has purchased this layer ---
+    group = get_group(group_id)
+    if not group:
+        raise HTTPException(status_code=403, detail="Grupo no válido")
+
+    # Build reverse map: variable name -> layer_id
+    _var_to_layer = {layer["variable"]: layer["id"] for layer in LAYERS_CONFIG}
+    required_layer = _var_to_layer.get(variable)
+
+    if required_layer and required_layer not in group.get("purchasedLayers", []):
+        raise HTTPException(status_code=403, detail="Capa no comprada. Adquiera la capa antes de acceder a los datos.")
+    # --- END AUTH ---
+
     df = get_municipalities_df()
 
     if df.empty:
@@ -132,6 +148,11 @@ async def get_choropleth_data(variable: str):
         'pct_urbana': 'pct_urbana',                         # 1 credit
         'pct_pobreza': 'pct_pobreza',                       # 2 credits
         'vulnerabilidad': 'idx_vulnerabilidad',             # 2 credits
+        # Coringa layers
+        'esgoto_tratado': 'esgoto_tratado',
+        'class_iaa': 'class_iaa',
+        'classe_pri': 'classe_pri',
+        'per_mulh_1': 'per_mulh_1',
         # Legacy/utility
         'pct_preta': 'pct_preta',
     }
@@ -169,6 +190,48 @@ async def get_choropleth_data(variable: str):
         "terciles": [t1, t2],
         "min": min(valid_values) if valid_values else 0,
         "max": max(valid_values) if valid_values else 0
+    }
+
+
+@router.get("/background/{variable}")
+async def get_background_data(variable: str):
+    """Get background layer values for ALL municipalities (no auth required).
+    Used for permanent background layers like PMVA classification."""
+
+    # Only allow background variables
+    background_vars = {
+        layer["variable"] for layer in LAYERS_CONFIG if layer.get("background")
+    }
+    if variable not in background_vars:
+        raise HTTPException(status_code=403, detail="Variável não é de fundo")
+
+    df = get_municipalities_df()
+    if df.empty:
+        raise HTTPException(status_code=404, detail="Dados não disponíveis")
+
+    code_col = next((c for c in ['cod_ibge', 'CD_MUN', 'codigo'] if c in df.columns), None)
+    if not code_col:
+        raise HTTPException(status_code=500, detail="Formato de dados incorreto")
+
+    if variable not in df.columns:
+        raise HTTPException(status_code=404, detail=f"Variável '{variable}' não encontrada no dataset")
+
+    values = {}
+    for _, row in df.iterrows():
+        code = str(row[code_col])
+        val = row[variable]
+        if pd.notna(val):
+            # Support both numeric and categorical
+            try:
+                values[code] = float(val)
+            except (ValueError, TypeError):
+                values[code] = str(val)
+        else:
+            values[code] = None
+
+    return {
+        "variable": variable,
+        "values": values,
     }
 
 

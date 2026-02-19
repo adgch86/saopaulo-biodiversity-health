@@ -5,20 +5,26 @@ export interface Layer {
   name: string;
   category: LayerCategory;
   description: string;
+  source?: string;
+  formula?: string;
   cost: number;
   imageUrl: string;
   variable: string;
-  colorScale: 'positive' | 'negative' | 'neutral';
+  colorScale: 'positive' | 'negative' | 'neutral' | 'categorical';
   popularity: number;
   isFree?: boolean;
+  hidden?: boolean;
+  background?: boolean;
 }
 
 export type LayerCategory =
   | 'governance'
   | 'biodiversity'
   | 'climate'
+  | 'coringa'
   | 'health'
-  | 'social';
+  | 'social'
+  | 'background';
 
 export interface Group {
   id: string;
@@ -100,16 +106,18 @@ export const SP_CENTER: [number, number] = [-22.5, -48.5];
 
 // Category colors and labels
 export const CATEGORY_CONFIG: Record<LayerCategory, { label: string; color: string; bgColor: string }> = {
-  governance: { label: 'Gobernanza', color: '#7B1FA2', bgColor: 'bg-purple-100' },
-  biodiversity: { label: 'Biodiversidad', color: '#2E7D32', bgColor: 'bg-green-100' },
+  governance: { label: 'Governança', color: '#7B1FA2', bgColor: 'bg-purple-100' },
+  biodiversity: { label: 'Biodiversidade', color: '#2E7D32', bgColor: 'bg-green-100' },
   climate: { label: 'Clima', color: '#E65100', bgColor: 'bg-orange-100' },
-  health: { label: 'Salud', color: '#C62828', bgColor: 'bg-red-100' },
+  health: { label: 'Saúde', color: '#C62828', bgColor: 'bg-red-100' },
   social: { label: 'Social', color: '#1565C0', bgColor: 'bg-blue-100' },
+  coringa: { label: 'Coringa', color: '#FF6F00', bgColor: 'bg-amber-100' },
+  background: { label: 'Fundo', color: '#455A64', bgColor: 'bg-gray-100' },
 };
 
 // Workshop Flow Types
 
-export type WorkshopPhase = 'step1' | 'step1_results' | 'step2' | 'step2_results' | 'step3' | 'step4' | 'step5';
+export type WorkshopPhase = 'step1' | 'step1_results' | 'step2' | 'step2_results' | 'step2b' | 'step2b_results' | 'step3' | 'step4' | 'step5';
 
 export interface WorkshopMunicipality {
   code: string;
@@ -160,6 +168,8 @@ export const PHASE_CONFIG: Record<WorkshopPhase, {step: number; icon: string}> =
   step1_results: { step: 1, icon: '1' },
   step2: { step: 2, icon: '2' },
   step2_results: { step: 2, icon: '2' },
+  step2b: { step: 2.5, icon: '2b' },
+  step2b_results: { step: 2.5, icon: '2b' },
   step3: { step: 3, icon: '3' },
   step4: { step: 4, icon: '4' },
   step5: { step: 5, icon: '5' },
@@ -175,6 +185,7 @@ export interface GroupComparisonData {
     layersByCategory: Record<string, number>;
     ranking: Array<{code: string; position: number; name: string}> | null;
     revisedRanking: Array<{code: string; position: number; name: string}> | null;
+    exchangeRanking: Array<{code: string; position: number; name: string}> | null;
     averageValues: Record<string, number>;
   }>;
   totalGroups: number;

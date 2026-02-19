@@ -311,7 +311,7 @@ def get_rankings(group_id: str) -> dict:
             SELECT phase, ranking FROM rankings WHERE group_id = ?
         """, (group_id,))
 
-        results = {"initial": None, "revised": None}
+        results = {"initial": None, "revised": None, "exchange": None}
         for row in cursor.fetchall():
             phase = row['phase']
             ranking = json.loads(row['ranking'])

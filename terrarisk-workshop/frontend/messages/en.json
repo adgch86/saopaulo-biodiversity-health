@@ -89,7 +89,8 @@
   "municipality": {
     "title": "Municipality",
     "clickToSelect": "Click on a municipality on the map to view its data",
-    "activeVariables": "Active Variables"
+    "activeVariables": "Active Variables",
+    "purchaseLayersToSeeData": "Purchase data layers to see municipality information"
   },
   "strategy": {
     "title": "Your Progress",
@@ -167,6 +168,8 @@
     "step1Desc": "Explore data layers and rank municipalities by priority",
     "step2Title": "Step 2: Second Selection",
     "step2Desc": "With new information, make a second municipality selection",
+    "step2bTitle": "Step 2b: Group Exchange",
+    "step2bDesc": "After member exchange between groups, re-rank municipalities based on new discussions",
     "step3Title": "Step 3: Priority Actions",
     "step3Desc": "Select priority actions and explore the PEARC network",
     "step4Title": "Step 4: TerraRisk Ranking",
@@ -195,6 +198,7 @@
     "yourPriorityList": "Your Priority List",
     "submitRanking": "Submit Ranking",
     "keepInitialRanking": "Keep My Initial Ranking",
+    "keepRanking": "Keep Current Ranking",
     "continueToExploration": "Continue to Data Exploration",
     "continueToRevision": "Continue to Revision",
     "viewResults": "View Results",
@@ -250,7 +254,17 @@
     "promoted": "Promoted",
     "demoted": "Demoted",
     "unchangedLabel": "Unchanged",
-    "continueToStep5": "Continue to Perspective Change"
+    "continueToStep5": "Continue to Perspective Change",
+    "moment1Title": "Moment 1: Post-Data",
+    "moment1Subtitle": "How data exploration changed your priorities (initial → revised ranking)",
+    "moment2Title": "Moment 2: Post-Exchange",
+    "moment2Subtitle": "How group discussion changed your priorities (revised → exchange ranking)",
+    "progressionTitle": "Convergence Progression",
+    "progressionInitial": "Initial",
+    "progressionAfterData": "Post-Data",
+    "progressionRevised": "Revised",
+    "progressionAfterExchange": "Post-Exchange",
+    "progressionFinal": "Final"
   },
   "radarChart": {
     "noData": "Select a municipality to see its risk profile"

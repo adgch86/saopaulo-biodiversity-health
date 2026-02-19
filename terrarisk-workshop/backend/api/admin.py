@@ -14,7 +14,9 @@ from core.database import (
 
 router = APIRouter()
 
-ADMIN_API_KEY = os.getenv("ADMIN_API_KEY", "tr-admin-k3y-2026!")
+ADMIN_API_KEY = os.getenv("ADMIN_API_KEY")
+if not ADMIN_API_KEY:
+    raise RuntimeError("ADMIN_API_KEY environment variable is required")
 
 
 async def verify_admin(x_api_key: str = Header(default=None)):

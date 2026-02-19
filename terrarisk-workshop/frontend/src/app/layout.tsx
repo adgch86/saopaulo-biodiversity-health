@@ -30,14 +30,21 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const locale = await getLocale();
-  const messages = await getMessages();
+  const messages = await getMessages() as Record<string, unknown>;
+
+  // Only pass common and categories to global provider
+  // Pages will lazy-load their specific namespaces
+  const layoutMessages = {
+    common: messages.common,
+    categories: messages.categories,
+  };
 
   return (
     <html lang={locale}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider messages={layoutMessages}>
           {children}
         </NextIntlClientProvider>
       </body>

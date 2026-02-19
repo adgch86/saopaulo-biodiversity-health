@@ -4,15 +4,17 @@ import { useTranslations } from 'next-intl';
 import { useWorkshopStore } from '@/lib/store';
 import type { WorkshopPhase } from '@/lib/types';
 
-// Map each phase to its visual step (1-5)
+// Map each phase to its visual step (1-6)
 const PHASE_TO_STEP: Record<WorkshopPhase, number> = {
   step1: 1,
   step1_results: 1,
   step2: 2,
   step2_results: 2,
-  step3: 3,
-  step4: 4,
-  step5: 5,
+  step2b: 3,
+  step2b_results: 3,
+  step3: 4,
+  step4: 5,
+  step5: 6,
 };
 
 export default function WorkshopStepper() {
@@ -22,9 +24,10 @@ export default function WorkshopStepper() {
   const steps: Array<{ step: number; title: string; phases: WorkshopPhase[] }> = [
     { step: 1, title: t('step1Title'), phases: ['step1', 'step1_results'] },
     { step: 2, title: t('step2Title'), phases: ['step2', 'step2_results'] },
-    { step: 3, title: t('step3Title'), phases: ['step3'] },
-    { step: 4, title: t('step4Title'), phases: ['step4'] },
-    { step: 5, title: t('step5Title'), phases: ['step5'] },
+    { step: 3, title: t('step2bTitle'), phases: ['step2b', 'step2b_results'] },
+    { step: 4, title: t('step3Title'), phases: ['step3'] },
+    { step: 5, title: t('step4Title'), phases: ['step4'] },
+    { step: 6, title: t('step5Title'), phases: ['step5'] },
   ];
 
   const currentStep = PHASE_TO_STEP[workshopPhase];
@@ -76,7 +79,7 @@ export default function WorkshopStepper() {
                       />
                     </svg>
                   ) : (
-                    step.step
+                    step.step === 3 ? '2b' : step.step
                   )}
                 </div>
                 <div className="text-left">

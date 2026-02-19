@@ -8,6 +8,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from core.config import LAYERS_CONFIG, DATA_DIR
+from core.database import get_group
 
 router = APIRouter()
 
@@ -15,6 +16,7 @@ router = APIRouter()
 class BivariateRequest(BaseModel):
     layer1Id: str
     layer2Id: str
+    groupId: str
 
 
 # Variable mapping: layer_id -> CSV column
@@ -39,9 +41,26 @@ BIVARIATE_VARIABLE_MAP = {
     'urban': 'pct_urbana',
     'poverty': 'pct_pobreza',
     'vulnerability': 'idx_vulnerabilidad',
+    # Coringa layers
+    'coringa_esgoto': 'esgoto_tratado',
+    'pmva_background': 'class_iaa',
+    'coringa_restauracao': 'classe_pri',
+    'coringa_mulheres': 'per_mulh_1',
+}
+
+# Categorical columns that need numeric encoding for bivariate analysis
+CATEGORICAL_ENCODINGS = {
+    'classe_pri': {'Baixa': 1, 'Média': 2, 'Alta': 3, 'Muito alta': 4},
 }
 
 _cached_df = None
+
+
+def _encode_categorical(series: pd.Series, col_name: str) -> pd.Series:
+    """Encode categorical columns to numeric values if a mapping exists."""
+    if col_name in CATEGORICAL_ENCODINGS:
+        return series.map(CATEGORICAL_ENCODINGS[col_name])
+    return pd.to_numeric(series, errors='coerce')
 
 
 def _load_data():
@@ -71,6 +90,16 @@ async def generate_bivariate(request: BivariateRequest):
     Returns per-municipality values and tercile breakpoints for both variables.
     The frontend colors the map using a 3x3 bivariate color matrix.
     """
+    # --- AUTH: Verify group exists and has purchased both layers ---
+    group = get_group(request.groupId)
+    if not group:
+        raise HTTPException(status_code=403, detail="Grupo no válido")
+
+    purchased = group.get("purchasedLayers", [])
+    if request.layer1Id not in purchased or request.layer2Id not in purchased:
+        raise HTTPException(status_code=403, detail="Capas no compradas. Adquiera ambas capas antes de generar análisis bivariado.")
+    # --- END AUTH ---
+
     # Validate layers exist
     layer1 = next((l for l in LAYERS_CONFIG if l["id"] == request.layer1Id), None)
     layer2 = next((l for l in LAYERS_CONFIG if l["id"] == request.layer2Id), None)
@@ -105,9 +134,9 @@ async def generate_bivariate(request: BivariateRequest):
                 detail=f"Column not found: {col1 if col1 not in df.columns else col2}"
             )
 
-        # Convert to numeric
-        s1 = pd.to_numeric(df[col1], errors='coerce')
-        s2 = pd.to_numeric(df[col2], errors='coerce')
+        # Convert to numeric (with categorical encoding support)
+        s1 = _encode_categorical(df[col1], col1)
+        s2 = _encode_categorical(df[col2], col2)
 
         # Compute terciles across ALL municipalities (for proper classification)
         terciles1 = _compute_terciles(s1)
@@ -115,10 +144,10 @@ async def generate_bivariate(request: BivariateRequest):
 
         # Build per-municipality values
         values = {}
-        for _, row in df.iterrows():
+        for idx, row in df.iterrows():
             code = str(row[code_col])
-            v1 = None if pd.isna(row[col1]) else float(s1.loc[row.name])
-            v2 = None if pd.isna(row[col2]) else float(s2.loc[row.name])
+            v1 = None if pd.isna(s1.iloc[idx]) else float(s1.iloc[idx])
+            v2 = None if pd.isna(s2.iloc[idx]) else float(s2.iloc[idx])
             values[code] = [v1, v2]
 
         return {

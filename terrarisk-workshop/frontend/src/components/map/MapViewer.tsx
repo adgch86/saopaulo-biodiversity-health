@@ -12,6 +12,39 @@ interface ChoroplethData {
   max: number;
 }
 
+interface BackgroundData {
+  variable: string;
+  values: Record<string, number | string | null>;
+}
+
+// PMVA IAA class colors (0.0=lowest, 1.0=highest environmental quality)
+const PMVA_CLASS_COLORS: Record<number, string> = {
+  0.0: '#ffccbc',   // Orange-red — lowest IAA
+  0.25: '#ffe0b2',  // Light orange
+  0.5: '#fff9c4',   // Yellow — medium
+  0.75: '#c5e1a5',  // Light green
+  1.0: '#a5d6a7',   // Green — highest IAA (certified)
+};
+const PMVA_LEGEND = [
+  { value: 0.0, label: 'IAA Muito baixo', color: '#ffccbc' },
+  { value: 0.25, label: 'IAA Baixo', color: '#ffe0b2' },
+  { value: 0.5, label: 'IAA Médio', color: '#fff9c4' },
+  { value: 0.75, label: 'IAA Alto', color: '#c5e1a5' },
+  { value: 1.0, label: 'IAA Certificado', color: '#a5d6a7' },
+];
+
+function getBackgroundColor(value: number | string | null): string {
+  if (value === null) return '#f5f5f5';
+  const numVal = typeof value === 'string' ? parseFloat(value) : value;
+  if (isNaN(numVal)) return '#f5f5f5';
+  // Find closest class
+  const classes = [0, 0.25, 0.5, 0.75, 1.0];
+  const closest = classes.reduce((prev, curr) =>
+    Math.abs(curr - numVal) < Math.abs(prev - numVal) ? curr : prev
+  );
+  return PMVA_CLASS_COLORS[closest] || '#f5f5f5';
+}
+
 // Color scales
 const POSITIVE_COLORS = ['#C62828', '#FFC107', '#2E7D32']; // Red -> Yellow -> Green (low is bad)
 const NEGATIVE_COLORS = ['#2E7D32', '#FFC107', '#C62828']; // Green -> Yellow -> Red (high is bad)
@@ -59,9 +92,11 @@ function getBivariateColor(
 export default function MapViewer() {
   const mapRef = useRef<HTMLDivElement>(null);
   const geoJsonLayerRef = useRef<L.GeoJSON | null>(null);
+  const zeeLayerRef = useRef<L.GeoJSON | null>(null);
   const [mapInstance, setMapInstance] = useState<L.Map | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [choroplethData, setChoroplethData] = useState<ChoroplethData | null>(null);
+  const [backgroundData, setBackgroundData] = useState<BackgroundData | null>(null);
   const [geoData, setGeoData] = useState<GeoJSON.FeatureCollection | null>(null);
 
   const {
@@ -75,6 +110,24 @@ export default function MapViewer() {
     bivariateMode,
     bivariateData,
   } = useWorkshopStore();
+
+  // Find background layer variable
+  const backgroundLayer = layers.find(l => l.background);
+  const backgroundVariable = backgroundLayer?.variable || null;
+
+  // Fetch background layer data on mount
+  useEffect(() => {
+    if (!backgroundVariable) return;
+    fetch(`/api/municipalities/background/${backgroundVariable}`)
+      .then(res => {
+        if (!res.ok) return null;
+        return res.json();
+      })
+      .then(data => {
+        if (data?.values) setBackgroundData(data);
+      })
+      .catch(() => setBackgroundData(null));
+  }, [backgroundVariable]);
 
   // Get the first active and unlocked layer
   const activeLayerObj = activeLayers
@@ -92,24 +145,34 @@ export default function MapViewer() {
 
   // Fetch choropleth data when active variable changes
   useEffect(() => {
-    console.log('[MapViewer] activeVariable changed:', activeVariable);
-    console.log('[MapViewer] activeLayers:', activeLayers);
-    console.log('[MapViewer] layers count:', layers.length);
-    console.log('[MapViewer] group:', group?.id, 'purchasedLayers:', group?.purchasedLayers);
-
     if (!activeVariable) {
       setChoroplethData(null);
       return;
     }
 
-    console.log('[MapViewer] Fetching choropleth for:', activeVariable);
-    fetch(`/api/municipalities/choropleth/${activeVariable}`)
-      .then(res => res.json())
-      .then(data => {
-        console.log('[MapViewer] Choropleth data received:', data.variable, 'values count:', Object.keys(data.values || {}).length);
-        setChoroplethData(data);
+    if (!group?.id) {
+      setChoroplethData(null);
+      return;
+    }
+
+    fetch(`/api/municipalities/choropleth/${activeVariable}?group_id=${encodeURIComponent(group.id)}`)
+      .then(res => {
+        if (!res.ok) {
+          console.warn(`[MapViewer] Choropleth returned ${res.status} for ${activeVariable}`);
+          setChoroplethData(null);
+          return null;
+        }
+        return res.json();
       })
-      .catch(err => console.error('Failed to fetch choropleth data:', err));
+      .then(data => {
+        if (data && data.values) {
+          setChoroplethData(data);
+        }
+      })
+      .catch(err => {
+        console.error('Failed to fetch choropleth data:', err);
+        setChoroplethData(null);
+      });
   }, [activeVariable, activeLayers, layers, group]);
 
   // Initialize map
@@ -132,8 +195,12 @@ export default function MapViewer() {
         ],
       });
 
-      // Base tile layer
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+      // Base tile layer - supports offline mode via NEXT_PUBLIC_TILE_URL
+      const tileBase = process.env.NEXT_PUBLIC_TILE_URL || 'https://{s}.basemaps.cartocdn.com';
+      const isOffline = tileBase.includes('localhost') || tileBase.includes('127.0.0.1');
+      L.tileLayer(isOffline
+        ? `${tileBase}/tiles/light_nolabels/{z}/{x}/{y}.png`
+        : `${tileBase}/light_nolabels/{z}/{x}/{y}{r}.png`, {
         attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
       }).addTo(map);
 
@@ -148,8 +215,30 @@ export default function MapViewer() {
         console.error('Failed to load GeoJSON:', err);
       }
 
+      // Load ZEE zone borders (always visible as background)
+      try {
+        const zeeRes = await fetch('/data/zee_zones.geojson');
+        const zeeData = await zeeRes.json();
+        const zeeLayer = L.geoJSON(zeeData, {
+          style: {
+            weight: 2,
+            color: '#546E7A',
+            fillOpacity: 0,
+            dashArray: '',
+            interactive: false,
+          },
+          pane: 'overlayPane',
+        });
+        zeeLayer.addTo(map);
+        zeeLayerRef.current = zeeLayer;
+      } catch (err) {
+        console.error('Failed to load ZEE zones:', err);
+      }
+
       // Labels layer on top (add after GeoJSON)
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+      L.tileLayer(isOffline
+        ? `${tileBase}/tiles/light_only_labels/{z}/{x}/{y}.png`
+        : 'https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
         pane: 'overlayPane',
         zIndex: 1000,
       }).addTo(map);
@@ -195,8 +284,17 @@ export default function MapViewer() {
         const code = fullCode ? fullCode.substring(0, 6) : null;
         const isWorkshop = code ? workshopCodes.has(code) : false;
 
-        // Non-workshop municipalities: light gray, no fill
+        // Non-workshop municipalities: background layer or light gray
         if (!isWorkshop) {
+          if (backgroundData?.values && code) {
+            const bgValue = backgroundData.values[code];
+            return {
+              weight: 0.5,
+              color: '#999',
+              fillOpacity: 0.25,
+              fillColor: getBackgroundColor(bgValue),
+            };
+          }
           return {
             weight: 0.3,
             color: '#ccc',
@@ -228,8 +326,10 @@ export default function MapViewer() {
           };
         }
 
-        const value = code ? choroplethData.values[code] : null;
-        const fillColor = getColor(value, choroplethData.terciles, choroplethData.variable);
+        const value = code && choroplethData.values ? choroplethData.values[code] : null;
+        const fillColor = choroplethData.values && choroplethData.terciles
+          ? getColor(value, choroplethData.terciles, choroplethData.variable)
+          : '#cccccc';
 
         return {
           weight: 1.5,
@@ -267,7 +367,7 @@ export default function MapViewer() {
                 ? getBivariateColor(pair[0], pair[1], bivariateData.terciles1 as [number, number], bivariateData.terciles2 as [number, number])
                 : '#cccccc';
               fillOpacity = currentOpacity;
-            } else if (choroplethData) {
+            } else if (choroplethData?.values && choroplethData?.terciles) {
               const value = choroplethData.values[code6!];
               fillColor = getColor(value, choroplethData.terciles, choroplethData.variable);
               fillOpacity = currentOpacity;
@@ -285,7 +385,7 @@ export default function MapViewer() {
 
         // Tooltip with value
         let tooltipContent = `<strong>${props.NM_MUN}</strong>`;
-        if (choroplethData && code6) {
+        if (choroplethData?.values && code6) {
           const value = choroplethData.values[code6];
           if (value !== null && value !== undefined) {
             tooltipContent += `<br/>${value.toFixed(2)}`;
@@ -348,15 +448,15 @@ export default function MapViewer() {
       mapInstance.removeLayer(labelLayerGroup);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapInstance, isLoaded, geoData, choroplethData, handleMunicipalityClick, setHoveredMunicipalityCode, workshopCodes, layerOpacity, activeLayerId, bivariateMode, bivariateData]);
+  }, [mapInstance, isLoaded, geoData, choroplethData, backgroundData, handleMunicipalityClick, setHoveredMunicipalityCode, workshopCodes, layerOpacity, activeLayerId, bivariateMode, bivariateData]);
 
   return (
     <div className="w-full h-full relative">
-      <div ref={mapRef} className="w-full h-full" style={{ background: '#e5e7eb' }} />
+      <div ref={mapRef} className="w-full h-full bg-risk-map-bg" />
 
       {!isLoaded && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-          <div className="animate-pulse text-gray-500">Cargando mapa...</div>
+          <div className="animate-pulse text-gray-500">Carregando mapa...</div>
         </div>
       )}
 
@@ -368,7 +468,7 @@ export default function MapViewer() {
             {/* Y-axis label */}
             <div className="flex flex-col justify-between text-[10px] text-gray-500 pr-1">
               <span>Alto</span>
-              <span>Bajo</span>
+              <span>Baixo</span>
             </div>
             {/* 3x3 grid */}
             <div>
@@ -385,7 +485,7 @@ export default function MapViewer() {
               </div>
               {/* X-axis label */}
               <div className="flex justify-between text-[10px] text-gray-500 mt-1">
-                <span>Bajo</span>
+                <span>Baixo</span>
                 <span>Alto</span>
               </div>
             </div>
@@ -395,7 +495,7 @@ export default function MapViewer() {
             <div className="truncate">Y: {bivariateData.layer2Name}</div>
           </div>
         </div>
-      ) : choroplethData ? (
+      ) : choroplethData?.values && choroplethData?.terciles ? (
         <div className="absolute bottom-4 left-4 z-[1000] bg-white p-3 rounded shadow-lg">
           <div className="text-xs font-semibold mb-2 text-gray-700">
             {layers.find(l => l.variable === choroplethData.variable)?.name || choroplethData.variable}
@@ -403,12 +503,12 @@ export default function MapViewer() {
           <div className="space-y-1">
             {(NEGATIVE_VARS.includes(choroplethData.variable) ?
               [
-                { color: '#2E7D32', label: `Bajo (≤${choroplethData.terciles[0].toFixed(1)})` },
-                { color: '#FFC107', label: `Medio` },
+                { color: '#2E7D32', label: `Baixo (≤${choroplethData.terciles[0].toFixed(1)})` },
+                { color: '#FFC107', label: `Médio` },
                 { color: '#C62828', label: `Alto (>${choroplethData.terciles[1].toFixed(1)})` },
               ] : [
-                { color: '#C62828', label: `Bajo (≤${choroplethData.terciles[0].toFixed(1)})` },
-                { color: '#FFC107', label: `Medio` },
+                { color: '#C62828', label: `Baixo (≤${choroplethData.terciles[0].toFixed(1)})` },
+                { color: '#FFC107', label: `Médio` },
                 { color: '#2E7D32', label: `Alto (>${choroplethData.terciles[1].toFixed(1)})` },
               ]
             ).map(({ color, label }) => (
@@ -421,6 +521,19 @@ export default function MapViewer() {
         </div>
       ) : null}
 
+      {/* PMVA background legend */}
+      {backgroundData && (
+        <div className="absolute bottom-4 right-4 z-[1000] bg-white/90 p-2 rounded shadow text-[10px]">
+          <div className="font-semibold text-gray-600 mb-1">PMVA - Município VerdeAzul</div>
+          {PMVA_LEGEND.map(({ label, color }) => (
+            <div key={label} className="flex items-center gap-1.5">
+              <span className="w-3 h-2.5 rounded-sm border border-black/20" style={{ backgroundColor: color, opacity: 0.5 }} />
+              <span className="text-gray-500">{label}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* Map controls */}
       <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
         <button
@@ -431,7 +544,7 @@ export default function MapViewer() {
               map.requestFullscreen?.();
             }
           }}
-          title="Pantalla completa (F)"
+          title="Tela cheia (F)"
         >
           <svg
             className="w-5 h-5"
@@ -460,7 +573,7 @@ export default function MapViewer() {
           font-weight: 500;
         }
         .leaflet-container {
-          background: #e5e7eb;
+          background: var(--risk-map-bg);
         }
         .workshop-label {
           background: none !important;
@@ -472,7 +585,7 @@ export default function MapViewer() {
           white-space: nowrap;
           font-size: 11px;
           font-weight: 600;
-          color: #1a1a1a;
+          color: var(--risk-label-text);
           text-shadow: 1px 1px 2px white, -1px -1px 2px white, 1px -1px 2px white, -1px 1px 2px white;
           pointer-events: none;
         }

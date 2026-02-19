@@ -10,3 +10,4 @@ shapely==2.0.2
 pyproj==3.6.1
 pydantic==2.5.3
 aiofiles==23.2.1
+sentry-sdk[fastapi]==2.19.2

@@ -125,10 +125,12 @@ export default function Step1View({ onSubmit }: Props) {
     workshopPhase,
     layers,
     group,
+    revisedRanking,
+    initialRanking,
   } = useWorkshopStore();
   const [ranking, setRanking] = useState<RankingEntry[]>([]);
 
-  const isStep2 = workshopPhase === 'step2';
+  const isStep2OrLater = workshopPhase === 'step2' || workshopPhase === 'step2b';
 
   // DnD sensors
   const sensors = useSensors(
@@ -138,19 +140,19 @@ export default function Step1View({ onSubmit }: Props) {
 
   // Determine which categories have purchased layers
   const purchasedCategories = useMemo(() => {
-    if (!group || !isStep2 || !group.purchasedLayers) return new Set<string>();
+    if (!group || !isStep2OrLater || !group.purchasedLayers) return new Set<string>();
     const cats = new Set<string>();
     group.purchasedLayers.forEach((layerId) => {
       const layer = layers.find((l) => l.id === layerId);
       if (layer) cats.add(layer.category);
     });
     return cats;
-  }, [group, layers, isStep2]);
+  }, [group, layers, isStep2OrLater]);
 
   // Compute normalized values (0-1) for each municipality's riskSummary
   // Normalization uses min/max across the 10 workshop municipalities
   const normalizedValues = useMemo(() => {
-    if (!isStep2 || workshopMunicipalities.length === 0) return {};
+    if (!isStep2OrLater || workshopMunicipalities.length === 0) return {};
 
     const categories = ['governance', 'biodiversity', 'climate', 'health', 'social'];
 
@@ -183,7 +185,7 @@ export default function Step1View({ onSubmit }: Props) {
     });
 
     return result;
-  }, [isStep2, workshopMunicipalities]);
+  }, [isStep2OrLater, workshopMunicipalities]);
 
   const handleAddToRanking = (code: string) => {
     if (ranking.find((r) => r.code === code)) return;
@@ -216,6 +218,16 @@ export default function Step1View({ onSubmit }: Props) {
     }
   };
 
+  // In step2b, allow keeping the previous ranking (from step2's revised ranking, or initial)
+  const isStep2b = workshopPhase === 'step2b';
+  const previousRanking = revisedRanking.length > 0 ? revisedRanking : initialRanking;
+
+  const handleKeepRanking = () => {
+    if (previousRanking.length === 10) {
+      onSubmit(previousRanking);
+    }
+  };
+
   const getMunicipalityByCode = (code: string) =>
     workshopMunicipalities.find((m) => m.code === code);
 
@@ -226,7 +238,7 @@ export default function Step1View({ onSubmit }: Props) {
   );
 
   // Panel width: wider in step2 to fit radar charts
-  const panelWidth = isStep2 ? 'w-[400px]' : 'w-[320px]';
+  const panelWidth = isStep2OrLater ? 'w-[400px]' : 'w-[320px]';
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
@@ -264,8 +276,8 @@ export default function Step1View({ onSubmit }: Props) {
                             entry={entry}
                             muni={muni}
                             onRemove={handleRemove}
-                            radarValues={isStep2 ? normalizedValues[entry.code] : undefined}
-                            purchasedCategories={isStep2 ? purchasedCategories : undefined}
+                            radarValues={isStep2OrLater ? normalizedValues[entry.code] : undefined}
+                            purchasedCategories={isStep2OrLater ? purchasedCategories : undefined}
                           />
                         );
                       })}
@@ -306,7 +318,7 @@ export default function Step1View({ onSubmit }: Props) {
                           </span>
                         </div>
                         {/* Show radar for unranked too in step2 */}
-                        {isStep2 && purchasedCategories.size > 0 && normalizedValues[muni.code] && (
+                        {isStep2OrLater && purchasedCategories.size > 0 && normalizedValues[muni.code] && (
                           <div className="px-2 pb-3">
                             <MiniRadarChart
                               values={normalizedValues[muni.code]}
@@ -351,13 +363,24 @@ export default function Step1View({ onSubmit }: Props) {
           </span>
         </div>
 
-        <Button
-          className="bg-purple-600 hover:bg-purple-700 px-6"
-          disabled={ranking.length !== 10}
-          onClick={handleSubmit}
-        >
-          {t('continueToRevision')}
-        </Button>
+        <div className="flex items-center gap-3">
+          {isStep2b && previousRanking.length === 10 && (
+            <Button
+              variant="outline"
+              className="px-6"
+              onClick={handleKeepRanking}
+            >
+              {t('keepRanking')}
+            </Button>
+          )}
+          <Button
+            className="bg-purple-600 hover:bg-purple-700 px-6"
+            disabled={ranking.length !== 10}
+            onClick={handleSubmit}
+          >
+            {t('continueToRevision')}
+          </Button>
+        </div>
       </div>
     </div>
   );

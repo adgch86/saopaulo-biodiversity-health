@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { CATEGORY_CONFIG } from '@/lib/types';
 
 interface Props {
-  phase: 'step1' | 'step2';
+  phase: 'step1' | 'step2' | 'step2b';
   onContinue: () => void;
 }
 
@@ -24,7 +24,7 @@ export default function GroupComparison({ phase, onContinue }: Props) {
   const t = useTranslations('workshopFlow');
   const { groupComparison, layers } = useWorkshopStore();
 
-  const isStep2 = phase === 'step2';
+  const isStep2 = phase === 'step2' || phase === 'step2b';
 
   // Build a map of layer_id -> display name
   const layerNameMap = useMemo(() => {
@@ -44,7 +44,15 @@ export default function GroupComparison({ phase, onContinue }: Props) {
     const ipm = new Map<string, Map<string, number>>();
 
     groupComparison.groups.forEach((group) => {
-      if (isStep2 && group.revisedRanking) {
+      if (phase === 'step2b' && group.exchangeRanking) {
+        dr.set(group.id, group.exchangeRanking);
+        // Build revised position map for delta calculation
+        if (group.revisedRanking) {
+          const posMap = new Map<string, number>();
+          group.revisedRanking.forEach((e) => posMap.set(e.code, e.position));
+          ipm.set(group.id, posMap);
+        }
+      } else if (isStep2 && group.revisedRanking) {
         dr.set(group.id, group.revisedRanking);
         // Build initial position map for delta calculation
         if (group.ranking) {

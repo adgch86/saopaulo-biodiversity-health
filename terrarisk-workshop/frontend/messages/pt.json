@@ -89,7 +89,8 @@
   "municipality": {
     "title": "Município",
     "clickToSelect": "Clique em um município no mapa para ver seus dados",
-    "activeVariables": "Variáveis Ativas"
+    "activeVariables": "Variáveis Ativas",
+    "purchaseLayersToSeeData": "Compre camadas de dados para ver informações do município"
   },
   "strategy": {
     "title": "Seu Progresso",
@@ -167,6 +168,8 @@
     "step1Desc": "Explore as camadas de dados e ordene os municípios por prioridade",
     "step2Title": "Etapa 2: Segunda Seleção",
     "step2Desc": "Com novas informações, faça uma segunda seleção de municípios",
+    "step2bTitle": "Etapa 2b: Intercâmbio",
+    "step2bDesc": "Após o intercâmbio de integrantes, reordene os municípios com base nas novas discussões",
     "step3Title": "Etapa 3: Ações Prioritárias",
     "step3Desc": "Selecione ações prioritárias e explore a rede PEARC",
     "step4Title": "Etapa 4: Ranking TerraRisk",
@@ -195,6 +198,7 @@
     "yourPriorityList": "Sua Lista de Prioridades",
     "submitRanking": "Enviar Ranking",
     "keepInitialRanking": "Manter Meu Ranking Inicial",
+    "keepRanking": "Manter Ranking Atual",
     "continueToExploration": "Continuar para Exploração de Dados",
     "continueToRevision": "Continuar para Revisão",
     "viewResults": "Ver Resultados",
@@ -250,7 +254,17 @@
     "promoted": "Promovido",
     "demoted": "Rebaixado",
     "unchangedLabel": "Sem mudança",
-    "continueToStep5": "Continuar para Mudança de Perspectiva"
+    "continueToStep5": "Continuar para Mudança de Perspectiva",
+    "moment1Title": "Momento 1: Pós-Dados",
+    "moment1Subtitle": "Como a exploração de dados mudou suas prioridades (ranking inicial → revisado)",
+    "moment2Title": "Momento 2: Pós-Intercâmbio",
+    "moment2Subtitle": "Como a discussão em grupo mudou suas prioridades (ranking revisado → intercâmbio)",
+    "progressionTitle": "Progressão de Convergência",
+    "progressionInitial": "Inicial",
+    "progressionAfterData": "Pós-Dados",
+    "progressionRevised": "Revisado",
+    "progressionAfterExchange": "Pós-Intercâmbio",
+    "progressionFinal": "Final"
   },
   "radarChart": {
     "noData": "Selecione um municipio para ver seu perfil de risco"

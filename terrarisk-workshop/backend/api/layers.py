@@ -20,11 +20,15 @@ async def get_all_layers():
             "name": layer_config["name"],
             "category": layer_config["category"],
             "description": layer_config["description"],
+            "source": layer_config.get("source", ""),
+            "formula": layer_config.get("formula", ""),
             "cost": layer_config["cost"],
             "variable": layer_config["variable"],
             "imageUrl": f"/maps/{layer_config['imageFile']}",
             "colorScale": layer_config["colorScale"],
             "isFree": layer_config.get("isFree", False),
+            "hidden": layer_config.get("hidden", False),
+            "background": layer_config.get("background", False),
             "popularity": 0,  # Could be computed from purchases
         }
         layers.append(layer)
@@ -45,10 +49,14 @@ async def get_layer_by_id(layer_id: str):
         "name": layer_config["name"],
         "category": layer_config["category"],
         "description": layer_config["description"],
+        "source": layer_config.get("source", ""),
+        "formula": layer_config.get("formula", ""),
         "cost": layer_config["cost"],
         "variable": layer_config["variable"],
         "imageUrl": f"/maps/{layer_config['imageFile']}",
         "colorScale": layer_config["colorScale"],
         "isFree": layer_config.get("isFree", False),
+        "hidden": layer_config.get("hidden", False),
+        "background": layer_config.get("background", False),
         "popularity": 0,
     }

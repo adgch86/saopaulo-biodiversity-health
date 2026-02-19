@@ -62,6 +62,8 @@ interface WorkshopState {
   setInitialRanking: (ranking: RankingEntry[]) => void;
   revisedRanking: RankingEntry[];
   setRevisedRanking: (ranking: RankingEntry[]) => void;
+  exchangeRanking: RankingEntry[];
+  setExchangeRanking: (ranking: RankingEntry[]) => void;
   pearcActions: PEARCAction[];
   setPearcActions: (actions: PEARCAction[]) => void;
   selectedActions: string[];
@@ -98,6 +100,7 @@ export const useWorkshopStore = create<WorkshopState>()(
       workshopMunicipalities: [],
       initialRanking: [],
       revisedRanking: [],
+      exchangeRanking: [],
       pearcActions: [],
       selectedActions: [],
       comparison: null,
@@ -142,6 +145,7 @@ export const useWorkshopStore = create<WorkshopState>()(
       setWorkshopMunicipalities: (municipalities) => set({ workshopMunicipalities: municipalities }),
       setInitialRanking: (ranking) => set({ initialRanking: ranking }),
       setRevisedRanking: (ranking) => set({ revisedRanking: ranking }),
+      setExchangeRanking: (ranking) => set({ exchangeRanking: ranking }),
       setPearcActions: (actions) => set({ pearcActions: actions }),
       setSelectedActions: (actions) => set({ selectedActions: actions }),
       toggleAction: (actionId) => set((state) => {
@@ -194,6 +198,7 @@ export const useWorkshopStore = create<WorkshopState>()(
         workshopPhase: 'step1',
         initialRanking: [],
         revisedRanking: [],
+        exchangeRanking: [],
         selectedActions: [],
         comparison: null,
         groupComparison: null,
@@ -207,6 +212,7 @@ export const useWorkshopStore = create<WorkshopState>()(
         workshopPhase: state.workshopPhase,
         initialRanking: state.initialRanking,
         revisedRanking: state.revisedRanking,
+        exchangeRanking: state.exchangeRanking,
         selectedActions: state.selectedActions,
         groupComparison: state.groupComparison,
       }),

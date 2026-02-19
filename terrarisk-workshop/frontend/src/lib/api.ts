@@ -77,10 +77,10 @@ class ApiClient {
   }
 
   // Bivariate
-  async generateBivariate(layer1Id: string, layer2Id: string): Promise<{ imageUrl: string }> {
+  async generateBivariate(layer1Id: string, layer2Id: string, groupId: string): Promise<{ imageUrl: string }> {
     return this.request<{ imageUrl: string }>('/bivariate', {
       method: 'POST',
-      body: JSON.stringify({ layer1Id, layer2Id }),
+      body: JSON.stringify({ layer1Id, layer2Id, groupId }),
     });
   }
 

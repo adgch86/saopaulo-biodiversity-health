@@ -4,11 +4,26 @@ Multi-step workshop dynamic for municipality ranking and PEARC actions
 """
 
 import os
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 import pandas as pd
 
 from core.config import DATA_DIR
+
+# Categorical columns that need numeric encoding
+CATEGORICAL_ENCODINGS = {
+    'classe_pri': {'Baixa': 1, 'Média': 2, 'Alta': 3, 'Muito alta': 4},
+}
+
+
+def _to_numeric(val, col_name: str):
+    """Convert a value to float, handling categorical encodings."""
+    if col_name in CATEGORICAL_ENCODINGS:
+        return CATEGORICAL_ENCODINGS[col_name].get(val)
+    try:
+        return float(val)
+    except (ValueError, TypeError):
+        return None
 from core.pearc_actions import (
     get_actions_list,
     get_actions_for_risks,
@@ -106,6 +121,10 @@ VARIABLE_MAPPING = {
     'urban': 'pct_urbana',                              # 1 credit
     'poverty': 'pct_pobreza',                           # 2 credits
     'vulnerability': 'idx_vulnerabilidad',              # 2 credits
+    # Coringa (5 credits)
+    'coringa_esgoto': 'esgoto_tratado',
+    'coringa_restauracao': 'classe_pri',
+    'coringa_mulheres': 'per_mulh_1',
 }
 
 # Category to layer mapping
@@ -115,6 +134,7 @@ CATEGORY_LAYERS = {
     "climate": ["flooding", "fire_risk", "hydric_stress", "composite_climate"],
     "health": ["dengue", "diarrhea", "cv_mortality", "resp_hosp", "composite_health"],
     "social": ["population", "rural", "urban", "poverty", "vulnerability"],
+    "coringa": ["coringa_esgoto", "coringa_restauracao", "coringa_mulheres"],
 }
 
 # Risk layers (higher = worse) vs protective (higher = better)
@@ -223,7 +243,9 @@ async def get_workshop_municipalities():
                     if col_name and col_name in df.columns:
                         val = row[col_name]
                         if pd.notna(val):
-                            values.append(float(val))
+                            numeric_val = _to_numeric(val, col_name)
+                            if numeric_val is not None:
+                                values.append(numeric_val)
                 # Compute category average (or 0 if no data)
                 risk_summary[category] = round(sum(values) / len(values), 3) if values else 0
 
@@ -276,8 +298,8 @@ async def save_municipality_ranking(request: RankingRequest):
         raise HTTPException(status_code=404, detail="Group not found")
 
     # Validate phase
-    if request.phase not in ["initial", "revised"]:
-        raise HTTPException(status_code=400, detail="Phase must be 'initial' or 'revised'")
+    if request.phase not in ["initial", "revised", "exchange"]:
+        raise HTTPException(status_code=400, detail="Phase must be 'initial', 'revised', or 'exchange'")
 
     # Validate ranking data
     if not request.ranking or len(request.ranking) == 0:
@@ -313,6 +335,7 @@ async def get_group_rankings(group_id: str):
         return {
             "initial": user_rankings.get("initial"),
             "revised": user_rankings.get("revised"),
+            "exchange": user_rankings.get("exchange"),
             "platform": platform_ranking
         }
     except Exception as e:
@@ -364,8 +387,8 @@ async def get_workshop_comparison(group_id: str):
         user_rankings = get_rankings(group_id)
         platform_ranking = get_platform_ranking()
 
-        # Use revised if available, otherwise initial
-        user_ranking = user_rankings.get("revised") or user_rankings.get("initial")
+        # Use most recent ranking: exchange > revised > initial
+        user_ranking = user_rankings.get("exchange") or user_rankings.get("revised") or user_rankings.get("initial")
 
         if not user_ranking:
             raise HTTPException(status_code=404, detail="No ranking found for this group")
@@ -414,24 +437,41 @@ async def get_workshop_comparison(group_id: str):
 
 
 @router.get("/radar")
-async def get_radar_profiles(codes: str):
+async def get_radar_profiles(codes: str, group_id: str = Query(..., description="Group ID for access verification")):
     """
-    Get radar chart profiles for one or more municipalities.
-    Each category score is min-max normalized to 0-100 across all 645 municipalities.
-
-    For risk categories (climate, health, social): higher score = higher risk.
-    For protective categories (governance, biodiversity): higher score = better.
+    Get radar chart profiles for workshop municipalities only.
+    Each category score is min-max normalized to 0-100.
+    Restricted to the 10 workshop municipalities.
 
     Query params:
-        codes: Comma-separated municipality codes (e.g. "3520509,3548500")
-
-    Returns:
-        List of {code, name, scores: {governance, biodiversity, climate, health, social}}
+        codes: Comma-separated municipality codes
+        group_id: Group ID for access verification
     """
+    # Verify group exists
+    group = get_group(group_id)
+    if not group:
+        raise HTTPException(status_code=403, detail="Grupo no válido")
+
     if not codes or not codes.strip():
         raise HTTPException(status_code=400, detail="codes parameter is required")
 
     code_list = [c.strip() for c in codes.split(",") if c.strip()]
+
+    # Restrict to workshop municipality codes only
+    workshop_names = {m["name"] for m in WORKSHOP_MUNICIPALITIES}
+    data = get_workshop_data()
+    df = data["df"]
+    name_col = data["name_col"]
+    code_col = data["code_col"]
+    allowed_codes = set()
+    for wm_name in workshop_names:
+        row = df[df[name_col] == wm_name]
+        if not row.empty:
+            allowed_codes.add(str(row.iloc[0][code_col]))
+
+    code_list = [c for c in code_list if c in allowed_codes]
+    if not code_list:
+        raise HTTPException(status_code=403, detail="Solo se permite acceso a municipios del workshop")
 
     try:
         data = get_full_data()
@@ -699,137 +739,119 @@ async def get_vulnerability_comparison(group_id: str):
         raise HTTPException(status_code=500, detail=f"Error computing vulnerability comparison: {str(e)}")
 
 
+def _compute_moment(before_ranking, after_ranking, platform_pos, code_to_name):
+    """Compute perspective change metrics between two rankings."""
+    before_pos = {item["code"]: item["position"] for item in before_ranking}
+    after_pos = {item["code"]: item["position"] for item in after_ranking}
+
+    changes = []
+    promotions = 0
+    demotions = 0
+
+    for code in before_pos:
+        b_p = before_pos[code]
+        a_p = after_pos.get(code, b_p)
+        change = b_p - a_p  # Positive = promoted
+
+        change_type = "unchanged"
+        if change > 0:
+            change_type = "promoted"
+            promotions += 1
+        elif change < 0:
+            change_type = "demoted"
+            demotions += 1
+
+        changes.append({
+            "code": code,
+            "name": code_to_name.get(code, code),
+            "initialPosition": b_p,
+            "revisedPosition": a_p,
+            "positionChange": change,
+            "changeType": change_type,
+        })
+
+    position_shifts = [abs(c["positionChange"]) for c in changes]
+    total_changes = sum(1 for s in position_shifts if s > 0)
+    avg_shift = sum(position_shifts) / len(position_shifts) if position_shifts else 0
+    max_shift = max(position_shifts) if position_shifts else 0
+
+    common_codes = sorted(before_pos.keys())
+    before_ranks = [before_pos[c] for c in common_codes]
+    after_ranks = [after_pos.get(c, before_pos[c]) for c in common_codes]
+    platform_ranks = [platform_pos.get(c, 5) for c in common_codes]
+
+    before_plat_corr = compute_spearman(before_ranks, platform_ranks) or 0
+    after_plat_corr = compute_spearman(after_ranks, platform_ranks) or 0
+    improvement = (after_plat_corr - before_plat_corr) * 100
+
+    changes.sort(key=lambda x: abs(x["positionChange"]), reverse=True)
+
+    return {
+        "totalPositionChanges": total_changes,
+        "averagePositionShift": round(avg_shift, 2),
+        "maxPositionShift": max_shift,
+        "unchangedCount": len(changes) - total_changes,
+        "promotions": promotions,
+        "demotions": demotions,
+        "municipalityChanges": changes,
+        "convergenceWithPlatform": {
+            "initialSpearman": round(before_plat_corr, 3),
+            "revisedSpearman": round(after_plat_corr, 3),
+            "improvement": round(improvement, 1),
+        },
+    }
+
+
 @router.get("/perspective-change/{group_id}")
 async def get_perspective_change(group_id: str):
     """
-    Compute perspective change metrics between initial and revised rankings.
+    Compute perspective change metrics across ranking phases.
 
-    Measures how much a group's decisions changed after exploring data,
-    and whether they converged toward the platform optimal ranking.
+    Returns two moments:
+      - moment1 (Pós-Dados): initial → revised ranking
+      - moment2 (Pós-Intercâmbio): revised → exchange ranking (if available)
 
     Path params:
         group_id: Group identifier
-
-    Returns:
-        - totalPositionChanges, averagePositionShift, maxPositionShift
-        - municipalityChanges: detailed per-municipality changes
-        - convergenceWithPlatform: improvement toward optimal
-        - dataLayersUsed: how many layers informed the decision
     """
-    # Validate group exists
     group = get_group(group_id)
     if not group:
         raise HTTPException(status_code=404, detail="Group not found")
 
     try:
-        # Get both rankings
         rankings = get_rankings(group_id)
         initial = rankings.get("initial")
         revised = rankings.get("revised")
+        exchange = rankings.get("exchange")
 
         if not initial:
             raise HTTPException(status_code=404, detail="No initial ranking found")
 
-        # If no revised ranking, use initial (no change)
         if not revised:
             revised = initial
 
-        # Get platform optimal ranking
         platform_ranking = get_platform_ranking()
-
-        # Build position mappings
-        initial_pos = {item["code"]: item["position"] for item in initial}
-        revised_pos = {item["code"]: item["position"] for item in revised}
         platform_pos = {item["code"]: item["position"] for item in platform_ranking}
-
-        # Get municipality names from platform ranking
         code_to_name = {item["code"]: item["name"] for item in platform_ranking}
 
-        # Compute per-municipality changes
-        changes = []
-        promotions = 0
-        demotions = 0
+        # Moment 1: initial → revised (effect of data exploration)
+        moment1 = _compute_moment(initial, revised, platform_pos, code_to_name)
 
-        for code in initial_pos:
-            init_p = initial_pos[code]
-            rev_p = revised_pos.get(code, init_p)
-            change = init_p - rev_p  # Positive = promoted (moved to higher priority)
-
-            change_type = "unchanged"
-            if change > 0:
-                change_type = "promoted"
-                promotions += 1
-            elif change < 0:
-                change_type = "demoted"
-                demotions += 1
-
-            changes.append({
-                "code": code,
-                "name": code_to_name.get(code, code),
-                "initialPosition": init_p,
-                "revisedPosition": rev_p,
-                "positionChange": change,
-                "changeType": change_type
-            })
-
-        # Aggregate metrics
-        position_shifts = [abs(c["positionChange"]) for c in changes]
-        total_changes = sum(1 for s in position_shifts if s > 0)
-        avg_shift = sum(position_shifts) / len(position_shifts) if position_shifts else 0
-        max_shift = max(position_shifts) if position_shifts else 0
-
-        # Top 3 / bottom 3 changes
-        top_three_changed = any(
-            c["positionChange"] != 0 for c in changes if c["initialPosition"] <= 3
-        )
-        bottom_three_changed = any(
-            c["positionChange"] != 0 for c in changes if c["initialPosition"] >= 8
-        )
-
-        # Correlation: initial vs revised
-        common_codes = sorted(initial_pos.keys())
-        initial_ranks = [initial_pos[c] for c in common_codes]
-        revised_ranks = [revised_pos.get(c, initial_pos[c]) for c in common_codes]
-
-        initial_vs_revised = {
-            "spearman": round(compute_spearman(initial_ranks, revised_ranks), 3),
-            "kendall": round(compute_kendall(initial_ranks, revised_ranks), 3),
-        }
-
-        # Convergence with platform
-        platform_ranks = [platform_pos.get(c, 5) for c in common_codes]
-
-        initial_plat_corr = compute_spearman(initial_ranks, platform_ranks) or 0
-        revised_plat_corr = compute_spearman(revised_ranks, platform_ranks) or 0
-        improvement = (revised_plat_corr - initial_plat_corr) * 100
+        # Moment 2: revised → exchange (effect of group discussion)
+        moment2 = None
+        if exchange:
+            moment2 = _compute_moment(revised, exchange, platform_pos, code_to_name)
 
         # Data usage
         purchased_layers = group.get("purchasedLayers", [])
         initial_credits = 10  # from config
         credits_spent = initial_credits - group.get("credits", initial_credits)
 
-        # Sort changes: biggest shifts first
-        changes.sort(key=lambda x: abs(x["positionChange"]), reverse=True)
-
         return {
-            "totalPositionChanges": total_changes,
-            "averagePositionShift": round(avg_shift, 2),
-            "maxPositionShift": max_shift,
-            "unchangedCount": len(changes) - total_changes,
-            "promotions": promotions,
-            "demotions": demotions,
-            "topThreeChanges": top_three_changed,
-            "bottomThreeChanges": bottom_three_changed,
-            "initialVsRevisedCorrelation": initial_vs_revised,
-            "municipalityChanges": changes,
-            "convergenceWithPlatform": {
-                "initialSpearman": round(initial_plat_corr, 3),
-                "revisedSpearman": round(revised_plat_corr, 3),
-                "improvement": round(improvement, 1)
-            },
+            "moment1": moment1,
+            "moment2": moment2,
             "dataLayersUsed": len(purchased_layers),
-            "layersUsed": purchased_layers,
-            "creditsSpent": max(0, credits_spent)
+            "creditsSpent": max(0, credits_spent),
         }
 
     except HTTPException:
@@ -889,6 +911,8 @@ async def get_group_comparison():
 
             ranking_with_names = _enrich_ranking(initial_ranking)
             revised_with_names = _enrich_ranking(revised_ranking)
+            exchange_ranking = rankings.get("exchange")
+            exchange_with_names = _enrich_ranking(exchange_ranking)
 
             # Calculate average values for purchased layers across workshop municipalities
             average_values = {}
@@ -913,6 +937,7 @@ async def get_group_comparison():
                 "layersByCategory": layers_by_category,
                 "ranking": ranking_with_names,
                 "revisedRanking": revised_with_names,
+                "exchangeRanking": exchange_with_names,
                 "averageValues": average_values,
             })
 

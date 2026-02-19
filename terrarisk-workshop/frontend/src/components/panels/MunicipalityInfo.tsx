@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { useWorkshopStore } from '@/lib/store';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,19 +13,19 @@ import type { RadarProfile } from '@/components/workshop/RadarChart';
 // Variable categories for organized display
 const VARIABLE_GROUPS = {
   governance: {
-    label: 'Gobernanza',
+    label: 'Governança',
     variables: ['UAI_Crisk', 'gobernanza_100', 'UAI', 'pol_def'],
   },
   biodiversity: {
-    label: 'Biodiversidad',
+    label: 'Biodiversidade',
     variables: ['mean_species_richness', 'forest_cover', 'pollination_deficit', 'idx_biodiv'],
   },
   climate: {
-    label: 'Riesgo Climatico',
+    label: 'Risco Climático',
     variables: ['fire_risk_index', 'flooding_risk', 'hydric_stress_r'],
   },
   health: {
-    label: 'Salud',
+    label: 'Saúde',
     variables: [
       'dengue',
       'incidence_diarr',
@@ -41,30 +41,30 @@ const VARIABLE_GROUPS = {
 
 // Human-readable labels
 const VARIABLE_LABELS: Record<string, string> = {
-  UAI_Crisk: 'Indice UAI Riesgo Climatico',
-  gobernanza_100: 'Indice de Gobernanza',
-  UAI: 'UAI General',
-  pol_def: 'Politicas Definidas',
-  biodiversity: 'Riqueza de Especies',
-  forest_cover: 'Cobertura Forestal',
-  mean_species_richness: 'Riqueza Media de Especies',
-  idx_biodiv: 'Indice Compuesto Biodiversidad',
-  pollination_deficit: 'Deficit de Polinizacion',
-  fire_risk_index: 'Indice de Riesgo de Incendio',
-  flooding_risk: 'Riesgo de Inundacion',
-  hydric_stress_r: 'Estres Hidrico',
-  dengue: 'Incidencia de Dengue',
-  idx_carga_enfermedad: 'Indice Compuesto Salud',
-  idx_clima: 'Indice Compuesto Clima',
-  pct_urbana: 'Porcentaje Urbano',
-  population: 'Poblacion',
-  incidence_diarr: 'Incidencia de Diarrea',
-  death_circ_mean: 'Mortalidad Cardiovascular',
-  hosp_resp_mean: 'Hospitalizacion Respiratoria',
-  vulnerabilidad: 'Indice de Vulnerabilidad',
-  pct_pobreza: 'Porcentaje de Pobreza',
-  pct_rural: 'Porcentaje Rural',
-  pct_preta: 'Porcentaje Poblacion Negra',
+  UAI_Crisk: 'Índice UAI Risco Climático',
+  gobernanza_100: 'Índice de Governança',
+  UAI: 'UAI Geral',
+  pol_def: 'Políticas Definidas',
+  biodiversity: 'Riqueza de Espécies',
+  forest_cover: 'Cobertura Florestal',
+  mean_species_richness: 'Riqueza Média de Espécies',
+  idx_biodiv: 'Índice Composto Biodiversidade',
+  pollination_deficit: 'Déficit de Polinização',
+  fire_risk_index: 'Índice de Risco de Incêndio',
+  flooding_risk: 'Risco de Inundação',
+  hydric_stress_r: 'Estresse Hídrico',
+  dengue: 'Incidência de Dengue',
+  idx_carga_enfermedad: 'Índice Composto Saúde',
+  idx_clima: 'Índice Composto Clima',
+  pct_urbana: 'Percentual Urbano',
+  population: 'População',
+  incidence_diarr: 'Incidência de Diarreia',
+  death_circ_mean: 'Mortalidade Cardiovascular',
+  hosp_resp_mean: 'Hospitalização Respiratória',
+  vulnerabilidad: 'Índice de Vulnerabilidade',
+  pct_pobreza: 'Percentual de Pobreza',
+  pct_rural: 'Percentual Rural',
+  pct_preta: 'Percentual População Negra',
 };
 
 function formatValue(value: unknown): string {
@@ -108,18 +108,46 @@ function getValueColor(variable: string, value: number | null): string {
 
 export default function MunicipalityInfo() {
   const t = useTranslations('municipality');
-  const { selectedMunicipality, setSelectedMunicipality, layers, activeLayers } =
+  const { selectedMunicipality, setSelectedMunicipality, layers, activeLayers, group } =
     useWorkshopStore();
   const [radarProfile, setRadarProfile] = useState<RadarProfile | null>(null);
 
+  // Variables the group has access to (from purchased + free layers)
+  const purchasedVariables = useMemo(() => {
+    const vars = new Set<string>();
+    // Free layers are always visible
+    layers.filter((l) => l.isFree).forEach((l) => vars.add(l.variable));
+    // Purchased layers
+    if (group?.purchasedLayers) {
+      group.purchasedLayers.forEach((layerId) => {
+        const layer = layers.find((l) => l.id === layerId);
+        if (layer) vars.add(layer.variable);
+      });
+    }
+    return vars;
+  }, [group?.purchasedLayers, layers]);
+
+  // Categories that have at least one purchased/free layer
+  const purchasedCategories = useMemo(() => {
+    const cats = new Set<string>();
+    layers.filter((l) => l.isFree).forEach((l) => cats.add(l.category));
+    if (group?.purchasedLayers) {
+      group.purchasedLayers.forEach((layerId) => {
+        const layer = layers.find((l) => l.id === layerId);
+        if (layer) cats.add(layer.category);
+      });
+    }
+    return cats;
+  }, [group?.purchasedLayers, layers]);
+
   // Fetch radar data when municipality changes
   useEffect(() => {
-    if (!selectedMunicipality) {
+    if (!selectedMunicipality || !group?.id) {
       setRadarProfile(null);
       return;
     }
 
-    fetch(`/api/workshop/radar?codes=${selectedMunicipality.code}`)
+    fetch(`/api/workshop/radar?codes=${selectedMunicipality.code}&group_id=${encodeURIComponent(group.id)}`)
       .then((res) => res.json())
       .then((data: RadarProfile[]) => {
         if (data.length > 0) {
@@ -127,7 +155,21 @@ export default function MunicipalityInfo() {
         }
       })
       .catch(() => setRadarProfile(null));
-  }, [selectedMunicipality]);
+  }, [selectedMunicipality, group?.id]);
+
+  // Filter radar profile to only show purchased categories
+  const filteredRadarProfile = useMemo(() => {
+    if (!radarProfile || purchasedCategories.size === 0) return null;
+    return {
+      ...radarProfile,
+      scores: Object.fromEntries(
+        Object.entries(radarProfile.scores).map(([cat, score]) => [
+          cat,
+          purchasedCategories.has(cat) ? score : 0,
+        ])
+      ),
+    };
+  }, [radarProfile, purchasedCategories]);
 
   if (!selectedMunicipality || !selectedMunicipality.data) {
     return (
@@ -144,9 +186,12 @@ export default function MunicipalityInfo() {
     );
   }
 
+  // Only show active layer variables that are also purchased
   const activeLayerVariables = activeLayers
     .map((id) => layers.find((l) => l.id === id)?.variable)
-    .filter(Boolean);
+    .filter((v): v is string => Boolean(v) && purchasedVariables.has(v!));
+
+  const hasPurchases = purchasedVariables.size > 0;
 
   return (
     <Card>
@@ -176,32 +221,39 @@ export default function MunicipalityInfo() {
       <CardContent className="py-0">
         <ScrollArea className="h-[350px]">
           <div className="space-y-3 pr-4">
-            {/* Radar chart */}
-            {radarProfile && (
+            {!hasPurchases && (
+              <p className="text-xs text-gray-400 text-center py-6">
+                {t('purchaseLayersToSeeData')}
+              </p>
+            )}
+
+            {/* Radar chart - only if there are purchased categories */}
+            {filteredRadarProfile && (
               <div className="pb-2">
-                <RadarChart profiles={[radarProfile]} size={240} />
+                <RadarChart profiles={[filteredRadarProfile]} size={240} />
                 <Separator className="mt-2" />
               </div>
             )}
-            {/* Active layer variables first */}
+
+            {/* Active layer variables first (only purchased) */}
             {activeLayerVariables.length > 0 && (
               <div>
                 <h4 className="text-xs font-semibold text-purple-600 mb-2">
                   {t('activeVariables')}
                 </h4>
                 {activeLayerVariables.map((variable) => {
-                  const value = selectedMunicipality.data[variable!] as number | null;
+                  const value = selectedMunicipality.data[variable] as number | null;
                   return (
                     <div
                       key={variable}
                       className="flex justify-between items-center py-1 bg-purple-50 px-2 rounded mb-1"
                     >
                       <span className="text-xs">
-                        {VARIABLE_LABELS[variable!] || variable}
+                        {VARIABLE_LABELS[variable] || variable}
                       </span>
                       <Badge
                         variant="outline"
-                        className={getValueColor(variable!, value)}
+                        className={getValueColor(variable, value)}
                       >
                         {formatValue(value)}
                       </Badge>
@@ -212,33 +264,41 @@ export default function MunicipalityInfo() {
               </div>
             )}
 
-            {/* All variable groups */}
-            {Object.entries(VARIABLE_GROUPS).map(([key, group]) => (
-              <div key={key}>
-                <h4 className="text-xs font-semibold text-gray-600 mb-1">
-                  {group.label}
-                </h4>
-                {group.variables.map((variable) => {
-                  if (activeLayerVariables.includes(variable)) return null;
-                  const value = selectedMunicipality.data[variable] as number | null;
-                  return (
-                    <div
-                      key={variable}
-                      className="flex justify-between items-center py-0.5"
-                    >
-                      <span className="text-xs text-gray-600">
-                        {VARIABLE_LABELS[variable] || variable}
-                      </span>
-                      <span
-                        className={`text-xs font-medium ${getValueColor(variable, value)}`}
-                      >
-                        {formatValue(value)}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            ))}
+            {/* Variable groups - only show purchased variables */}
+            {hasPurchases &&
+              Object.entries(VARIABLE_GROUPS).map(([key, varGroup]) => {
+                // Filter to only purchased variables not already shown as active
+                const visibleVars = varGroup.variables.filter(
+                  (v) => purchasedVariables.has(v) && !activeLayerVariables.includes(v)
+                );
+                if (visibleVars.length === 0) return null;
+
+                return (
+                  <div key={key}>
+                    <h4 className="text-xs font-semibold text-gray-600 mb-1">
+                      {varGroup.label}
+                    </h4>
+                    {visibleVars.map((variable) => {
+                      const value = selectedMunicipality.data[variable] as number | null;
+                      return (
+                        <div
+                          key={variable}
+                          className="flex justify-between items-center py-0.5"
+                        >
+                          <span className="text-xs text-gray-600">
+                            {VARIABLE_LABELS[variable] || variable}
+                          </span>
+                          <span
+                            className={`text-xs font-medium ${getValueColor(variable, value)}`}
+                          >
+                            {formatValue(value)}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })}
           </div>
         </ScrollArea>
       </CardContent>
