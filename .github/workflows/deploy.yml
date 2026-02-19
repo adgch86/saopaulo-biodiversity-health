@@ -1,0 +1,28 @@
+name: Deploy to Contabo
+
+on:
+  push:
+    branches: [workshop-ui-fixes]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
+          command_timeout: 10m
+          script: |
+            cd /opt/terrarisk-workshop/terrarisk-workshop
+            git pull origin workshop-ui-fixes
+            docker-compose -f docker-compose.prod.yml build
+            docker-compose -f docker-compose.prod.yml up -d
+            sleep 10
+            curl -sf http://localhost:8002/api/health || exit 1
+            curl -sf http://localhost:4001 || exit 1
+            echo "Deploy exitoso"
