@@ -173,11 +173,15 @@ def get_full_data():
         min_max = {}
         for layer_id, col_name in VARIABLE_MAPPING.items():
             if col_name in df.columns:
-                col = pd.to_numeric(df[col_name], errors='coerce')
-                min_max[layer_id] = {
-                    "min": float(col.min()) if not col.isna().all() else 0,
-                    "max": float(col.max()) if not col.isna().all() else 1,
-                }
+                if col_name in CATEGORICAL_ENCODINGS:
+                    vals = list(CATEGORICAL_ENCODINGS[col_name].values())
+                    min_max[layer_id] = {"min": min(vals), "max": max(vals)}
+                else:
+                    col = pd.to_numeric(df[col_name], errors='coerce')
+                    min_max[layer_id] = {
+                        "min": float(col.min()) if not col.isna().all() else 0,
+                        "max": float(col.max()) if not col.isna().all() else 1,
+                    }
 
         _full_data = {
             "df": df,
@@ -503,7 +507,9 @@ async def get_radar_profiles(codes: str, group_id: str = Query(..., description=
                     if pd.isna(val):
                         continue
 
-                    val = float(val)
+                    val = _to_numeric(val, col_name)
+                    if val is None:
+                        continue
                     mm = min_max.get(layer_id)
                     if not mm:
                         continue
