@@ -21,6 +21,14 @@ jobs:
             cd /opt/terrarisk-workshop/terrarisk-workshop
             git stash --include-untracked
             git pull origin workshop-ui-fixes
+            # Ensure .env exists (not tracked in git)
+            if [ ! -f .env ]; then
+              echo "PYTHONUNBUFFERED=1" > .env
+              echo "ENVIRONMENT=production" >> .env
+              echo "NEXT_PUBLIC_API_URL=http://api:8000" >> .env
+              echo "NODE_ENV=production" >> .env
+              echo "ADMIN_API_KEY=terrarisk-admin-2026" >> .env
+            fi
             docker compose -f docker-compose.prod.yml build
             docker compose -f docker-compose.prod.yml up -d
             sleep 10
