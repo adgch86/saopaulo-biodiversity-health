@@ -311,7 +311,7 @@ LAYERS_CONFIG = [
         "cost": 5,
         "variable": "classe_pri",
         "imageFile": "coringa_restauracao.png",
-        "colorScale": "positive",
+        "colorScale": "negative",
         "hidden": True,
     },
     {

@@ -55,6 +55,7 @@ const NEGATIVE_VARS = [
   'dengue', 'incidence_diarr', 'death_circ_mean', 'hosp_resp_mean',
   'vulnerabilidad', 'pct_pobreza', 'pollination_deficit',
   'idx_clima', 'idx_carga_enfermedad',
+  'classe_pri',
 ];
 
 function getColor(value: number | null, terciles: [number, number], variable: string): string {
