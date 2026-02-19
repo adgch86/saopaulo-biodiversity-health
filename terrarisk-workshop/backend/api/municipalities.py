@@ -151,7 +151,7 @@ async def get_choropleth_data(variable: str, group_id: str = Query(..., descript
         # Coringa layers
         'esgoto_tratado': 'esgoto_tratado',
         'class_iaa': 'class_iaa',
-        'classe_pri': 'classe_pri',
+        'valor_iaa': 'valor_iaa',
         'per_mulh_1': 'per_mulh_1',
         # Legacy/utility
         'pct_preta': 'pct_preta',

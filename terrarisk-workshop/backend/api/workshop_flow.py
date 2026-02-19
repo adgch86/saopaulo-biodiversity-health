@@ -123,7 +123,7 @@ VARIABLE_MAPPING = {
     'vulnerability': 'idx_vulnerabilidad',              # 2 credits
     # Coringa (5 credits)
     'coringa_esgoto': 'esgoto_tratado',
-    'coringa_restauracao': 'classe_pri',
+    'coringa_restauracao': 'valor_iaa',
     'coringa_mulheres': 'per_mulh_1',
 }
 
