@@ -44,7 +44,7 @@ BIVARIATE_VARIABLE_MAP = {
     # Coringa layers
     'coringa_esgoto': 'esgoto_tratado',
     'pmva_background': 'class_iaa',
-    'coringa_restauracao': 'valor_iaa',
+    'coringa_restauracao': 'classe_pri',
     'coringa_mulheres': 'per_mulh_1',
 }
 

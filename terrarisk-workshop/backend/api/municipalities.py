@@ -151,7 +151,7 @@ async def get_choropleth_data(variable: str, group_id: str = Query(..., descript
         # Coringa layers
         'esgoto_tratado': 'esgoto_tratado',
         'class_iaa': 'class_iaa',
-        'valor_iaa': 'valor_iaa',
+        'classe_pri': 'classe_pri',
         'per_mulh_1': 'per_mulh_1',
         # Legacy/utility
         'pct_preta': 'pct_preta',
@@ -162,6 +162,11 @@ async def get_choropleth_data(variable: str, group_id: str = Query(..., descript
     if col_name not in df.columns:
         raise HTTPException(status_code=404, detail=f"Variable '{variable}' no encontrada")
 
+    # Categorical encodings for non-numeric columns
+    categorical_encodings = {
+        'classe_pri': {'Baixa': 1, 'Média': 2, 'Alta': 3, 'Muito alta': 4},
+    }
+
     # Get values
     values = {}
     valid_values = []
@@ -170,8 +175,16 @@ async def get_choropleth_data(variable: str, group_id: str = Query(..., descript
         code = str(row[code_col])
         val = row[col_name]
         if pd.notna(val):
-            values[code] = float(val)
-            valid_values.append(float(val))
+            if col_name in categorical_encodings:
+                num_val = categorical_encodings[col_name].get(val)
+                if num_val is not None:
+                    values[code] = float(num_val)
+                    valid_values.append(float(num_val))
+                else:
+                    values[code] = None
+            else:
+                values[code] = float(val)
+                valid_values.append(float(val))
         else:
             values[code] = None
 
