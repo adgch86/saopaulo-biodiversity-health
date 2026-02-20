@@ -123,6 +123,12 @@
     "poverty": "Porcentaje de Pobreza",
     "vulnerability": "Índice de Vulnerabilidad",
     "rural": "Población Rural",
+    "urban": "Población Urbana",
+    "population": "Población Total",
+    "forest_cover": "Cobertura Forestal",
+    "composite_biodiversity": "Biodiversidad (Compuesto)",
+    "composite_climate": "Clima (Compuesto)",
+    "composite_health": "Salud (Compuesto)",
     "leishmaniasis": "Incidencia de Leishmaniasis"
   },
   "layerDescriptions": {
@@ -258,13 +264,7 @@
     "moment1Title": "Momento 1: Post-Datos",
     "moment1Subtitle": "Cómo la exploración de datos cambió sus prioridades (ranking inicial → revisado)",
     "moment2Title": "Momento 2: Post-Intercambio",
-    "moment2Subtitle": "Cómo la discusión grupal cambió sus prioridades (ranking revisado → intercambio)",
-    "progressionTitle": "Progresión de Convergencia",
-    "progressionInitial": "Inicial",
-    "progressionAfterData": "Post-Datos",
-    "progressionRevised": "Revisado",
-    "progressionAfterExchange": "Post-Intercambio",
-    "progressionFinal": "Final"
+    "moment2Subtitle": "Cómo la discusión grupal cambió sus prioridades (ranking revisado → intercambio)"
   },
   "radarChart": {
     "noData": "Seleccione un municipio para ver su perfil de riesgo"

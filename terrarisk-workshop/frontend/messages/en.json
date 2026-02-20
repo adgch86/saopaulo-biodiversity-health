@@ -123,6 +123,12 @@
     "poverty": "Poverty Percentage",
     "vulnerability": "Vulnerability Index",
     "rural": "Rural Population",
+    "urban": "Urban Population",
+    "population": "Total Population",
+    "forest_cover": "Forest Cover",
+    "composite_biodiversity": "Biodiversity (Composite)",
+    "composite_climate": "Climate (Composite)",
+    "composite_health": "Health (Composite)",
     "leishmaniasis": "Leishmaniasis Incidence"
   },
   "layerDescriptions": {
@@ -258,13 +264,7 @@
     "moment1Title": "Moment 1: Post-Data",
     "moment1Subtitle": "How data exploration changed your priorities (initial → revised ranking)",
     "moment2Title": "Moment 2: Post-Exchange",
-    "moment2Subtitle": "How group discussion changed your priorities (revised → exchange ranking)",
-    "progressionTitle": "Convergence Progression",
-    "progressionInitial": "Initial",
-    "progressionAfterData": "Post-Data",
-    "progressionRevised": "Revised",
-    "progressionAfterExchange": "Post-Exchange",
-    "progressionFinal": "Final"
+    "moment2Subtitle": "How group discussion changed your priorities (revised → exchange ranking)"
   },
   "radarChart": {
     "noData": "Select a municipality to see its risk profile"
