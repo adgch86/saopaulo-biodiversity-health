@@ -2,7 +2,7 @@ name: Deploy to Contabo
 
 on:
   push:
-    branches: [workshop-ui-fixes]
+    branches: [master]
   workflow_dispatch:
 
 jobs:
@@ -21,7 +21,7 @@ jobs:
             set -e
             cd /opt/terrarisk-workshop/terrarisk-workshop
             git stash --include-untracked
-            git pull origin workshop-ui-fixes
+            git pull origin master
             # Ensure .env exists (not tracked in git)
             if [ ! -f .env ]; then
               echo "PYTHONUNBUFFERED=1" > .env
