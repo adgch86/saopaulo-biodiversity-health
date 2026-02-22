@@ -18,6 +18,7 @@ jobs:
           port: 22
           command_timeout: 10m
           script: |
+            set -e
             cd /opt/terrarisk-workshop/terrarisk-workshop
             git stash --include-untracked
             git pull origin workshop-ui-fixes
@@ -29,9 +30,12 @@ jobs:
               echo "NODE_ENV=production" >> .env
               echo "ADMIN_API_KEY=terrarisk-admin-2026" >> .env
             fi
+            echo "Building images..."
             docker compose -f docker-compose.prod.yml build
+            echo "Build OK — deploying..."
             docker compose -f docker-compose.prod.yml up -d
             sleep 10
-            curl -sf http://localhost:8002/api/health || exit 1
-            curl -sf http://localhost:4001 || exit 1
+            echo "Running health checks..."
+            curl -sf http://localhost:8002/api/health || { echo "API health check failed"; exit 1; }
+            curl -sf http://localhost:4001 || { echo "Frontend health check failed"; exit 1; }
             echo "Deploy exitoso"
