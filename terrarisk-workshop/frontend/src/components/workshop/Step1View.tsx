@@ -138,22 +138,21 @@ export default function Step1View({ onSubmit }: Props) {
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
-  // Determine which categories have purchased layers
+  // Determine which categories have purchased layers (only from Step 2)
   const purchasedCategories = useMemo(() => {
-    if (!group) return new Set<string>();
-    if (!group.purchasedLayers) return new Set<string>();
+    if (!isStep2OrLater || !group || !group.purchasedLayers) return new Set<string>();
     const cats = new Set<string>();
     group.purchasedLayers.forEach((layerId) => {
       const layer = layers.find((l) => l.id === layerId);
       if (layer) cats.add(layer.category);
     });
     return cats;
-  }, [group, layers]);
+  }, [group, layers, isStep2OrLater]);
 
   // Compute normalized values (0-1) for each municipality's riskSummary
-  // Normalization uses min/max across the 10 workshop municipalities
+  // Only from Step 2 onward — Step 1 has no radar charts
   const normalizedValues = useMemo(() => {
-    if (workshopMunicipalities.length === 0) return {};
+    if (!isStep2OrLater || workshopMunicipalities.length === 0) return {};
 
     const categories = ['governance', 'biodiversity', 'climate', 'health', 'social'];
 
@@ -186,7 +185,7 @@ export default function Step1View({ onSubmit }: Props) {
     });
 
     return result;
-  }, [workshopMunicipalities]);
+  }, [isStep2OrLater, workshopMunicipalities]);
 
   const handleAddToRanking = (code: string) => {
     if (ranking.find((r) => r.code === code)) return;
