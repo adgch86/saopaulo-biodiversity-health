@@ -319,7 +319,7 @@ export default function Step1View({ onSubmit }: Props) {
                           </span>
                         </div>
                         {/* Show radar for unranked too in step2 */}
-                        {normalizedValues[muni.code] && (
+                        {isStep2OrLater && normalizedValues[muni.code] && (
                           <div className="px-2 pb-3">
                             <MiniRadarChart
                               values={normalizedValues[muni.code]}
