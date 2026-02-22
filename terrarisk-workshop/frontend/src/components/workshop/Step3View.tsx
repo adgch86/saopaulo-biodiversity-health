@@ -56,7 +56,7 @@ function AverageRadarChart({
 
       <PlanetaryRadar
         dimensions={dimensions}
-        size={240}
+        size={320}
         showLabels={true}
         safeZoneFraction={0.28}
         stdDevValues={stdDevNormalized}
@@ -199,7 +199,7 @@ export default function Step3View({ onSubmit }: Props) {
 
         {/* CENTER: Average Radar Chart (replaces map) */}
         {radarStats && (
-          <div className="w-[280px] flex-shrink-0 flex flex-col items-center justify-center border-r border-gray-200 bg-gray-50/50 p-4">
+          <div className="w-[380px] flex-shrink-0 flex flex-col items-center justify-center border-r border-gray-200 bg-gray-50/50 p-4">
             <AverageRadarChart
               means={radarStats.means}
               stdDevs={radarStats.stdDevs}
