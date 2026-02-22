@@ -132,7 +132,7 @@ export default function Step3View({ onSubmit }: Props) {
       if (layer) purchasedCats.add(layer.category);
     });
 
-    if (purchasedCats.size === 0) return null;
+    // Show radar even with 0 purchased — unpurchased categories render gray
 
     // Min-max per category for normalization to 0-100
     const mins: Record<string, number> = {};

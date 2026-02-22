@@ -62,7 +62,7 @@ function SortableRankingCard({
     touchAction: 'none',
   } as React.CSSProperties;
 
-  const showRadar = radarValues && purchasedCategories && purchasedCategories.size > 0;
+  const showRadar = !!radarValues;
 
   return (
     <div
@@ -140,19 +140,20 @@ export default function Step1View({ onSubmit }: Props) {
 
   // Determine which categories have purchased layers
   const purchasedCategories = useMemo(() => {
-    if (!group || !isStep2OrLater || !group.purchasedLayers) return new Set<string>();
+    if (!group) return new Set<string>();
+    if (!group.purchasedLayers) return new Set<string>();
     const cats = new Set<string>();
     group.purchasedLayers.forEach((layerId) => {
       const layer = layers.find((l) => l.id === layerId);
       if (layer) cats.add(layer.category);
     });
     return cats;
-  }, [group, layers, isStep2OrLater]);
+  }, [group, layers]);
 
   // Compute normalized values (0-1) for each municipality's riskSummary
   // Normalization uses min/max across the 10 workshop municipalities
   const normalizedValues = useMemo(() => {
-    if (!isStep2OrLater || workshopMunicipalities.length === 0) return {};
+    if (workshopMunicipalities.length === 0) return {};
 
     const categories = ['governance', 'biodiversity', 'climate', 'health', 'social'];
 
@@ -185,7 +186,7 @@ export default function Step1View({ onSubmit }: Props) {
     });
 
     return result;
-  }, [isStep2OrLater, workshopMunicipalities]);
+  }, [workshopMunicipalities]);
 
   const handleAddToRanking = (code: string) => {
     if (ranking.find((r) => r.code === code)) return;
@@ -318,7 +319,7 @@ export default function Step1View({ onSubmit }: Props) {
                           </span>
                         </div>
                         {/* Show radar for unranked too in step2 */}
-                        {isStep2OrLater && purchasedCategories.size > 0 && normalizedValues[muni.code] && (
+                        {normalizedValues[muni.code] && (
                           <div className="px-2 pb-3">
                             <MiniRadarChart
                               values={normalizedValues[muni.code]}
