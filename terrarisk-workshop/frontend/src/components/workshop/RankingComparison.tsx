@@ -13,7 +13,6 @@ import type { LayerCategory } from '@/lib/types';
 import PlanetaryRadar, {
   CANONICAL_ORDER,
   DIMENSION_SEMANTICS,
-  type PlanetaryDimension,
 } from './PlanetaryRadar';
 import VulnerabilityComparison from './VulnerabilityComparison';
 
