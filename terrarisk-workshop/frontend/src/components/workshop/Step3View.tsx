@@ -192,10 +192,22 @@ export default function Step3View({ onSubmit }: Props) {
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       <div className="flex-1 flex overflow-hidden">
-        {/* LEFT: Bipartite Network (expanded, no map) */}
+        {/* LEFT: Bipartite Network */}
         <div className="flex-1 min-w-0 overflow-hidden border-r border-gray-200">
           <BipartiteNetwork />
         </div>
+
+        {/* CENTER: Average Radar Chart (replaces map) */}
+        {radarStats && (
+          <div className="w-[280px] flex-shrink-0 flex flex-col items-center justify-center border-r border-gray-200 bg-gray-50/50 p-4">
+            <AverageRadarChart
+              means={radarStats.means}
+              stdDevs={radarStats.stdDevs}
+              purchasedCats={radarStats.purchasedCats}
+              title={t('avgRiskDimensions')}
+            />
+          </div>
+        )}
 
         {/* RIGHT: Actions Selector Panel */}
         <div className="w-[340px] flex-shrink-0 flex flex-col border-l border-gray-200 bg-gray-50">
@@ -277,16 +289,6 @@ export default function Step3View({ onSubmit }: Props) {
                   </div>
                 );
               })}
-
-              {/* Average Radar Chart with Std Dev band */}
-              {radarStats && (
-                <AverageRadarChart
-                  means={radarStats.means}
-                  stdDevs={radarStats.stdDevs}
-                  purchasedCats={radarStats.purchasedCats}
-                  title={t('avgRiskDimensions')}
-                />
-              )}
             </div>
           </ScrollArea>
         </div>
