@@ -8,7 +8,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { CATEGORY_CONFIG } from '@/lib/types';
 import type { LayerCategory } from '@/lib/types';
-import MapViewer from '@/components/map/MapViewer';
 import BipartiteNetwork from './BipartiteNetwork';
 import PlanetaryRadar, {
   CANONICAL_ORDER,
@@ -193,18 +192,13 @@ export default function Step3View({ onSubmit }: Props) {
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       <div className="flex-1 flex overflow-hidden">
-        {/* LEFT: Bipartite Network */}
-        <div className="flex-[6] min-w-[500px] overflow-hidden border-r border-gray-200">
+        {/* LEFT: Bipartite Network (expanded, no map) */}
+        <div className="flex-1 min-w-0 overflow-hidden border-r border-gray-200">
           <BipartiteNetwork />
         </div>
 
-        {/* CENTER: Map */}
-        <div className="flex-[3] relative">
-          <MapViewer />
-        </div>
-
         {/* RIGHT: Actions Selector Panel */}
-        <div className="w-[320px] flex-shrink-0 flex flex-col border-l border-gray-200 bg-gray-50">
+        <div className="w-[340px] flex-shrink-0 flex flex-col border-l border-gray-200 bg-gray-50">
           <div className="px-4 py-3 border-b border-gray-200 bg-white">
             <h2 className="text-base font-bold text-gray-800">{t('selectActions')}</h2>
             <p className="text-sm text-gray-500">
