@@ -8,12 +8,19 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
+import { CATEGORY_CONFIG } from '@/lib/types';
+import type { LayerCategory } from '@/lib/types';
+import PlanetaryRadar, {
+  CANONICAL_ORDER,
+  DIMENSION_SEMANTICS,
+  type PlanetaryDimension,
+} from './PlanetaryRadar';
 import VulnerabilityComparison from './VulnerabilityComparison';
 
 export default function RankingComparison() {
   const t = useTranslations('workshopFlow');
   const tActions = useTranslations('actionNames');
-  const { comparison, setWorkshopPhase, workshopMunicipalities } = useWorkshopStore();
+  const { comparison, setWorkshopPhase, workshopMunicipalities, group, layers } = useWorkshopStore();
 
   // Lookup municipality name from store as fallback
   const getMuniName = (code: string, fallbackName: string) => {
@@ -37,6 +44,61 @@ export default function RankingComparison() {
     if (!comparison) return 1;
     return Math.max(...comparison.suggestedActions.map((a) => a.relevanceScore), 1);
   }, [comparison]);
+
+  // Compute average radar for group (purchased categories) vs TerraRisk Boundaries (all 5)
+  const radarComparison = useMemo(() => {
+    if (!group || workshopMunicipalities.length === 0) return null;
+
+    const categories = CANONICAL_ORDER;
+    const n = workshopMunicipalities.length;
+
+    // Purchased categories by the group
+    const purchasedCats = new Set<string>();
+    (group.purchasedLayers || []).forEach((layerId) => {
+      const layer = layers.find((l) => l.id === layerId);
+      if (layer) purchasedCats.add(layer.category);
+    });
+
+    // Min-max per category for normalization to 0-100
+    const mins: Record<string, number> = {};
+    const maxs: Record<string, number> = {};
+    categories.forEach((cat) => {
+      let min = Infinity;
+      let max = -Infinity;
+      workshopMunicipalities.forEach((m) => {
+        const val = m.riskSummary[cat as keyof typeof m.riskSummary];
+        if (val < min) min = val;
+        if (val > max) max = val;
+      });
+      mins[cat] = min;
+      maxs[cat] = max;
+    });
+
+    // Normalize all values to 0-100, compute mean and stdDev
+    const groupMeans: Record<string, number> = {};
+    const groupStdDevs: Record<string, number> = {};
+    const fullMeans: Record<string, number> = {};
+    const fullStdDevs: Record<string, number> = {};
+
+    categories.forEach((cat) => {
+      const range = maxs[cat] - mins[cat];
+      const normValues = workshopMunicipalities.map((m) =>
+        range > 0 ? ((m.riskSummary[cat as keyof typeof m.riskSummary] - mins[cat]) / range) * 100 : 50
+      );
+      const mean = normValues.reduce((a, v) => a + v, 0) / n;
+      const variance = normValues.reduce((a, v) => a + (v - mean) ** 2, 0) / n;
+
+      // Group uses only purchased categories
+      groupMeans[cat] = mean;
+      groupStdDevs[cat] = Math.sqrt(variance);
+
+      // TerraRisk Boundaries uses all categories
+      fullMeans[cat] = mean;
+      fullStdDevs[cat] = Math.sqrt(variance);
+    });
+
+    return { groupMeans, groupStdDevs, fullMeans, fullStdDevs, purchasedCats };
+  }, [group, workshopMunicipalities, layers]);
 
   if (!comparison) {
     return (
@@ -127,6 +189,115 @@ export default function RankingComparison() {
             </div>
           </CardContent>
         </Card>
+
+        {/* RADAR COMPARISON: Group average vs TerraRisk Boundaries */}
+        {radarComparison && (
+          <Card>
+            <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50">
+              <CardTitle className="text-base lg:text-lg">{t('radarComparison') || 'Visão Dimensional'}</CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 lg:p-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {/* Group average radar (purchased categories only) */}
+                <div className="flex flex-col items-center">
+                  <h4 className="text-xs font-semibold text-blue-600 uppercase tracking-wide mb-3 text-center">
+                    {t('yourGroup') || 'Seu Grupo'}
+                  </h4>
+                  <PlanetaryRadar
+                    dimensions={CANONICAL_ORDER.map((key) => ({
+                      key,
+                      label: CATEGORY_CONFIG[key as LayerCategory]?.label ?? key,
+                      value: Math.max(0, Math.min(1, (radarComparison.groupMeans[key] ?? 0) / 100)),
+                      purchased: radarComparison.purchasedCats.has(key),
+                      semantics: DIMENSION_SEMANTICS[key] ?? 'risk',
+                    }))}
+                    size={280}
+                    showLabels={true}
+                    safeZoneFraction={0.28}
+                    stdDevValues={Object.fromEntries(
+                      CANONICAL_ORDER.map((key) => [key, (radarComparison.groupStdDevs[key] ?? 0) / 100])
+                    )}
+                  />
+                  <div className="mt-2 space-y-0.5 w-full max-w-[260px]">
+                    {CANONICAL_ORDER.map((key) => {
+                      if (!radarComparison.purchasedCats.has(key)) return null;
+                      const config = CATEGORY_CONFIG[key as LayerCategory];
+                      if (!config) return null;
+                      return (
+                        <div key={key} className="flex items-center justify-between text-xs px-1">
+                          <span className="flex items-center gap-1.5" style={{ color: config.color }}>
+                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: config.color }} />
+                            {config.label}
+                          </span>
+                          <span className="text-gray-600">
+                            {(radarComparison.groupMeans[key] ?? 0).toFixed(0)}{' '}
+                            <span className="text-gray-400">± {(radarComparison.groupStdDevs[key] ?? 0).toFixed(0)}</span>
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* TerraRisk Boundaries radar (all 5 dimensions) */}
+                <div className="flex flex-col items-center">
+                  <h4 className="text-xs font-semibold text-purple-600 uppercase tracking-wide mb-3 text-center">
+                    TerraRisk Boundaries
+                  </h4>
+                  <PlanetaryRadar
+                    dimensions={CANONICAL_ORDER.map((key) => ({
+                      key,
+                      label: CATEGORY_CONFIG[key as LayerCategory]?.label ?? key,
+                      value: Math.max(0, Math.min(1, (radarComparison.fullMeans[key] ?? 0) / 100)),
+                      purchased: true,
+                      semantics: DIMENSION_SEMANTICS[key] ?? 'risk',
+                    }))}
+                    size={280}
+                    showLabels={true}
+                    safeZoneFraction={0.28}
+                    stdDevValues={Object.fromEntries(
+                      CANONICAL_ORDER.map((key) => [key, (radarComparison.fullStdDevs[key] ?? 0) / 100])
+                    )}
+                  />
+                  <div className="mt-2 space-y-0.5 w-full max-w-[260px]">
+                    {CANONICAL_ORDER.map((key) => {
+                      const config = CATEGORY_CONFIG[key as LayerCategory];
+                      if (!config) return null;
+                      return (
+                        <div key={key} className="flex items-center justify-between text-xs px-1">
+                          <span className="flex items-center gap-1.5" style={{ color: config.color }}>
+                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: config.color }} />
+                            {config.label}
+                          </span>
+                          <span className="text-gray-600">
+                            {(radarComparison.fullMeans[key] ?? 0).toFixed(0)}{' '}
+                            <span className="text-gray-400">± {(radarComparison.fullStdDevs[key] ?? 0).toFixed(0)}</span>
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* Legend */}
+              <div className="flex items-center justify-center gap-6 mt-4 text-[11px] text-gray-500">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-3 h-1.5 rounded-sm bg-emerald-500 inline-block" />
+                  Média
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-3 h-1.5 rounded-sm bg-gray-300 inline-block opacity-50" />
+                  Desvio padrão (±σ)
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-3 h-1.5 rounded-sm bg-gray-200 inline-block" />
+                  Sem dados
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
           <Card>
