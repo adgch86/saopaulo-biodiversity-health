@@ -1,0 +1,59 @@
+version: '3.8'
+
+# TerraRisk Workshop - Offline Mode
+# Runs entirely on localhost without internet
+# Includes local tile server for map backgrounds
+
+services:
+  api:
+    image: terrarisk-api:offline
+    container_name: terrarisk-api
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+      - ENVIRONMENT=offline
+      - ALLOWED_ORIGINS=http://localhost:4001,http://localhost:3000,http://127.0.0.1:4001
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - terrarisk-offline
+
+  frontend:
+    image: terrarisk-frontend:offline
+    container_name: terrarisk-frontend
+    ports:
+      - "4001:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      - NEXT_PUBLIC_API_URL=http://api:8000
+      - NODE_ENV=production
+    restart: unless-stopped
+    networks:
+      - terrarisk-offline
+
+  tiles:
+    image: nginx:alpine
+    container_name: terrarisk-tiles
+    ports:
+      - "8080:80"
+    volumes:
+      - ./tiles:/usr/share/nginx/html/tiles:ro
+      - ./tiles-nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: unless-stopped
+    networks:
+      - terrarisk-offline
+
+networks:
+  terrarisk-offline:
+    driver: bridge
+    name: terrarisk-offline

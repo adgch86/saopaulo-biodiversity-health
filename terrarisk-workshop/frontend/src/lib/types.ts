@@ -117,7 +117,35 @@ export const CATEGORY_CONFIG: Record<LayerCategory, { label: string; color: stri
 
 // Workshop Flow Types
 
-export type WorkshopPhase = 'step1' | 'step1_results' | 'step2' | 'step2_results' | 'step2b' | 'step2b_results' | 'step3' | 'step4' | 'step5';
+export type WorkshopPhase = 'step1' | 'step1_results' | 'step2' | 'step2_results' | 'step2b' | 'step2b_results' | 'step3' | 'step4' | 'step5' | 'survey';
+
+// ITECS v1.2 — Instrumento de Avaliação de Coerência Sistêmica
+export interface ITECSCollaborator {
+  nameOrInstitution: string;
+  topic: string;
+  frequency: 'monthly' | 'more_than_monthly' | 'yearly' | 'sporadic';
+}
+
+export interface ITECSResponses {
+  // Bloco I — Transformação Cognitiva (1-7)
+  tc1: number; tc2: number; tc3: number; tc4: number; tc5: number;
+  // Bloco II — Robustez Analítica (1-7)
+  ra6: number; ra7: number; ra8: number;
+  // Bloco III — Potencial da Ferramenta (1-7)
+  pf9: number; pf10: number; pf11: number; pf12: number;
+  // Bloco IV — Coerência Sistêmica Percebida (1-7)
+  csp13: number; csp14: number; csp15: number; csp16: number;
+  // Bloco V — Intenção de Aplicação (1-7)
+  ia17: number; ia18: number; ia19: number; ia20: number;
+  // Bloco VI — Ativação Proativa (1-7)
+  ap21: number; ap22: number; ap23: number; ap24: number; ap25: number;
+  // Bloco VII — Coprodução e Uso de Evidência (texto)
+  q26: string; q27: string;
+  // Bloco VIII — Rede de Colaboradores (tabela)
+  q28: ITECSCollaborator[];
+  // Bloco IX — Próximos Passos (texto)
+  q29: string; q30: string;
+}
 
 export interface WorkshopMunicipality {
   code: string;
@@ -173,6 +201,7 @@ export const PHASE_CONFIG: Record<WorkshopPhase, {step: number; icon: string}> =
   step3: { step: 3, icon: '3' },
   step4: { step: 4, icon: '4' },
   step5: { step: 5, icon: '5' },
+  survey: { step: 6, icon: '6' },
 };
 
 export interface GroupComparisonData {

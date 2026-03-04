@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useWorkshopStore } from '@/lib/store';
 import type { WorkshopPhase } from '@/lib/types';
 
-// Map each phase to its visual step (1-6)
+// Map each phase to its visual step (1-7)
 const PHASE_TO_STEP: Record<WorkshopPhase, number> = {
   step1: 1,
   step1_results: 1,
@@ -15,6 +15,7 @@ const PHASE_TO_STEP: Record<WorkshopPhase, number> = {
   step3: 4,
   step4: 5,
   step5: 6,
+  survey: 7,
 };
 
 export default function WorkshopStepper() {
@@ -28,6 +29,7 @@ export default function WorkshopStepper() {
     { step: 4, title: t('step3Title'), phases: ['step3'] },
     { step: 5, title: t('step4Title'), phases: ['step4'] },
     { step: 6, title: t('step5Title'), phases: ['step5'] },
+    { step: 7, title: t('surveyTitle'), phases: ['survey'] },
   ];
 
   const currentStep = PHASE_TO_STEP[workshopPhase];

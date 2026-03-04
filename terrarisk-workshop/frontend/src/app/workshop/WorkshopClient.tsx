@@ -12,6 +12,7 @@ import Step3View from '@/components/workshop/Step3View';
 import RankingComparison from '@/components/workshop/RankingComparison';
 import PerspectiveChange from '@/components/workshop/PerspectiveChange';
 import type { PerspectiveData } from '@/components/workshop/PerspectiveChange';
+import ITECSSurvey from '@/components/workshop/ITECSSurvey';
 import { Button } from '@/components/ui/button';
 import type { RankingEntry } from '@/lib/types';
 
@@ -38,14 +39,30 @@ export default function WorkshopClient() {
   const [perspectiveData, setPerspectiveData] = useState<PerspectiveData | null>(null);
   const [perspectiveLoading, setPerspectiveLoading] = useState(false);
 
-  // Redirect if no group
+  const resetGroup = useWorkshopStore((s) => s.resetGroup);
+
+  // Validate group exists on server; redirect if orphaned
   useEffect(() => {
     if (!group) {
       router.push('/');
       return;
     }
-    setIsLoading(false);
-  }, [group, router]);
+
+    fetch(`/api/groups/${group.id}`)
+      .then((res) => {
+        if (!res.ok) {
+          // Group no longer exists on server — clear local state
+          resetGroup();
+          router.push('/');
+          return;
+        }
+        setIsLoading(false);
+      })
+      .catch(() => {
+        resetGroup();
+        router.push('/');
+      });
+  }, [group, router, resetGroup]);
 
   // Load data on mount
   useEffect(() => {
@@ -386,14 +403,20 @@ export default function WorkshopClient() {
               </>
             )}
 
-            <div className="flex justify-center pt-4 pb-8">
+            <div className="flex justify-center gap-4 pt-4 pb-8">
               <Button variant="outline" onClick={() => setWorkshopPhase('step4')}>
                 {tf('backToExploration')}
+              </Button>
+              <Button onClick={() => setWorkshopPhase('survey')}>
+                {tf('proceedToSurvey')}
               </Button>
             </div>
           </div>
         </div>
       )}
+      {/* Survey: ITECS v1.2 */}
+      {workshopPhase === 'survey' && <ITECSSurvey />}
+
     </div>
   );
 }

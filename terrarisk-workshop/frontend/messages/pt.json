@@ -182,6 +182,8 @@
     "step4Desc": "Compare seu ranking com o ranking TerraRisk baseado em dados",
     "step5Title": "Etapa 5: Mudança de Perspectiva",
     "step5Desc": "Analise como sua perspectiva mudou e as capacidades da plataforma",
+    "surveyTitle": "Etapa 6: Avaliação ITECS",
+    "proceedToSurvey": "Avançar para Avaliação",
     "step5Placeholder": "Esta etapa será implementada em breve com análise detalhada de mudança de perspectiva.",
     "finishStep": "Finalizar Etapa",
     "continueToStep2": "Continuar para Etapa 2",
@@ -266,7 +268,13 @@
     "moment1Title": "Momento 1: Pós-Dados",
     "moment1Subtitle": "Como a exploração de dados mudou suas prioridades (ranking inicial → revisado)",
     "moment2Title": "Momento 2: Pós-Intercâmbio",
-    "moment2Subtitle": "Como a discussão em grupo mudou suas prioridades (ranking revisado → intercâmbio)"
+    "moment2Subtitle": "Como a discussão em grupo mudou suas prioridades (ranking revisado → intercâmbio)",
+    "progressionTitle": "Progressão de Convergência",
+    "progressionInitial": "Ranking inicial",
+    "progressionAfterData": "Após explorar dados",
+    "progressionRevised": "Ranking revisado",
+    "progressionAfterExchange": "Após intercâmbio",
+    "progressionFinal": "Ranking final"
   },
   "radarChart": {
     "noData": "Selecione um municipio para ver seu perfil de risco"

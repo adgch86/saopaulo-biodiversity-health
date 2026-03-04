@@ -182,6 +182,8 @@
     "step4Desc": "Compare your ranking with the data-driven TerraRisk ranking",
     "step5Title": "Step 5: Perspective Change",
     "step5Desc": "Analyze how your perspective changed and platform capabilities",
+    "surveyTitle": "Step 6: ITECS Evaluation",
+    "proceedToSurvey": "Proceed to Evaluation",
     "step5Placeholder": "This step will be implemented soon with detailed perspective change analysis.",
     "finishStep": "Finish Step",
     "continueToStep2": "Continue to Step 2",
@@ -266,7 +268,13 @@
     "moment1Title": "Moment 1: Post-Data",
     "moment1Subtitle": "How data exploration changed your priorities (initial → revised ranking)",
     "moment2Title": "Moment 2: Post-Exchange",
-    "moment2Subtitle": "How group discussion changed your priorities (revised → exchange ranking)"
+    "moment2Subtitle": "How group discussion changed your priorities (revised → exchange ranking)",
+    "progressionTitle": "Convergence Progression",
+    "progressionInitial": "Initial ranking",
+    "progressionAfterData": "After exploring data",
+    "progressionRevised": "Revised ranking",
+    "progressionAfterExchange": "After exchange",
+    "progressionFinal": "Final ranking"
   },
   "radarChart": {
     "noData": "Select a municipality to see its risk profile"

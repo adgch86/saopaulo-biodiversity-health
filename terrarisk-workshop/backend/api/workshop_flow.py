@@ -37,7 +37,9 @@ from core.database import (
     save_selected_actions,
     get_selected_actions,
     get_group,
-    list_groups
+    list_groups,
+    save_itecs_response,
+    get_itecs_results,
 )
 
 router = APIRouter()
@@ -53,6 +55,20 @@ class RankingRequest(BaseModel):
 class ActionsRequest(BaseModel):
     groupId: str
     selectedActions: list[str]  # List of action IDs
+
+
+class ITECSMeta(BaseModel):
+    layersPurchased: list[str] = []
+    creditsSpent: int = 0
+    rankingChanged: bool = False
+    actionsSelected: list[str] = []
+
+
+class ITECSRequest(BaseModel):
+    groupId: str
+    participantId: str
+    responses: dict
+    meta: ITECSMeta
 
 
 # Cached data
@@ -173,15 +189,11 @@ def get_full_data():
         min_max = {}
         for layer_id, col_name in VARIABLE_MAPPING.items():
             if col_name in df.columns:
-                if col_name in CATEGORICAL_ENCODINGS:
-                    vals = list(CATEGORICAL_ENCODINGS[col_name].values())
-                    min_max[layer_id] = {"min": min(vals), "max": max(vals)}
-                else:
-                    col = pd.to_numeric(df[col_name], errors='coerce')
-                    min_max[layer_id] = {
-                        "min": float(col.min()) if not col.isna().all() else 0,
-                        "max": float(col.max()) if not col.isna().all() else 1,
-                    }
+                col = pd.to_numeric(df[col_name], errors='coerce')
+                min_max[layer_id] = {
+                    "min": float(col.min()) if not col.isna().all() else 0,
+                    "max": float(col.max()) if not col.isna().all() else 1,
+                }
 
         _full_data = {
             "df": df,
@@ -507,9 +519,7 @@ async def get_radar_profiles(codes: str, group_id: str = Query(..., description=
                     if pd.isna(val):
                         continue
 
-                    val = _to_numeric(val, col_name)
-                    if val is None:
-                        continue
+                    val = float(val)
                     mm = min_max.get(layer_id)
                     if not mm:
                         continue
@@ -954,3 +964,139 @@ async def get_group_comparison():
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error computing group comparison: {str(e)}")
+
+
+@router.get("/radar-stats/{group_id}")
+async def get_radar_stats(group_id: str):
+    """
+    Radar comparison stats for Step 4:
+    - groupStats: category averages using ONLY the layers this group purchased
+    - boundaryStats: category averages using ALL available layers
+
+    Both compute mean ± stdDev across the 10 workshop municipalities, normalized 0-100.
+    """
+    try:
+        group = get_group(group_id)
+        if not group:
+            raise HTTPException(status_code=404, detail="Group not found")
+
+        purchased_layers = set(group.get("purchasedLayers", []))
+        data = get_workshop_data()
+        df = data["df"]
+        name_col = data["name_col"]
+        var_mapping = data["variable_mapping"]
+
+        categories = ["governance", "biodiversity", "climate", "health", "social"]
+
+        # Collect raw values per municipality per category for both modes
+        # all_values[category] = [val_muni1, val_muni2, ...]
+        # group_values[category] = [val_muni1, val_muni2, ...] (only purchased layers)
+        all_values: dict[str, list[float]] = {cat: [] for cat in categories}
+        group_values: dict[str, list[float]] = {cat: [] for cat in categories}
+
+        for workshop_muni in WORKSHOP_MUNICIPALITIES:
+            row = df[df[name_col] == workshop_muni["name"]]
+            if row.empty:
+                continue
+            row = row.iloc[0]
+
+            for cat in categories:
+                layers_list = CATEGORY_LAYERS.get(cat, [])
+
+                # All layers for this category
+                all_vals = []
+                group_vals = []
+                for layer_id in layers_list:
+                    col_name = var_mapping.get(layer_id)
+                    if col_name and col_name in df.columns:
+                        val = row[col_name]
+                        if pd.notna(val):
+                            numeric_val = _to_numeric(val, col_name)
+                            if numeric_val is not None:
+                                all_vals.append(numeric_val)
+                                if layer_id in purchased_layers:
+                                    group_vals.append(numeric_val)
+
+                all_values[cat].append(sum(all_vals) / len(all_vals) if all_vals else 0)
+                group_values[cat].append(sum(group_vals) / len(group_vals) if group_vals else 0)
+
+        def compute_stats(values_dict: dict[str, list[float]]) -> dict:
+            """Normalize values 0-100 (min-max across municipalities) then compute mean ± stdDev."""
+            means = {}
+            std_devs = {}
+            has_data = {}
+            for cat in categories:
+                vals = values_dict[cat]
+                if not vals:
+                    means[cat] = 0
+                    std_devs[cat] = 0
+                    has_data[cat] = False
+                    continue
+
+                vmin = min(vals)
+                vmax = max(vals)
+                rng = vmax - vmin
+                norm = [(((v - vmin) / rng) * 100 if rng > 0 else 50) for v in vals]
+                n = len(norm)
+                mean = sum(norm) / n
+                variance = sum((v - mean) ** 2 for v in norm) / n
+                means[cat] = round(mean, 1)
+                std_devs[cat] = round(variance ** 0.5, 1)
+                # A category "has data" if at least one raw value was non-zero
+                has_data[cat] = any(v != 0 for v in vals)
+
+            return {"means": means, "stdDevs": std_devs, "hasData": has_data}
+
+        # Determine which categories have purchased layers
+        purchased_cats = []
+        for cat in categories:
+            layers_in_cat = CATEGORY_LAYERS.get(cat, [])
+            if any(lid in purchased_layers for lid in layers_in_cat):
+                purchased_cats.append(cat)
+
+        return {
+            "groupStats": compute_stats(group_values),
+            "boundaryStats": compute_stats(all_values),
+            "purchasedCategories": purchased_cats,
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error computing radar stats: {str(e)}")
+
+
+@router.post("/survey")
+async def submit_itecs_survey(request: ITECSRequest):
+    """
+    Save an individual ITECS v1.2 response.
+
+    Body:
+        - groupId: Group identifier
+        - participantId: Unique UUID generated per participant in the frontend
+        - responses: ITECS fields (25 Likert + 5 open)
+        - meta: Behavioural metadata (auto-calculated client-side)
+    """
+    group = get_group(request.groupId)
+    if not group:
+        raise HTTPException(status_code=404, detail="Group not found")
+
+    try:
+        save_itecs_response(
+            group_id=request.groupId,
+            participant_id=request.participantId,
+            responses=request.responses,
+            meta=request.meta.model_dump(),
+        )
+        return {"success": True}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error saving ITECS response: {str(e)}")
+
+
+@router.get("/survey/admin/results")
+async def get_survey_results():
+    """Admin: export all ITECS responses."""
+    try:
+        return get_itecs_results()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching survey results: {str(e)}")

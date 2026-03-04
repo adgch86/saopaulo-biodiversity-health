@@ -1,7 +1,7 @@
 // TerraRisk Workshop - Zustand Store
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Group, Layer, Municipality, MunicipalityBasic, WorkshopPhase, WorkshopMunicipality, RankingEntry, PEARCAction, RankingComparison, GroupComparisonData } from './types';
+import type { Group, Layer, Municipality, MunicipalityBasic, WorkshopPhase, WorkshopMunicipality, RankingEntry, PEARCAction, RankingComparison, GroupComparisonData, ITECSResponses } from './types';
 
 interface WorkshopState {
   // Group state
@@ -74,6 +74,14 @@ interface WorkshopState {
   groupComparison: GroupComparisonData | null;
   setGroupComparison: (data: GroupComparisonData | null) => void;
 
+  // ITECS Survey
+  surveySubmitted: boolean;
+  setSurveySubmitted: (submitted: boolean) => void;
+  surveyParticipantId: string | null;
+  setSurveyParticipantId: (id: string) => void;
+  surveyResponses: ITECSResponses | null;
+  setSurveyResponses: (responses: ITECSResponses | null) => void;
+
   // Actions
   purchaseLayer: (layerId: string) => Promise<boolean>;
   resetGroup: () => void;
@@ -105,6 +113,9 @@ export const useWorkshopStore = create<WorkshopState>()(
       selectedActions: [],
       comparison: null,
       groupComparison: null,
+      surveySubmitted: false,
+      surveyParticipantId: null,
+      surveyResponses: null,
 
       // Setters
       setGroup: (group) => set({ group }),
@@ -158,6 +169,9 @@ export const useWorkshopStore = create<WorkshopState>()(
       }),
       setComparison: (comparison) => set({ comparison }),
       setGroupComparison: (data) => set({ groupComparison: data }),
+      setSurveySubmitted: (submitted) => set({ surveySubmitted: submitted }),
+      setSurveyParticipantId: (id) => set({ surveyParticipantId: id }),
+      setSurveyResponses: (responses) => set({ surveyResponses: responses }),
 
       // Purchase layer
       purchaseLayer: async (layerId) => {
@@ -177,7 +191,13 @@ export const useWorkshopStore = create<WorkshopState>()(
             body: JSON.stringify({ layerId }),
           });
 
-          if (!response.ok) return false;
+          if (!response.ok) {
+            // Group was deleted from server — clear local state
+            if (response.status === 404) {
+              get().resetGroup();
+            }
+            return false;
+          }
 
           const updatedGroup = await response.json();
           set({ group: updatedGroup });
@@ -215,6 +235,8 @@ export const useWorkshopStore = create<WorkshopState>()(
         exchangeRanking: state.exchangeRanking,
         selectedActions: state.selectedActions,
         groupComparison: state.groupComparison,
+        surveySubmitted: state.surveySubmitted,
+        surveyParticipantId: state.surveyParticipantId,
       }),
     }
   )

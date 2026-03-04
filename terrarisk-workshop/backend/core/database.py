@@ -106,6 +106,40 @@ def init_db():
             )
         """)
 
+        # ITECS responses table (individual, multiple per group)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS itecs_responses (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                group_id TEXT NOT NULL,
+                participant_id TEXT NOT NULL UNIQUE,
+                -- Bloco I: Transformação Cognitiva
+                tc1 INTEGER, tc2 INTEGER, tc3 INTEGER, tc4 INTEGER, tc5 INTEGER,
+                -- Bloco II: Robustez Analítica
+                ra6 INTEGER, ra7 INTEGER, ra8 INTEGER,
+                -- Bloco III: Potencial da Ferramenta
+                pf9 INTEGER, pf10 INTEGER, pf11 INTEGER, pf12 INTEGER,
+                -- Bloco IV: Coerência Sistêmica Percebida
+                csp13 INTEGER, csp14 INTEGER, csp15 INTEGER, csp16 INTEGER,
+                -- Bloco V: Intenção de Aplicação
+                ia17 INTEGER, ia18 INTEGER, ia19 INTEGER, ia20 INTEGER,
+                -- Bloco VI: Ativação Proativa
+                ap21 INTEGER, ap22 INTEGER, ap23 INTEGER, ap24 INTEGER, ap25 INTEGER,
+                -- Bloco VII: Coprodução
+                q26 TEXT, q27 TEXT,
+                -- Bloco VIII: Rede de colaboradores (JSON)
+                q28 TEXT,
+                -- Bloco IX: Próximos passos
+                q29 TEXT, q30 TEXT,
+                -- Metadata automático
+                layers_purchased TEXT,
+                credits_spent INTEGER,
+                ranking_changed BOOLEAN,
+                actions_selected TEXT,
+                submitted_at TEXT NOT NULL,
+                FOREIGN KEY (group_id) REFERENCES groups(id)
+            )
+        """)
+
         conn.commit()
 
 
@@ -358,3 +392,84 @@ def get_selected_actions(group_id: str) -> list[str]:
         if row:
             return json.loads(row['actions'])
         return []
+
+
+# ITECS operations
+
+def save_itecs_response(group_id: str, participant_id: str, responses: dict, meta: dict):
+    """Save an individual ITECS response."""
+    now = datetime.utcnow().isoformat()
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO itecs_responses (
+                group_id, participant_id,
+                tc1, tc2, tc3, tc4, tc5,
+                ra6, ra7, ra8,
+                pf9, pf10, pf11, pf12,
+                csp13, csp14, csp15, csp16,
+                ia17, ia18, ia19, ia20,
+                ap21, ap22, ap23, ap24, ap25,
+                q26, q27, q28, q29, q30,
+                layers_purchased, credits_spent, ranking_changed, actions_selected,
+                submitted_at
+            ) VALUES (
+                ?, ?,
+                ?, ?, ?, ?, ?,
+                ?, ?, ?,
+                ?, ?, ?, ?,
+                ?, ?, ?, ?,
+                ?, ?, ?, ?,
+                ?, ?, ?, ?, ?,
+                ?, ?, ?, ?, ?,
+                ?, ?, ?, ?,
+                ?
+            )
+            ON CONFLICT(participant_id) DO UPDATE SET
+                tc1=excluded.tc1, tc2=excluded.tc2, tc3=excluded.tc3,
+                tc4=excluded.tc4, tc5=excluded.tc5,
+                ra6=excluded.ra6, ra7=excluded.ra7, ra8=excluded.ra8,
+                pf9=excluded.pf9, pf10=excluded.pf10, pf11=excluded.pf11, pf12=excluded.pf12,
+                csp13=excluded.csp13, csp14=excluded.csp14, csp15=excluded.csp15, csp16=excluded.csp16,
+                ia17=excluded.ia17, ia18=excluded.ia18, ia19=excluded.ia19, ia20=excluded.ia20,
+                ap21=excluded.ap21, ap22=excluded.ap22, ap23=excluded.ap23, ap24=excluded.ap24, ap25=excluded.ap25,
+                q26=excluded.q26, q27=excluded.q27, q28=excluded.q28, q29=excluded.q29, q30=excluded.q30,
+                submitted_at=excluded.submitted_at
+        """, (
+            group_id, participant_id,
+            responses.get('tc1'), responses.get('tc2'), responses.get('tc3'),
+            responses.get('tc4'), responses.get('tc5'),
+            responses.get('ra6'), responses.get('ra7'), responses.get('ra8'),
+            responses.get('pf9'), responses.get('pf10'), responses.get('pf11'), responses.get('pf12'),
+            responses.get('csp13'), responses.get('csp14'), responses.get('csp15'), responses.get('csp16'),
+            responses.get('ia17'), responses.get('ia18'), responses.get('ia19'), responses.get('ia20'),
+            responses.get('ap21'), responses.get('ap22'), responses.get('ap23'),
+            responses.get('ap24'), responses.get('ap25'),
+            responses.get('q26', ''), responses.get('q27', ''),
+            json.dumps(responses.get('q28', [])),
+            responses.get('q29', ''), responses.get('q30', ''),
+            json.dumps(meta.get('layersPurchased', [])),
+            meta.get('creditsSpent', 0),
+            meta.get('rankingChanged', False),
+            json.dumps(meta.get('actionsSelected', [])),
+            now,
+        ))
+
+
+def get_itecs_results() -> list[dict]:
+    """Get all ITECS responses for admin export."""
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM itecs_responses ORDER BY submitted_at DESC")
+        rows = cursor.fetchall()
+        results = []
+        for row in rows:
+            d = dict(row)
+            for field in ('q28', 'layers_purchased', 'actions_selected'):
+                if d.get(field):
+                    try:
+                        d[field] = json.loads(d[field])
+                    except (json.JSONDecodeError, TypeError):
+                        pass
+            results.append(d)
+        return results
