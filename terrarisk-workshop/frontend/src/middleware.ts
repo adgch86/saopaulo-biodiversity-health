@@ -9,8 +9,8 @@ const ADMIN_COOKIE = 'tr-admin-auth';
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Allow access to the login page and its API
-  if (pathname === '/login' || pathname === '/api/auth/login') {
+  // Allow access to the login page and all API routes (backend handles its own auth)
+  if (pathname === '/login' || pathname.startsWith('/api/')) {
     return NextResponse.next();
   }
 

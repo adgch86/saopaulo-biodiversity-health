@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Fragment } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -56,10 +56,12 @@ export default function AdminClient() {
   const [itecs, setItecs] = useState<ITECSRow[]>([]);
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
 
+  const adminHeaders = { 'X-API-Key': 'TR-Admin-Adrian2026!' };
+
   const fetchStats = useCallback(async () => {
     try {
       const [statsRes, itecsRes] = await Promise.all([
-        fetch('/api/admin/stats'),
+        fetch('/api/admin/stats', { headers: adminHeaders }),
         fetch('/api/workshop/survey/admin/results'),
       ]);
       const data = await statsRes.json();
@@ -71,6 +73,7 @@ export default function AdminClient() {
     } finally {
       setLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -83,7 +86,7 @@ export default function AdminClient() {
   const handleResetCredits = async (groupId: string) => {
     setActionLoading(groupId);
     try {
-      await fetch(`/api/admin/reset/${groupId}`, { method: 'POST' });
+      await fetch(`/api/admin/reset/${groupId}`, { method: 'POST', headers: adminHeaders });
       await fetchStats();
     } catch (err) {
       console.error('Failed to reset credits:', err);
@@ -97,7 +100,7 @@ export default function AdminClient() {
 
     setActionLoading(groupId);
     try {
-      await fetch(`/api/admin/groups/${groupId}`, { method: 'DELETE' });
+      await fetch(`/api/admin/groups/${groupId}`, { method: 'DELETE', headers: adminHeaders });
       await fetchStats();
     } catch (err) {
       console.error('Failed to delete group:', err);
@@ -408,8 +411,8 @@ export default function AdminClient() {
                           const pid = row.participant_id;
                           const isOpen = expandedRow === pid;
                           return (
-                            <>
-                              <tr key={pid} className="border-b hover:bg-gray-50">
+                            <Fragment key={pid}>
+                              <tr className="border-b hover:bg-gray-50">
                                 <td className="py-2 px-3 font-medium text-xs">{row.group_id.slice(0, 8)}</td>
                                 <td className="py-2 px-3 text-xs text-gray-400">{pid.slice(0, 8)}…</td>
                                 {BLOCKS.map((b) => {
@@ -443,8 +446,8 @@ export default function AdminClient() {
                               </tr>
 
                               {isOpen && (
-                                <tr key={`${pid}-detail`} className="bg-purple-50">
-                                  <td colSpan={10} className="px-4 py-4">
+                                <tr className="bg-purple-50">
+                                  <td colSpan={11} className="px-4 py-4">
                                     <div className="space-y-4 text-sm">
 
                                       {/* Likert detalhado */}
@@ -501,7 +504,7 @@ export default function AdminClient() {
                                   </td>
                                 </tr>
                               )}
-                            </>
+                            </Fragment>
                           );
                         })}
                       </tbody>
