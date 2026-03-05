@@ -56,7 +56,7 @@ export default function AdminClient() {
   const [itecs, setItecs] = useState<ITECSRow[]>([]);
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
 
-  const adminHeaders = { 'X-API-Key': 'TR-Admin-Adrian2026!' };
+  const adminHeaders = { 'X-API-Key': 'terrarisk-admin-2026' };
 
   const fetchStats = useCallback(async () => {
     try {
