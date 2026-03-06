@@ -101,9 +101,9 @@ function CollaboratorTable({
         <thead>
           <tr className="bg-gray-50">
             <th className="text-left p-2 border border-gray-200 text-xs text-gray-600 w-8">#</th>
-            <th className="text-left p-2 border border-gray-200 text-xs text-gray-600">Pessoa / Institui&ccedil;&atilde;o / Rede</th>
-            <th className="text-left p-2 border border-gray-200 text-xs text-gray-600">Tema de colabora&ccedil;&atilde;o</th>
-            <th className="text-left p-2 border border-gray-200 text-xs text-gray-600">Frequ&ecirc;ncia</th>
+            <th className="text-left p-2 border border-gray-200 text-xs text-gray-600">{"Pessoa / Institui\u00e7\u00e3o / Rede"}</th>
+            <th className="text-left p-2 border border-gray-200 text-xs text-gray-600">{"Tema de colabora\u00e7\u00e3o"}</th>
+            <th className="text-left p-2 border border-gray-200 text-xs text-gray-600">{"Frequ\u00eancia"}</th>
           </tr>
         </thead>
         <tbody>
@@ -116,7 +116,7 @@ function CollaboratorTable({
                   disabled={disabled}
                   value={row.nameOrInstitution}
                   onChange={(e) => updateRow(idx, 'nameOrInstitution', e.target.value)}
-                  placeholder="Nome ou institui&#231;&#227;o"
+                  placeholder="Nome ou institui\u00e7\u00e3o"
                   className="w-full px-2 py-1 text-sm rounded border-0 focus:ring-1 focus:ring-purple-400 disabled:bg-gray-50 disabled:text-gray-400"
                 />
               </td>
@@ -255,13 +255,12 @@ export default function ITECSSurvey() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Avalia&ccedil;&atilde;o enviada</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">{"Avalia\u00e7\u00e3o enviada"}</h2>
           <p className="text-gray-600 mb-6">
-            Obrigado pela sua participa&ccedil;&atilde;o. Suas respostas foram registradas e ser&atilde;o utilizadas
-            para autoavalia&ccedil;&atilde;o e otimiza&ccedil;&atilde;o da ferramenta.
+            {"Obrigado pela sua participa\u00e7\u00e3o. Suas respostas foram registradas e ser\u00e3o utilizadas para autoavalia\u00e7\u00e3o e otimiza\u00e7\u00e3o da ferramenta."}
           </p>
           <div className="text-xs text-gray-400 italic">
-            ITECS v2.0 &middot; TerraX &middot; Dados anonimizados
+            {"ITECS v2.0 \u00b7 TerraX \u00b7 Dados anonimizados"}
           </div>
         </div>
       </div>
@@ -285,29 +284,25 @@ export default function ITECSSurvey() {
               </svg>
             </div>
             <div>
-              <h1 className="text-xl lg:text-2xl font-bold text-gray-800">Avalia&ccedil;&atilde;o TerraRisk</h1>
-              <p className="text-xs text-gray-400">Instrumento de Avalia&ccedil;&atilde;o &middot; v2.0</p>
+              <h1 className="text-xl lg:text-2xl font-bold text-gray-800">{"Avalia\u00e7\u00e3o TerraRisk"}</h1>
+              <p className="text-xs text-gray-400">{"Instrumento de Avalia\u00e7\u00e3o \u00b7 v2.0"}</p>
             </div>
           </div>
           <p className="text-sm text-gray-600 bg-white rounded-lg p-4 border border-gray-200">
-            Este instrumento avalia sua experi&ecirc;ncia com a ferramenta TerraRisk e o marco anal&iacute;tico TerraX.
-            N&atilde;o h&aacute; respostas certas ou erradas. As respostas s&atilde;o utilizadas exclusivamente
-            para fins de autoavalia&ccedil;&atilde;o e otimiza&ccedil;&atilde;o da ferramenta.
-            S&atilde;o 10 perguntas de sele&ccedil;&atilde;o e 5 descritivas. O preenchimento leva aproximadamente 5 minutos.
+            {"Este instrumento avalia sua experi\u00eancia com a ferramenta TerraRisk e o marco anal\u00edtico TerraX. N\u00e3o h\u00e1 respostas certas ou erradas. As respostas s\u00e3o utilizadas exclusivamente para fins de autoavalia\u00e7\u00e3o e otimiza\u00e7\u00e3o da ferramenta. S\u00e3o 10 perguntas de sele\u00e7\u00e3o e 5 descritivas. O preenchimento leva aproximadamente 5 minutos."}
           </p>
         </div>
 
         {/* Likert instructions */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-700">
-          <strong>Escala:</strong> Para cada afirma&ccedil;&atilde;o, selecione de <strong>1</strong> (Discordo totalmente)
-          a <strong>7</strong> (Concordo totalmente).
+          <strong>Escala:</strong>{" Para cada afirma\u00e7\u00e3o, selecione de "}<strong>1</strong>{" (Discordo totalmente) a "}<strong>7</strong>{" (Concordo totalmente)."}
         </div>
 
         {/* ── BLOCO I — Experiência com o TerraRisk ── */}
         <section className="bg-white rounded-xl shadow-sm p-6">
           <div className="mb-4 p-4 rounded-lg bg-purple-50 border border-purple-200">
-            <p className="text-xs font-semibold text-purple-500 uppercase tracking-wide">Bloco I &mdash; Experi&ecirc;ncia com o TerraRisk</p>
-            <p className="text-sm text-purple-700 mt-1 font-medium">Como foi sua experi&ecirc;ncia com a ferramenta?</p>
+            <p className="text-xs font-semibold text-purple-500 uppercase tracking-wide">{"Bloco I \u2014 Experi\u00eancia com o TerraRisk"}</p>
+            <p className="text-sm text-purple-700 mt-1 font-medium">{"Como foi sua experi\u00eancia com a ferramenta?"}</p>
           </div>
           <LikertItem n={1} label="A ferramenta me ajudou a entender melhor o territ\u00f3rio que analiso." value={responses.exp1} onChange={(v) => setLikert('exp1', v)} disabled={disabled} />
           <LikertItem n={2} label="Consigo identificar rela\u00e7\u00f5es entre vari\u00e1veis que antes n\u00e3o considerava." value={responses.exp2} onChange={(v) => setLikert('exp2', v)} disabled={disabled} />
@@ -322,13 +317,13 @@ export default function ITECSSurvey() {
         {/* ── BLOCO II — Aplicação prática ── */}
         <section className="bg-white rounded-xl shadow-sm p-6">
           <div className="mb-4 p-4 rounded-lg bg-teal-50 border border-teal-200">
-            <p className="text-xs font-semibold text-teal-600 uppercase tracking-wide">Bloco II &mdash; Aplica&ccedil;&atilde;o pr&aacute;tica</p>
-            <p className="text-sm text-teal-700 mt-1 font-medium">Como voc&ecirc; aplicaria o TerraRisk?</p>
+            <p className="text-xs font-semibold text-teal-600 uppercase tracking-wide">{"Bloco II \u2014 Aplica\u00e7\u00e3o pr\u00e1tica"}</p>
+            <p className="text-sm text-teal-700 mt-1 font-medium">{"Como voc\u00ea aplicaria o TerraRisk?"}</p>
           </div>
           <div className="space-y-6">
             <div>
               <label className="text-sm font-medium text-gray-700 block mb-1">
-                <span className="font-bold text-teal-600">9.</span> Que problema concreto do seu trabalho o TerraRisk poderia ajudar a resolver?
+                <span className="font-bold text-teal-600">9.</span>{" Que problema concreto do seu trabalho o TerraRisk poderia ajudar a resolver?"}
               </label>
               <textarea
                 disabled={disabled}
@@ -341,33 +336,33 @@ export default function ITECSSurvey() {
             </div>
             <div>
               <label className="text-sm font-medium text-gray-700 block mb-1">
-                <span className="font-bold text-teal-600">10.</span> Que hip&oacute;tese causal espec&iacute;fica voc&ecirc; investigaria utilizando o TerraRisk?
+                <span className="font-bold text-teal-600">10.</span>{" Que hip\u00f3tese causal espec\u00edfica voc\u00ea investigaria utilizando o TerraRisk?"}
               </label>
               <textarea
                 disabled={disabled}
                 value={responses.q10}
                 onChange={(e) => setResponses((p) => ({ ...p, q10: e.target.value }))}
                 rows={3}
-                placeholder="Ex: A fragmenta&#231;&#227;o institucional aumenta a vulnerabilidade &#224; dengue em munic&#237;pios de m&#233;dio porte..."
+                placeholder={"Ex: A fragmenta\u00e7\u00e3o institucional aumenta a vulnerabilidade \u00e0 dengue em munic\u00edpios de m\u00e9dio porte..."}
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent disabled:bg-gray-50 resize-none"
               />
             </div>
             <div>
               <label className="text-sm font-medium text-gray-700 block mb-1">
-                <span className="font-bold text-teal-600">11.</span> Que dados ou funcionalidades faltam para que a ferramenta seja mais &uacute;til para voc&ecirc;?
+                <span className="font-bold text-teal-600">11.</span>{" Que dados ou funcionalidades faltam para que a ferramenta seja mais \u00fatil para voc\u00ea?"}
               </label>
               <textarea
                 disabled={disabled}
                 value={responses.q11}
                 onChange={(e) => setResponses((p) => ({ ...p, q11: e.target.value }))}
                 rows={3}
-                placeholder="Descreva dados, vari&#225;veis ou funcionalidades que agregariam valor..."
+                placeholder={"Descreva dados, vari\u00e1veis ou funcionalidades que agregariam valor..."}
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent disabled:bg-gray-50 resize-none"
               />
             </div>
             <div>
               <label className="text-sm font-medium text-gray-700 block mb-3">
-                <span className="font-bold text-teal-600">12.</span> Que institui&ccedil;&otilde;es ou redes do seu contexto se beneficiariam desta ferramenta? (Indique at&eacute; 5)
+                <span className="font-bold text-teal-600">12.</span>{" Que institui\u00e7\u00f5es ou redes do seu contexto se beneficiariam desta ferramenta? (Indique at\u00e9 5)"}
               </label>
               <CollaboratorTable
                 value={responses.q12}
@@ -377,14 +372,14 @@ export default function ITECSSurvey() {
             </div>
             <div>
               <label className="text-sm font-medium text-gray-700 block mb-1">
-                <span className="font-bold text-teal-600">13.</span> Que configura&ccedil;&atilde;o voc&ecirc; entende que deveria existir para articular melhor o uso de evid&ecirc;ncias na elabora&ccedil;&atilde;o de pol&iacute;ticas p&uacute;blicas vinculadas &agrave; mudan&ccedil;a clim&aacute;tica?
+                <span className="font-bold text-teal-600">13.</span>{" Que configura\u00e7\u00e3o voc\u00ea entende que deveria existir para articular melhor o uso de evid\u00eancias na elabora\u00e7\u00e3o de pol\u00edticas p\u00fablicas vinculadas \u00e0 mudan\u00e7a clim\u00e1tica?"}
               </label>
               <textarea
                 disabled={disabled}
                 value={responses.q13}
                 onChange={(e) => setResponses((p) => ({ ...p, q13: e.target.value }))}
                 rows={3}
-                placeholder="Descreva a configura&#231;&#227;o ideal..."
+                placeholder={"Descreva a configura\u00e7\u00e3o ideal..."}
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent disabled:bg-gray-50 resize-none"
               />
             </div>
@@ -394,7 +389,7 @@ export default function ITECSSurvey() {
         {/* ── BLOCO III — Próximos passos ── */}
         <section className="bg-white rounded-xl shadow-sm p-6">
           <div className="mb-4 p-4 rounded-lg bg-purple-50 border border-purple-200">
-            <p className="text-xs font-semibold text-purple-500 uppercase tracking-wide">Bloco III &mdash; Pr&oacute;ximos passos</p>
+            <p className="text-xs font-semibold text-purple-500 uppercase tracking-wide">{"Bloco III \u2014 Pr\u00f3ximos passos"}</p>
             <p className="text-sm text-purple-700 mt-1 font-medium">O que vem depois?</p>
           </div>
           <LikertItem n={14} label="Tenho interesse em participar de um piloto com o TerraRisk." value={responses.ps14} onChange={(v) => setLikert('ps14', v)} disabled={disabled} />
@@ -431,7 +426,7 @@ export default function ITECSSurvey() {
                       ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                     `}
                   >
-                    N&atilde;o
+                    {"N\u00e3o"}
                   </button>
                 </div>
               </div>
@@ -453,13 +448,13 @@ export default function ITECSSurvey() {
             disabled={disabled}
             className="px-8 py-3 bg-purple-600 text-white rounded-lg font-semibold text-sm hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
           >
-            {submitting ? 'Enviando...' : 'Enviar Avalia\u00e7\u00e3o'}
+            {"Enviar Avalia\u00e7\u00e3o"}
           </button>
           <p className="text-xs text-gray-400 text-center">
-            Suas respostas s&atilde;o vinculadas apenas ao grupo <strong>{group?.name}</strong>.
+            {"Suas respostas s\u00e3o vinculadas apenas ao grupo "}<strong>{group?.name}</strong>.
           </p>
           <p className="text-xs text-gray-300 italic">
-            ITECS v2.0 &middot; TerraX &middot; Dados anonimizados
+            {"ITECS v2.0 \u00b7 TerraX \u00b7 Dados anonimizados"}
           </p>
         </div>
 
