@@ -289,7 +289,7 @@ export default function ITECSSurvey() {
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Avaliação enviada</h2>
           <p className="text-gray-600 mb-6">
             Obrigado pela sua participação. Suas respostas foram registradas e serão utilizadas
-            exclusivamente para fins de pesquisa científica.
+            exclusivamente para fins de autoavaliação e otimização da ferramenta.
           </p>
           <div className="text-xs text-gray-400 italic">
             ITECS v1.2 · TerraX Research · Dados anonimizados
@@ -322,8 +322,8 @@ export default function ITECSSurvey() {
           </div>
           <p className="text-sm text-gray-600 bg-white rounded-lg p-4 border border-gray-200">
             Este instrumento avalia sua experiência com a ferramenta TerraRisk e o marco analítico TerraX.
-            Não há respostas certas ou erradas. Todas as respostas são confidenciais e utilizadas exclusivamente
-            para fins de pesquisa científica. O preenchimento leva aproximadamente 12 minutos.
+            Não há respostas certas ou erradas. Todas as respostas são utilizadas exclusivamente
+            para fins de autoavaliação e otimização da ferramenta. São 25 perguntas de seleção e 5 descritivas. O preenchimento leva aproximadamente 12 minutos.
           </p>
         </div>
 
@@ -479,7 +479,7 @@ export default function ITECSSurvey() {
           <div className="space-y-6">
             <div>
               <label className="text-sm font-medium text-gray-700 block mb-1">
-                <span className="font-bold text-teal-600">29.</span> Que hipótese causal específica você investigaria a seguir utilizando o TerraRisk?
+                <span className="font-bold text-teal-600">29.</span> Que hipótese causal específica você investigaria utilizando o TerraRisk?
               </label>
               <textarea
                 disabled={disabled}
@@ -526,7 +526,7 @@ export default function ITECSSurvey() {
             Suas respostas são confidenciais e vinculadas apenas ao grupo <strong>{group?.name}</strong>.
           </p>
           <p className="text-xs text-gray-300 italic">
-            ITECS v1.2 · TerraX Research · Uso restrito a fins de pesquisa científica · Dados anonimizados
+            ITECS v1.2 · TerraX Research · Uso restrito a fins de autoavaliação e otimização · Dados anonimizados
           </p>
           <p className="text-xs text-gray-300 italic">
             Correspondência TRLM v1.4: TC→P2+L5 · CSP→P3+L4 · IA→P4+L7 · AP→Dinâmica Ativação+Loop L7→L1
