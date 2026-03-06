@@ -119,7 +119,7 @@ export const CATEGORY_CONFIG: Record<LayerCategory, { label: string; color: stri
 
 export type WorkshopPhase = 'step1' | 'step1_results' | 'step2' | 'step2_results' | 'step2b' | 'step2b_results' | 'step3' | 'step4' | 'step5' | 'survey';
 
-// ITECS v1.2 — Instrumento de Avaliação de Coerência Sistêmica
+// ITECS v2.0 — Instrumento de Avaliação TerraRisk
 export interface ITECSCollaborator {
   nameOrInstitution: string;
   topic: string;
@@ -127,24 +127,16 @@ export interface ITECSCollaborator {
 }
 
 export interface ITECSResponses {
-  // Bloco I — Transformação Cognitiva (1-7)
-  tc1: number; tc2: number; tc3: number; tc4: number; tc5: number;
-  // Bloco II — Robustez Analítica (1-7)
-  ra6: number; ra7: number; ra8: number;
-  // Bloco III — Potencial da Ferramenta (1-7)
-  pf9: number; pf10: number; pf11: number; pf12: number;
-  // Bloco IV — Coerência Sistêmica Percebida (1-7)
-  csp13: number; csp14: number; csp15: number; csp16: number;
-  // Bloco V — Intenção de Aplicação (1-7)
-  ia17: number; ia18: number; ia19: number; ia20: number;
-  // Bloco VI — Ativação Proativa (1-7)
-  ap21: number; ap22: number; ap23: number; ap24: number; ap25: number;
-  // Bloco VII — Coprodução e Uso de Evidência (texto)
-  q26: string; q27: string;
-  // Bloco VIII — Rede de Colaboradores (tabela)
-  q28: ITECSCollaborator[];
-  // Bloco IX — Próximos Passos (texto)
-  q29: string; q30: string;
+  // Bloco I — Experiência com o TerraRisk (Likert 1-7)
+  exp1: number; exp2: number; exp3: number; exp4: number;
+  exp5: number; exp6: number; exp7: number; exp8: number;
+  // Bloco II — Aplicação prática (descritivas)
+  q9: string; q10: string; q11: string;
+  q12: ITECSCollaborator[];
+  q13: string;
+  // Bloco III — Próximos passos (Likert + Sim/Não)
+  ps14: number; ps15: number;
+  q16: boolean;
 }
 
 export interface WorkshopMunicipality {

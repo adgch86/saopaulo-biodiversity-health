@@ -42,26 +42,6 @@ function LikertScale({
   );
 }
 
-// ─── Block header ─────────────────────────────────────────────────────────────
-
-function BlockHeader({
-  title,
-  anchor,
-  question,
-}: {
-  title: string;
-  anchor: string;
-  question: string;
-}) {
-  return (
-    <div className="mb-4 p-4 rounded-lg bg-purple-50 border border-purple-200">
-      <p className="text-xs font-semibold text-purple-500 uppercase tracking-wide">{title}</p>
-      <p className="text-xs text-purple-400 mt-0.5 italic">{anchor}</p>
-      <p className="text-sm text-purple-700 mt-1 font-medium">{question}</p>
-    </div>
-  );
-}
-
 // ─── Likert item ──────────────────────────────────────────────────────────────
 
 function LikertItem({
@@ -70,24 +50,19 @@ function LikertItem({
   value,
   onChange,
   disabled,
-  revised,
 }: {
   n: number;
   label: string;
   value: number;
   onChange: (v: number) => void;
   disabled: boolean;
-  revised?: boolean;
 }) {
   return (
     <div className={`py-3 border-b border-gray-100 last:border-0 ${value === 0 && !disabled ? 'bg-amber-50 rounded' : ''}`}>
       <div className="flex items-start gap-2">
         <span className="text-xs font-bold text-gray-400 mt-0.5 w-5 shrink-0">{n}.</span>
         <div className="flex-1">
-          <p className="text-sm text-gray-700">
-            {label}
-            {revised && <span className="ml-1 text-xs text-purple-400 italic">(v1.2)</span>}
-          </p>
+          <p className="text-sm text-gray-700">{label}</p>
           <LikertScale value={value} onChange={onChange} disabled={disabled} />
         </div>
       </div>
@@ -98,10 +73,10 @@ function LikertItem({
 // ─── Collaborator table ───────────────────────────────────────────────────────
 
 const FREQ_OPTIONS: { value: ITECSCollaborator['frequency']; label: string }[] = [
-  { value: 'more_than_monthly', label: 'Mais de uma vez por mês' },
-  { value: 'monthly', label: 'Uma vez por mês' },
+  { value: 'more_than_monthly', label: 'Mais de uma vez por m\u00eas' },
+  { value: 'monthly', label: 'Uma vez por m\u00eas' },
   { value: 'yearly', label: 'Uma vez por ano' },
-  { value: 'sporadic', label: 'Esporádica' },
+  { value: 'sporadic', label: 'Espor\u00e1dica' },
 ];
 
 function CollaboratorTable({
@@ -126,9 +101,9 @@ function CollaboratorTable({
         <thead>
           <tr className="bg-gray-50">
             <th className="text-left p-2 border border-gray-200 text-xs text-gray-600 w-8">#</th>
-            <th className="text-left p-2 border border-gray-200 text-xs text-gray-600">Pessoa / Instituição / Rede</th>
-            <th className="text-left p-2 border border-gray-200 text-xs text-gray-600">Tema de colaboração</th>
-            <th className="text-left p-2 border border-gray-200 text-xs text-gray-600">Frequência</th>
+            <th className="text-left p-2 border border-gray-200 text-xs text-gray-600">Pessoa / Institui&ccedil;&atilde;o / Rede</th>
+            <th className="text-left p-2 border border-gray-200 text-xs text-gray-600">Tema de colabora&ccedil;&atilde;o</th>
+            <th className="text-left p-2 border border-gray-200 text-xs text-gray-600">Frequ&ecirc;ncia</th>
           </tr>
         </thead>
         <tbody>
@@ -141,7 +116,7 @@ function CollaboratorTable({
                   disabled={disabled}
                   value={row.nameOrInstitution}
                   onChange={(e) => updateRow(idx, 'nameOrInstitution', e.target.value)}
-                  placeholder="Nome ou instituição"
+                  placeholder="Nome ou institui&#231;&#227;o"
                   className="w-full px-2 py-1 text-sm rounded border-0 focus:ring-1 focus:ring-purple-400 disabled:bg-gray-50 disabled:text-gray-400"
                 />
               </td>
@@ -179,15 +154,13 @@ function CollaboratorTable({
 
 function emptyResponses(): ITECSResponses {
   return {
-    tc1: 0, tc2: 0, tc3: 0, tc4: 0, tc5: 0,
-    ra6: 0, ra7: 0, ra8: 0,
-    pf9: 0, pf10: 0, pf11: 0, pf12: 0,
-    csp13: 0, csp14: 0, csp15: 0, csp16: 0,
-    ia17: 0, ia18: 0, ia19: 0, ia20: 0,
-    ap21: 0, ap22: 0, ap23: 0, ap24: 0, ap25: 0,
-    q26: '', q27: '',
-    q28: Array.from({ length: 5 }, () => ({ nameOrInstitution: '', topic: '', frequency: 'sporadic' as const })),
-    q29: '', q30: '',
+    exp1: 0, exp2: 0, exp3: 0, exp4: 0,
+    exp5: 0, exp6: 0, exp7: 0, exp8: 0,
+    q9: '', q10: '', q11: '',
+    q12: Array.from({ length: 5 }, () => ({ nameOrInstitution: '', topic: '', frequency: 'sporadic' as const })),
+    q13: '',
+    ps14: 0, ps15: 0,
+    q16: false,
   };
 }
 
@@ -210,7 +183,6 @@ export default function ITECSSurvey() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Generate participantId once on mount
   useEffect(() => {
     if (!surveyParticipantId) {
       const id = crypto.randomUUID();
@@ -224,12 +196,8 @@ export default function ITECSSurvey() {
 
   const missingLikert = (): string[] => {
     const likertFields: (keyof ITECSResponses)[] = [
-      'tc1','tc2','tc3','tc4','tc5',
-      'ra6','ra7','ra8',
-      'pf9','pf10','pf11','pf12',
-      'csp13','csp14','csp15','csp16',
-      'ia17','ia18','ia19','ia20',
-      'ap21','ap22','ap23','ap24','ap25',
+      'exp1', 'exp2', 'exp3', 'exp4', 'exp5', 'exp6', 'exp7', 'exp8',
+      'ps14', 'ps15',
     ];
     return likertFields.filter((f) => (responses[f] as number) === 0);
   };
@@ -237,7 +205,7 @@ export default function ITECSSurvey() {
   const handleSubmit = async () => {
     const missing = missingLikert();
     if (missing.length > 0) {
-      setError(`Por favor, responda todos os itens Likert (${missing.length} pendente${missing.length > 1 ? 's' : ''}).`);
+      setError(`Por favor, responda todos os itens de sele\u00e7\u00e3o (${missing.length} pendente${missing.length > 1 ? 's' : ''}).`);
       return;
     }
     if (!group) return;
@@ -254,6 +222,7 @@ export default function ITECSSurvey() {
           participantId: surveyParticipantId,
           responses,
           meta: {
+            version: '2.0',
             layersPurchased: group.purchasedLayers ?? [],
             creditsSpent: Math.max(0, 10 - (group.credits ?? 10)),
             rankingChanged: initialRanking.length > 0 && revisedRanking.length > 0
@@ -286,13 +255,13 @@ export default function ITECSSurvey() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Avaliação enviada</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Avalia&ccedil;&atilde;o enviada</h2>
           <p className="text-gray-600 mb-6">
-            Obrigado pela sua participação. Suas respostas foram registradas e serão utilizadas
-            exclusivamente para fins de autoavaliação e otimização da ferramenta.
+            Obrigado pela sua participa&ccedil;&atilde;o. Suas respostas foram registradas e ser&atilde;o utilizadas
+            para autoavalia&ccedil;&atilde;o e otimiza&ccedil;&atilde;o da ferramenta.
           </p>
           <div className="text-xs text-gray-400 italic">
-            ITECS v1.2 · TerraX Research · Dados anonimizados
+            ITECS v2.0 &middot; TerraX &middot; Dados anonimizados
           </div>
         </div>
       </div>
@@ -316,192 +285,156 @@ export default function ITECSSurvey() {
               </svg>
             </div>
             <div>
-              <h1 className="text-xl lg:text-2xl font-bold text-gray-800">ITECS</h1>
-              <p className="text-xs text-gray-400">Instrumento de Avaliação de Coerência Sistêmica · v1.2</p>
+              <h1 className="text-xl lg:text-2xl font-bold text-gray-800">Avalia&ccedil;&atilde;o TerraRisk</h1>
+              <p className="text-xs text-gray-400">Instrumento de Avalia&ccedil;&atilde;o &middot; v2.0</p>
             </div>
           </div>
           <p className="text-sm text-gray-600 bg-white rounded-lg p-4 border border-gray-200">
-            Este instrumento avalia sua experiência com a ferramenta TerraRisk e o marco analítico TerraX.
-            Não há respostas certas ou erradas. Todas as respostas são utilizadas exclusivamente
-            para fins de autoavaliação e otimização da ferramenta. São 25 perguntas de seleção e 5 descritivas. O preenchimento leva aproximadamente 12 minutos.
+            Este instrumento avalia sua experi&ecirc;ncia com a ferramenta TerraRisk e o marco anal&iacute;tico TerraX.
+            N&atilde;o h&aacute; respostas certas ou erradas. As respostas s&atilde;o utilizadas exclusivamente
+            para fins de autoavalia&ccedil;&atilde;o e otimiza&ccedil;&atilde;o da ferramenta.
+            S&atilde;o 10 perguntas de sele&ccedil;&atilde;o e 5 descritivas. O preenchimento leva aproximadamente 5 minutos.
           </p>
         </div>
 
         {/* Likert instructions */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-700">
-          <strong>Escala Likert:</strong> Para cada afirmação, selecione de <strong>1</strong> (Discordo totalmente)
+          <strong>Escala:</strong> Para cada afirma&ccedil;&atilde;o, selecione de <strong>1</strong> (Discordo totalmente)
           a <strong>7</strong> (Concordo totalmente).
         </div>
 
-        {/* ── BLOCO I — Transformação Cognitiva ── */}
+        {/* ── BLOCO I — Experiência com o TerraRisk ── */}
         <section className="bg-white rounded-xl shadow-sm p-6">
-          <BlockHeader
-            title="Bloco I — Transformação Cognitiva (TC)"
-            anchor="Âncora conceitual: reorganização epistêmica do participante"
-            question="Como mudou minha forma de compreender o território?"
-          />
-          <LikertItem n={1} label="Minha compreensão do sistema territorial ampliou-se significativamente." value={responses.tc1} onChange={(v) => setLikert('tc1', v)} disabled={disabled} />
-          <LikertItem n={2} label="Agora identifico relações sistêmicas que antes não considerava." value={responses.tc2} onChange={(v) => setLikert('tc2', v)} disabled={disabled} />
-          <LikertItem n={3} label="O marco apresentado modificou minha forma de analisar problemas complexos." value={responses.tc3} onChange={(v) => setLikert('tc3', v)} disabled={disabled} />
-          <LikertItem n={4} label="Minha capacidade de analisar problemas territoriais de forma integrada aumentou após esta experiência." value={responses.tc4} onChange={(v) => setLikert('tc4', v)} disabled={disabled} revised />
-          <LikertItem n={5} label="Reconheço padrões estruturais que anteriormente não observava." value={responses.tc5} onChange={(v) => setLikert('tc5', v)} disabled={disabled} />
+          <div className="mb-4 p-4 rounded-lg bg-purple-50 border border-purple-200">
+            <p className="text-xs font-semibold text-purple-500 uppercase tracking-wide">Bloco I &mdash; Experi&ecirc;ncia com o TerraRisk</p>
+            <p className="text-sm text-purple-700 mt-1 font-medium">Como foi sua experi&ecirc;ncia com a ferramenta?</p>
+          </div>
+          <LikertItem n={1} label="A ferramenta me ajudou a entender melhor o territ\u00f3rio que analiso." value={responses.exp1} onChange={(v) => setLikert('exp1', v)} disabled={disabled} />
+          <LikertItem n={2} label="Consigo identificar rela\u00e7\u00f5es entre vari\u00e1veis que antes n\u00e3o considerava." value={responses.exp2} onChange={(v) => setLikert('exp2', v)} disabled={disabled} />
+          <LikertItem n={3} label="Os dados apresentados s\u00e3o relevantes para meu trabalho." value={responses.exp3} onChange={(v) => setLikert('exp3', v)} disabled={disabled} />
+          <LikertItem n={4} label="A escala municipal foi adequada para a an\u00e1lise." value={responses.exp4} onChange={(v) => setLikert('exp4', v)} disabled={disabled} />
+          <LikertItem n={5} label="Os resultados fazem sentido com o que conhe\u00e7o do territ\u00f3rio." value={responses.exp5} onChange={(v) => setLikert('exp5', v)} disabled={disabled} />
+          <LikertItem n={6} label="A ferramenta \u00e9 \u00fatil para apoiar decis\u00f5es na minha \u00e1rea de atua\u00e7\u00e3o." value={responses.exp6} onChange={(v) => setLikert('exp6', v)} disabled={disabled} />
+          <LikertItem n={7} label="Eu usaria o TerraRisk no meu trabalho." value={responses.exp7} onChange={(v) => setLikert('exp7', v)} disabled={disabled} />
+          <LikertItem n={8} label="Recomendaria o TerraRisk a colegas ou institui\u00e7\u00f5es." value={responses.exp8} onChange={(v) => setLikert('exp8', v)} disabled={disabled} />
         </section>
 
-        {/* ── BLOCO II — Robustez Analítica ── */}
-        <section className="bg-white rounded-xl shadow-sm p-6">
-          <BlockHeader
-            title="Bloco II — Robustez Analítica"
-            anchor="Avalie a qualidade metodológica e a solidez dos resultados apresentados."
-            question=""
-          />
-          <LikertItem n={6} label="A seleção de variáveis foi metodologicamente adequada para capturar o nexo governança–biodiversidade–clima–saúde." value={responses.ra6} onChange={(v) => setLikert('ra6', v)} disabled={disabled} />
-          <LikertItem n={7} label="A escala espacial utilizada (municipal) foi apropriada para a análise proposta." value={responses.ra7} onChange={(v) => setLikert('ra7', v)} disabled={disabled} />
-          <LikertItem n={8} label="Os resultados apresentaram plausibilidade causal, não apenas correlações estatísticas." value={responses.ra8} onChange={(v) => setLikert('ra8', v)} disabled={disabled} />
-        </section>
-
-        {/* ── BLOCO III — Potencial da Ferramenta ── */}
-        <section className="bg-white rounded-xl shadow-sm p-6">
-          <BlockHeader
-            title="Bloco III — Potencial da Ferramenta"
-            anchor="Avalie o impacto do TerraRisk como instrumento de apoio à tomada de decisão e à pesquisa."
-            question=""
-          />
-          <LikertItem n={9} label="A ferramenta ajudou a estruturar o problema em termos causais (não apenas descritivos)." value={responses.pf9} onChange={(v) => setLikert('pf9', v)} disabled={disabled} />
-          <LikertItem n={10} label="A interação com o TerraRisk estimulou novas perguntas e hipóteses que eu não havia considerado." value={responses.pf10} onChange={(v) => setLikert('pf10', v)} disabled={disabled} revised />
-          <LikertItem n={11} label="A abordagem multi-domínio favoreceu raciocínio sistêmico sobre o território." value={responses.pf11} onChange={(v) => setLikert('pf11', v)} disabled={disabled} />
-          <LikertItem n={12} label="A ferramenta favorece colaboração entre disciplinas que normalmente trabalham em silos." value={responses.pf12} onChange={(v) => setLikert('pf12', v)} disabled={disabled} />
-        </section>
-
-        {/* ── BLOCO IV — Coerência Sistêmica Percebida ── */}
-        <section className="bg-white rounded-xl shadow-sm p-6">
-          <BlockHeader
-            title="Bloco IV — Coerência Sistêmica Percebida (CSP)"
-            anchor="Âncora conceitual: percepção do sistema externo"
-            question="Como vejo o território agora?"
-          />
-          <LikertItem n={13} label="O sistema territorial em que atuo possui componentes interdependentes que afetam as decisões." value={responses.csp13} onChange={(v) => setLikert('csp13', v)} disabled={disabled} revised />
-          <LikertItem n={14} label="Identifico claramente pontos de fragmentação institucional." value={responses.csp14} onChange={(v) => setLikert('csp14', v)} disabled={disabled} />
-          <LikertItem n={15} label="Compreendo como integrar escalas municipais e estaduais." value={responses.csp15} onChange={(v) => setLikert('csp15', v)} disabled={disabled} />
-          <LikertItem n={16} label="Percebo que a coordenação estrutural é possível." value={responses.csp16} onChange={(v) => setLikert('csp16', v)} disabled={disabled} />
-        </section>
-
-        {/* ── BLOCO V — Intenção de Aplicação ── */}
-        <section className="bg-white rounded-xl shadow-sm p-6">
-          <BlockHeader
-            title="Bloco V — Intenção de Aplicação (IA)"
-            anchor="Âncora conceitual: viabilidade percebida real"
-            question="Posso fazer isso?"
-          />
-          <LikertItem n={17} label="Consigo identificar um contexto específico onde aplicar a abordagem." value={responses.ia17} onChange={(v) => setLikert('ia17', v)} disabled={disabled} />
-          <LikertItem n={18} label="Considero viável sua implementação no meu ambiente profissional." value={responses.ia18} onChange={(v) => setLikert('ia18', v)} disabled={disabled} />
-          <LikertItem n={19} label="Estou disposto/a a explorar sua aplicação no curto prazo." value={responses.ia19} onChange={(v) => setLikert('ia19', v)} disabled={disabled} />
-          <LikertItem n={20} label="Vejo benefícios concretos em sua adoção." value={responses.ia20} onChange={(v) => setLikert('ia20', v)} disabled={disabled} />
-        </section>
-
-        {/* ── BLOCO VI — Ativação Proativa ── */}
-        <section className="bg-white rounded-xl shadow-sm p-6">
-          <BlockHeader
-            title="Bloco VI — Ativação Proativa (AP)"
-            anchor="Âncora conceitual: disposição para agir"
-            question="Vou fazer isso?"
-          />
-          <LikertItem n={21} label="Tenho interesse em participar de um piloto relacionado." value={responses.ap21} onChange={(v) => setLikert('ap21', v)} disabled={disabled} />
-          <LikertItem n={22} label="Assumiria um papel ativo em um processo de implementação." value={responses.ap22} onChange={(v) => setLikert('ap22', v)} disabled={disabled} />
-          <LikertItem n={23} label="Considero necessária a ação após esta experiência." value={responses.ap23} onChange={(v) => setLikert('ap23', v)} disabled={disabled} />
-          <LikertItem n={24} label="Recomendaria esta abordagem a atores estratégicos." value={responses.ap24} onChange={(v) => setLikert('ap24', v)} disabled={disabled} />
-          <LikertItem n={25} label="Estou disposto/a a continuar a conversa institucionalmente." value={responses.ap25} onChange={(v) => setLikert('ap25', v)} disabled={disabled} />
-        </section>
-
-        {/* ── BLOCO VII — Coprodução e Uso de Evidência ── */}
+        {/* ── BLOCO II — Aplicação prática ── */}
         <section className="bg-white rounded-xl shadow-sm p-6">
           <div className="mb-4 p-4 rounded-lg bg-teal-50 border border-teal-200">
-            <p className="text-xs font-semibold text-teal-600 uppercase tracking-wide">Bloco VII — Coprodução e Uso de Evidência</p>
-            <p className="text-xs text-teal-500 mt-0.5 italic">
-              Estas perguntas exploram como a experiência com o TerraRisk pode influenciar práticas de uso de evidência e colaboração entre ciência e política.
-            </p>
+            <p className="text-xs font-semibold text-teal-600 uppercase tracking-wide">Bloco II &mdash; Aplica&ccedil;&atilde;o pr&aacute;tica</p>
+            <p className="text-sm text-teal-700 mt-1 font-medium">Como voc&ecirc; aplicaria o TerraRisk?</p>
           </div>
           <div className="space-y-6">
             <div>
               <label className="text-sm font-medium text-gray-700 block mb-1">
-                <span className="font-bold text-teal-600">26.</span> Após a experiência com o TerraRisk, que caminhos concretos você identifica para melhorar o uso de evidência científica na gestão ambiental do seu município ou instituição?
+                <span className="font-bold text-teal-600">9.</span> Que problema concreto do seu trabalho o TerraRisk poderia ajudar a resolver?
               </label>
               <textarea
                 disabled={disabled}
-                value={responses.q26}
-                onChange={(e) => setResponses((p) => ({ ...p, q26: e.target.value }))}
-                rows={4}
-                placeholder="Descreva caminhos concretos..."
+                value={responses.q9}
+                onChange={(e) => setResponses((p) => ({ ...p, q9: e.target.value }))}
+                rows={3}
+                placeholder="Descreva um problema concreto..."
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent disabled:bg-gray-50 resize-none"
               />
             </div>
             <div>
               <label className="text-sm font-medium text-gray-700 block mb-1">
-                <span className="font-bold text-teal-600">27.</span> Que barreiras específicas você enfrenta hoje para promover a coprodução entre pesquisadores e tomadores de decisão? O TerraRisk ajudou a visualizar como superar alguma delas?
+                <span className="font-bold text-teal-600">10.</span> Que hip&oacute;tese causal espec&iacute;fica voc&ecirc; investigaria utilizando o TerraRisk?
               </label>
               <textarea
                 disabled={disabled}
-                value={responses.q27}
-                onChange={(e) => setResponses((p) => ({ ...p, q27: e.target.value }))}
-                rows={4}
-                placeholder="Descreva barreiras e se a ferramenta ajudou..."
+                value={responses.q10}
+                onChange={(e) => setResponses((p) => ({ ...p, q10: e.target.value }))}
+                rows={3}
+                placeholder="Ex: A fragmenta&#231;&#227;o institucional aumenta a vulnerabilidade &#224; dengue em munic&#237;pios de m&#233;dio porte..."
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent disabled:bg-gray-50 resize-none"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 block mb-1">
+                <span className="font-bold text-teal-600">11.</span> Que dados ou funcionalidades faltam para que a ferramenta seja mais &uacute;til para voc&ecirc;?
+              </label>
+              <textarea
+                disabled={disabled}
+                value={responses.q11}
+                onChange={(e) => setResponses((p) => ({ ...p, q11: e.target.value }))}
+                rows={3}
+                placeholder="Descreva dados, vari&#225;veis ou funcionalidades que agregariam valor..."
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent disabled:bg-gray-50 resize-none"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 block mb-3">
+                <span className="font-bold text-teal-600">12.</span> Que institui&ccedil;&otilde;es ou redes do seu contexto se beneficiariam desta ferramenta? (Indique at&eacute; 5)
+              </label>
+              <CollaboratorTable
+                value={responses.q12}
+                onChange={(v) => setResponses((p) => ({ ...p, q12: v }))}
+                disabled={disabled}
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 block mb-1">
+                <span className="font-bold text-teal-600">13.</span> Que configura&ccedil;&atilde;o voc&ecirc; entende que deveria existir para articular melhor o uso de evid&ecirc;ncias na elabora&ccedil;&atilde;o de pol&iacute;ticas p&uacute;blicas vinculadas &agrave; mudan&ccedil;a clim&aacute;tica?
+              </label>
+              <textarea
+                disabled={disabled}
+                value={responses.q13}
+                onChange={(e) => setResponses((p) => ({ ...p, q13: e.target.value }))}
+                rows={3}
+                placeholder="Descreva a configura&#231;&#227;o ideal..."
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent disabled:bg-gray-50 resize-none"
               />
             </div>
           </div>
         </section>
 
-        {/* ── BLOCO VIII — Rede de Colaboradores ── */}
+        {/* ── BLOCO III — Próximos passos ── */}
         <section className="bg-white rounded-xl shadow-sm p-6">
-          <div className="mb-4 p-4 rounded-lg bg-teal-50 border border-teal-200">
-            <p className="text-xs font-semibold text-teal-600 uppercase tracking-wide">Bloco VIII — Rede de Colaboradores</p>
-            <p className="text-xs text-teal-500 mt-0.5 italic">
-              Mapeamento das redes existentes e potencial de conexão entre instituições participantes.
-            </p>
+          <div className="mb-4 p-4 rounded-lg bg-purple-50 border border-purple-200">
+            <p className="text-xs font-semibold text-purple-500 uppercase tracking-wide">Bloco III &mdash; Pr&oacute;ximos passos</p>
+            <p className="text-sm text-purple-700 mt-1 font-medium">O que vem depois?</p>
           </div>
-          <label className="text-sm font-medium text-gray-700 block mb-3">
-            <span className="font-bold text-teal-600">28.</span> Além dos participantes deste workshop, com quais instituições ou redes você já colabora em temas de governança ambiental, biodiversidade ou saúde pública? (Indique até 5)
-          </label>
-          <CollaboratorTable
-            value={responses.q28}
-            onChange={(v) => setResponses((p) => ({ ...p, q28: v }))}
-            disabled={disabled}
-          />
-        </section>
-
-        {/* ── BLOCO IX — Próximos Passos ── */}
-        <section className="bg-white rounded-xl shadow-sm p-6">
-          <div className="mb-4 p-4 rounded-lg bg-teal-50 border border-teal-200">
-            <p className="text-xs font-semibold text-teal-600 uppercase tracking-wide">Bloco IX — Próximos Passos</p>
-            <p className="text-xs text-teal-500 mt-0.5 italic">
-              Suas respostas ajudarão a orientar o desenvolvimento futuro da ferramenta e novas linhas de pesquisa.
-            </p>
-          </div>
-          <div className="space-y-6">
-            <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">
-                <span className="font-bold text-teal-600">29.</span> Que hipótese causal específica você investigaria utilizando o TerraRisk?
-              </label>
-              <textarea
-                disabled={disabled}
-                value={responses.q29}
-                onChange={(e) => setResponses((p) => ({ ...p, q29: e.target.value }))}
-                rows={3}
-                placeholder="Ex: A fragmentação institucional aumenta a vulnerabilidade à dengue em municípios de médio porte..."
-                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent disabled:bg-gray-50 resize-none"
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">
-                <span className="font-bold text-teal-600">30.</span> Que variável ou dimensão deveria ser incorporada, ou aprimorada ao modelo para fortalecer a análise?
-              </label>
-              <textarea
-                disabled={disabled}
-                value={responses.q30}
-                onChange={(e) => setResponses((p) => ({ ...p, q30: e.target.value }))}
-                rows={3}
-                placeholder="Descreva a variável ou dimensão e por que seria relevante..."
-                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent disabled:bg-gray-50 resize-none"
-              />
+          <LikertItem n={14} label="Tenho interesse em participar de um piloto com o TerraRisk." value={responses.ps14} onChange={(v) => setLikert('ps14', v)} disabled={disabled} />
+          <LikertItem n={15} label="Identifico um contexto espec\u00edfico onde aplicar a ferramenta no curto prazo." value={responses.ps15} onChange={(v) => setLikert('ps15', v)} disabled={disabled} />
+          <div className="py-3 mt-2">
+            <div className="flex items-start gap-2">
+              <span className="text-xs font-bold text-gray-400 mt-0.5 w-5 shrink-0">16.</span>
+              <div className="flex-1">
+                <p className="text-sm text-gray-700 mb-2">Autorizo o uso das minhas respostas para melhoria da ferramenta.</p>
+                <div className="flex gap-4">
+                  <button
+                    type="button"
+                    disabled={disabled}
+                    onClick={() => setResponses((p) => ({ ...p, q16: true }))}
+                    className={`px-6 py-2 rounded-lg text-sm font-semibold border-2 transition-all
+                      ${responses.q16 === true
+                        ? 'bg-purple-600 border-purple-600 text-white'
+                        : 'border-gray-300 text-gray-500 hover:border-purple-400'
+                      }
+                      ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+                    `}
+                  >
+                    Sim
+                  </button>
+                  <button
+                    type="button"
+                    disabled={disabled}
+                    onClick={() => setResponses((p) => ({ ...p, q16: false }))}
+                    className={`px-6 py-2 rounded-lg text-sm font-semibold border-2 transition-all
+                      ${responses.q16 === false
+                        ? 'bg-gray-500 border-gray-500 text-white'
+                        : 'border-gray-300 text-gray-500 hover:border-gray-400'
+                      }
+                      ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+                    `}
+                  >
+                    N&atilde;o
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -520,16 +453,13 @@ export default function ITECSSurvey() {
             disabled={disabled}
             className="px-8 py-3 bg-purple-600 text-white rounded-lg font-semibold text-sm hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
           >
-            {submitting ? 'Enviando...' : 'Enviar Avaliação'}
+            {submitting ? 'Enviando...' : 'Enviar Avalia\u00e7\u00e3o'}
           </button>
           <p className="text-xs text-gray-400 text-center">
-            Suas respostas são confidenciais e vinculadas apenas ao grupo <strong>{group?.name}</strong>.
+            Suas respostas s&atilde;o vinculadas apenas ao grupo <strong>{group?.name}</strong>.
           </p>
           <p className="text-xs text-gray-300 italic">
-            ITECS v1.2 · TerraX Research · Uso restrito a fins de autoavaliação e otimização · Dados anonimizados
-          </p>
-          <p className="text-xs text-gray-300 italic">
-            Correspondência TRLM v1.4: TC→P2+L5 · CSP→P3+L4 · IA→P4+L7 · AP→Dinâmica Ativação+Loop L7→L1
+            ITECS v2.0 &middot; TerraX &middot; Dados anonimizados
           </p>
         </div>
 
