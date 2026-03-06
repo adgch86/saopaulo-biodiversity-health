@@ -40,6 +40,7 @@ from core.database import (
     list_groups,
     save_itecs_response,
     get_itecs_results,
+    get_itecs_v1_results,
 )
 
 router = APIRouter()
@@ -58,6 +59,7 @@ class ActionsRequest(BaseModel):
 
 
 class ITECSMeta(BaseModel):
+    version: str = '2.0'
     layersPurchased: list[str] = []
     creditsSpent: int = 0
     rankingChanged: bool = False
@@ -1069,12 +1071,12 @@ async def get_radar_stats(group_id: str):
 @router.post("/survey")
 async def submit_itecs_survey(request: ITECSRequest):
     """
-    Save an individual ITECS v1.2 response.
+    Save an individual ITECS v2.0 response.
 
     Body:
         - groupId: Group identifier
         - participantId: Unique UUID generated per participant in the frontend
-        - responses: ITECS fields (25 Likert + 5 open)
+        - responses: ITECS v2 fields (10 Likert + 5 open + 1 boolean)
         - meta: Behavioural metadata (auto-calculated client-side)
     """
     group = get_group(request.groupId)
@@ -1095,8 +1097,17 @@ async def submit_itecs_survey(request: ITECSRequest):
 
 @router.get("/survey/admin/results")
 async def get_survey_results():
-    """Admin: export all ITECS responses."""
+    """Admin: export all ITECS v2 responses with group names."""
     try:
         return get_itecs_results()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching survey results: {str(e)}")
+
+
+@router.get("/survey/admin/results/v1")
+async def get_survey_results_v1():
+    """Admin: export legacy ITECS v1 responses."""
+    try:
+        return get_itecs_v1_results()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching v1 survey results: {str(e)}")

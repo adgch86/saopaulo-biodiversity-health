@@ -11,16 +11,20 @@ import type { AdminStats, GroupStats } from '@/lib/types';
 interface ITECSRow {
   id: number;
   group_id: string;
+  group_name: string | null;
   participant_id: string;
-  tc1: number; tc2: number; tc3: number; tc4: number; tc5: number;
-  ra6: number; ra7: number; ra8: number;
-  pf9: number; pf10: number; pf11: number; pf12: number;
-  csp13: number; csp14: number; csp15: number; csp16: number;
-  ia17: number; ia18: number; ia19: number; ia20: number;
-  ap21: number; ap22: number; ap23: number; ap24: number; ap25: number;
-  q26: string; q27: string;
-  q28: { nameOrInstitution: string; topic: string; frequency: string }[];
-  q29: string; q30: string;
+  // Bloco I — Experiência (Likert 1-7)
+  exp1: number; exp2: number; exp3: number; exp4: number;
+  exp5: number; exp6: number; exp7: number; exp8: number;
+  // Bloco II — Aplicação prática
+  q9: string; q10: string; q11: string;
+  q12: { nameOrInstitution: string; topic: string; frequency: string }[];
+  q13: string;
+  // Bloco III — Próximos passos
+  ps14: number; ps15: number;
+  q16: boolean;
+  // Meta
+  version: string;
   layers_purchased: string[];
   credits_spent: number;
   ranking_changed: boolean;
@@ -125,7 +129,7 @@ export default function AdminClient() {
     );
   }
 
-  // ── ITECS helpers ──────────────────────────────────────────────────────────
+  // ── ITECS v2 helpers ───────────────────────────────────────────────────────
 
   const avg = (vals: number[]) => {
     const valid = vals.filter((v) => v > 0);
@@ -138,25 +142,30 @@ export default function AdminClient() {
   };
 
   const BLOCKS = [
-    { id: 'TC', label: 'Transformação Cognitiva', keys: ['tc1','tc2','tc3','tc4','tc5'] as (keyof ITECSRow)[], color: 'bg-purple-500' },
-    { id: 'RA', label: 'Robustez Analítica',       keys: ['ra6','ra7','ra8'] as (keyof ITECSRow)[],             color: 'bg-blue-500' },
-    { id: 'PF', label: 'Potencial da Ferramenta',  keys: ['pf9','pf10','pf11','pf12'] as (keyof ITECSRow)[],    color: 'bg-teal-500' },
-    { id: 'CSP',label: 'Coerência Sistêmica',      keys: ['csp13','csp14','csp15','csp16'] as (keyof ITECSRow)[], color: 'bg-green-500' },
-    { id: 'IA', label: 'Intenção de Aplicação',    keys: ['ia17','ia18','ia19','ia20'] as (keyof ITECSRow)[],   color: 'bg-amber-500' },
-    { id: 'AP', label: 'Ativação Proativa',         keys: ['ap21','ap22','ap23','ap24','ap25'] as (keyof ITECSRow)[], color: 'bg-orange-500' },
+    { id: 'EXP', label: 'Experiência com TerraRisk', keys: ['exp1','exp2','exp3','exp4','exp5','exp6','exp7','exp8'] as (keyof ITECSRow)[], color: 'bg-purple-500' },
+    { id: 'PS',  label: 'Próximos Passos',            keys: ['ps14','ps15'] as (keyof ITECSRow)[], color: 'bg-teal-500' },
   ];
+
+  const QUESTION_LABELS: Record<string, string> = {
+    exp1: '1. Entender melhor o território',
+    exp2: '2. Identificar relações entre variáveis',
+    exp3: '3. Dados relevantes para o trabalho',
+    exp4: '4. Escala municipal adequada',
+    exp5: '5. Resultados coerentes com o território',
+    exp6: '6. Útil para apoiar decisões',
+    exp7: '7. Usaria no trabalho',
+    exp8: '8. Recomendaria a colegas',
+    ps14: '14. Interesse em piloto',
+    ps15: '15. Contexto para aplicar no curto prazo',
+  };
 
   const exportCSV = () => {
     if (!itecs.length) return;
     const headers = [
-      'participant_id','group_id',
-      'tc1','tc2','tc3','tc4','tc5',
-      'ra6','ra7','ra8',
-      'pf9','pf10','pf11','pf12',
-      'csp13','csp14','csp15','csp16',
-      'ia17','ia18','ia19','ia20',
-      'ap21','ap22','ap23','ap24','ap25',
-      'q26','q27','q29','q30',
+      'participant_id','group_id','group_name',
+      'exp1','exp2','exp3','exp4','exp5','exp6','exp7','exp8',
+      'q9','q10','q11','q13',
+      'ps14','ps15','q16',
       'layers_purchased','credits_spent','ranking_changed','actions_selected','submitted_at'
     ];
     const rows = itecs.map((r) => headers.map((h) => {
@@ -170,7 +179,7 @@ export default function AdminClient() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `itecs_results_${new Date().toISOString().slice(0,10)}.csv`;
+    a.download = `itecs_v2_results_${new Date().toISOString().slice(0,10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -340,14 +349,14 @@ export default function AdminClient() {
             </div>
           </CardContent>
         </Card>
-        {/* ── ITECS Results ── */}
+        {/* ── ITECS v2.0 Results ── */}
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Resultados ITECS v1.2</CardTitle>
+                <CardTitle>Avaliação TerraRisk (ITECS v2.0)</CardTitle>
                 <p className="text-sm text-gray-500 mt-1">
-                  {itecs.length} resposta{itecs.length !== 1 ? 's' : ''} individuais
+                  {itecs.length} resposta{itecs.length !== 1 ? 's' : ''} individuai{itecs.length !== 1 ? 's' : ''}
                   {itecs.length > 0 && ` · ${new Set(itecs.map(r => r.group_id)).size} grupo${new Set(itecs.map(r => r.group_id)).size !== 1 ? 's' : ''}`}
                 </p>
               </div>
@@ -372,7 +381,7 @@ export default function AdminClient() {
                       return (
                         <div key={block.id} className="flex items-center gap-3">
                           <span className="text-xs font-bold text-gray-500 w-8">{block.id}</span>
-                          <span className="text-xs text-gray-600 w-44 shrink-0">{block.label}</span>
+                          <span className="text-xs text-gray-600 w-52 shrink-0">{block.label}</span>
                           <div className="flex-1 bg-gray-100 rounded-full h-3 overflow-hidden">
                             <div
                               className={`h-3 rounded-full transition-all ${block.color}`}
@@ -388,6 +397,23 @@ export default function AdminClient() {
                   </div>
                 </div>
 
+                {/* Per-question averages */}
+                <div>
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Médias por Pergunta</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    {Object.entries(QUESTION_LABELS).map(([key, label]) => {
+                      const mean = avg(itecs.map((r) => (r[key as keyof ITECSRow] as number) || 0));
+                      const color = mean >= 5.5 ? 'text-green-600' : mean >= 3.5 ? 'text-amber-600' : 'text-red-500';
+                      return (
+                        <div key={key} className="flex items-center gap-2 text-xs">
+                          <span className={`font-bold w-8 text-right ${color}`}>{mean.toFixed(1)}</span>
+                          <span className="text-gray-600">{label}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
                 {/* Tabla de respuestas */}
                 <div>
                   <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Respostas Individuais</p>
@@ -396,12 +422,11 @@ export default function AdminClient() {
                       <thead>
                         <tr className="border-b bg-gray-50">
                           <th className="text-left py-2 px-3 font-medium text-gray-500">Grupo</th>
-                          <th className="text-left py-2 px-3 font-medium text-gray-500">Participante</th>
                           {BLOCKS.map((b) => (
                             <th key={b.id} className="text-center py-2 px-2 font-medium text-gray-500 w-12">{b.id}</th>
                           ))}
+                          <th className="text-center py-2 px-2 font-medium text-gray-500">Q16</th>
                           <th className="text-center py-2 px-2 font-medium text-gray-500">Camadas</th>
-                          <th className="text-center py-2 px-2 font-medium text-gray-500">Rank?</th>
                           <th className="text-left py-2 px-3 font-medium text-gray-500">Data</th>
                           <th className="py-2 px-2" />
                         </tr>
@@ -413,8 +438,9 @@ export default function AdminClient() {
                           return (
                             <Fragment key={pid}>
                               <tr className="border-b hover:bg-gray-50">
-                                <td className="py-2 px-3 font-medium text-xs">{row.group_id.slice(0, 8)}</td>
-                                <td className="py-2 px-3 text-xs text-gray-400">{pid.slice(0, 8)}…</td>
+                                <td className="py-2 px-3 font-medium text-xs">
+                                  {row.group_name || row.group_id.slice(0, 8)}
+                                </td>
                                 {BLOCKS.map((b) => {
                                   const mean = avg(b.keys.map((k) => (row[k] as number) || 0));
                                   const color = mean >= 5.5 ? 'text-green-600' : mean >= 3.5 ? 'text-amber-600' : 'text-red-500';
@@ -424,14 +450,14 @@ export default function AdminClient() {
                                     </td>
                                   );
                                 })}
-                                <td className="py-2 px-2 text-center text-xs">{row.credits_spent ?? '-'}</td>
                                 <td className="py-2 px-2 text-center text-xs">
-                                  {row.ranking_changed ? (
-                                    <span className="text-green-600 font-bold">✓</span>
+                                  {row.q16 ? (
+                                    <span className="text-green-600 font-bold">Sim</span>
                                   ) : (
-                                    <span className="text-gray-300">–</span>
+                                    <span className="text-gray-400">Não</span>
                                   )}
                                 </td>
+                                <td className="py-2 px-2 text-center text-xs">{row.credits_spent ?? '-'}</td>
                                 <td className="py-2 px-3 text-xs text-gray-400">
                                   {new Date(row.submitted_at).toLocaleDateString()}
                                 </td>
@@ -447,31 +473,45 @@ export default function AdminClient() {
 
                               {isOpen && (
                                 <tr className="bg-purple-50">
-                                  <td colSpan={11} className="px-4 py-4">
+                                  <td colSpan={7} className="px-4 py-4">
                                     <div className="space-y-4 text-sm">
 
                                       {/* Likert detalhado */}
-                                      <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-1">
-                                        {BLOCKS.map((b) => (
-                                          <div key={b.id}>
-                                            <p className="text-xs font-semibold text-gray-500 mb-1">{b.id} — {b.label}</p>
-                                            <div className="flex gap-2">
-                                              {b.keys.map((k) => (
-                                                <span key={String(k)} className="text-xs bg-white border rounded px-1.5 py-0.5 text-gray-700">
-                                                  {String(k).replace(/[a-z]+/, '')}: <strong>{row[k] as number}</strong>
-                                                </span>
-                                              ))}
-                                            </div>
-                                          </div>
-                                        ))}
+                                      <div>
+                                        <p className="text-xs font-semibold text-gray-500 mb-2">Bloco I — Experiência com TerraRisk</p>
+                                        <div className="flex flex-wrap gap-2">
+                                          {(['exp1','exp2','exp3','exp4','exp5','exp6','exp7','exp8'] as (keyof ITECSRow)[]).map((k) => {
+                                            const val = row[k] as number;
+                                            const color = val >= 5 ? 'border-green-300 bg-green-50' : val >= 3 ? 'border-amber-300 bg-amber-50' : 'border-red-300 bg-red-50';
+                                            return (
+                                              <span key={String(k)} className={`text-xs border rounded px-2 py-1 text-gray-700 ${color}`}>
+                                                {String(k).replace('exp', 'Q')}: <strong>{val}</strong>
+                                              </span>
+                                            );
+                                          })}
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <p className="text-xs font-semibold text-gray-500 mb-2">Bloco III — Próximos Passos</p>
+                                        <div className="flex flex-wrap gap-2">
+                                          <span className="text-xs border rounded px-2 py-1 text-gray-700 bg-white">
+                                            Q14 (Piloto): <strong>{row.ps14}</strong>
+                                          </span>
+                                          <span className="text-xs border rounded px-2 py-1 text-gray-700 bg-white">
+                                            Q15 (Contexto): <strong>{row.ps15}</strong>
+                                          </span>
+                                          <span className="text-xs border rounded px-2 py-1 text-gray-700 bg-white">
+                                            Q16 (Autoriza): <strong>{row.q16 ? 'Sim' : 'Não'}</strong>
+                                          </span>
+                                        </div>
                                       </div>
 
                                       {/* Perguntas abertas */}
                                       {[
-                                        { label: 'Q26 — Caminhos de evidência', val: row.q26 },
-                                        { label: 'Q27 — Barreiras à coprodução', val: row.q27 },
-                                        { label: 'Q29 — Hipótese causal', val: row.q29 },
-                                        { label: 'Q30 — Variável faltante', val: row.q30 },
+                                        { label: 'Q9 — Problema concreto', val: row.q9 },
+                                        { label: 'Q10 — Hipótese causal', val: row.q10 },
+                                        { label: 'Q11 — Dados/funcionalidades faltantes', val: row.q11 },
+                                        { label: 'Q13 — Configuração para políticas públicas', val: row.q13 },
                                       ].filter(({ val }) => val).map(({ label, val }) => (
                                         <div key={label}>
                                           <p className="text-xs font-semibold text-gray-500">{label}</p>
@@ -479,12 +519,12 @@ export default function AdminClient() {
                                         </div>
                                       ))}
 
-                                      {/* Q28 Rede */}
-                                      {row.q28?.filter(c => c.nameOrInstitution).length > 0 && (
+                                      {/* Q12 Rede */}
+                                      {row.q12?.filter(c => c.nameOrInstitution).length > 0 && (
                                         <div>
-                                          <p className="text-xs font-semibold text-gray-500 mb-1">Q28 — Rede de colaboradores</p>
+                                          <p className="text-xs font-semibold text-gray-500 mb-1">Q12 — Instituições/redes beneficiadas</p>
                                           <div className="flex flex-wrap gap-2">
-                                            {row.q28.filter(c => c.nameOrInstitution).map((c, i) => (
+                                            {row.q12.filter(c => c.nameOrInstitution).map((c, i) => (
                                               <span key={i} className="text-xs bg-white border rounded px-2 py-1 text-gray-700">
                                                 <strong>{c.nameOrInstitution}</strong> · {c.topic} · {c.frequency}
                                               </span>
@@ -498,6 +538,7 @@ export default function AdminClient() {
                                         <span>Camadas: {Array.isArray(row.layers_purchased) ? row.layers_purchased.join(', ') || '–' : '–'}</span>
                                         <span>Ações: {Array.isArray(row.actions_selected) ? row.actions_selected.join(', ') || '–' : '–'}</span>
                                         <span>Créditos gastos: {row.credits_spent}</span>
+                                        <span>Ranking mudou: {row.ranking_changed ? 'Sim' : 'Não'}</span>
                                       </div>
 
                                     </div>
