@@ -73,10 +73,10 @@ function LikertItem({
 // ─── Collaborator table ───────────────────────────────────────────────────────
 
 const FREQ_OPTIONS: { value: ITECSCollaborator['frequency']; label: string }[] = [
-  { value: 'more_than_monthly', label: 'Mais de uma vez por m\u00eas' },
-  { value: 'monthly', label: 'Uma vez por m\u00eas' },
+  { value: 'more_than_monthly', label: 'Mais de uma vez por mês' },
+  { value: 'monthly', label: 'Uma vez por mês' },
   { value: 'yearly', label: 'Uma vez por ano' },
-  { value: 'sporadic', label: 'Espor\u00e1dica' },
+  { value: 'sporadic', label: 'Esporádica' },
 ];
 
 function CollaboratorTable({
@@ -101,9 +101,9 @@ function CollaboratorTable({
         <thead>
           <tr className="bg-gray-50">
             <th className="text-left p-2 border border-gray-200 text-xs text-gray-600 w-8">#</th>
-            <th className="text-left p-2 border border-gray-200 text-xs text-gray-600">{"Pessoa / Institui\u00e7\u00e3o / Rede"}</th>
-            <th className="text-left p-2 border border-gray-200 text-xs text-gray-600">{"Tema de colabora\u00e7\u00e3o"}</th>
-            <th className="text-left p-2 border border-gray-200 text-xs text-gray-600">{"Frequ\u00eancia"}</th>
+            <th className="text-left p-2 border border-gray-200 text-xs text-gray-600">{"Pessoa / Instituição / Rede"}</th>
+            <th className="text-left p-2 border border-gray-200 text-xs text-gray-600">{"Tema de colaboração"}</th>
+            <th className="text-left p-2 border border-gray-200 text-xs text-gray-600">{"Frequência"}</th>
           </tr>
         </thead>
         <tbody>
@@ -116,7 +116,7 @@ function CollaboratorTable({
                   disabled={disabled}
                   value={row.nameOrInstitution}
                   onChange={(e) => updateRow(idx, 'nameOrInstitution', e.target.value)}
-                  placeholder="Nome ou institui\u00e7\u00e3o"
+                  placeholder="Nome ou instituição"
                   className="w-full px-2 py-1 text-sm rounded border-0 focus:ring-1 focus:ring-purple-400 disabled:bg-gray-50 disabled:text-gray-400"
                 />
               </td>
@@ -205,7 +205,7 @@ export default function ITECSSurvey() {
   const handleSubmit = async () => {
     const missing = missingLikert();
     if (missing.length > 0) {
-      setError(`Por favor, responda todos os itens de sele\u00e7\u00e3o (${missing.length} pendente${missing.length > 1 ? 's' : ''}).`);
+      setError(`Por favor, responda todos os itens de seleção (${missing.length} pendente${missing.length > 1 ? 's' : ''}).`);
       return;
     }
     if (!group) return;
@@ -255,12 +255,12 @@ export default function ITECSSurvey() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">{"Avalia\u00e7\u00e3o enviada"}</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">{"Avaliação enviada"}</h2>
           <p className="text-gray-600 mb-6">
-            {"Obrigado pela sua participa\u00e7\u00e3o. Suas respostas foram registradas e ser\u00e3o utilizadas para autoavalia\u00e7\u00e3o e otimiza\u00e7\u00e3o da ferramenta."}
+            {"Obrigado pela sua participação. Suas respostas foram registradas e serão utilizadas para autoavaliação e otimização da ferramenta."}
           </p>
           <div className="text-xs text-gray-400 italic">
-            {"ITECS v2.0 \u00b7 TerraX \u00b7 Dados anonimizados"}
+            {"ITECS v2.0 · TerraX · Dados anonimizados"}
           </div>
         </div>
       </div>
@@ -284,41 +284,41 @@ export default function ITECSSurvey() {
               </svg>
             </div>
             <div>
-              <h1 className="text-xl lg:text-2xl font-bold text-gray-800">{"Avalia\u00e7\u00e3o TerraRisk"}</h1>
-              <p className="text-xs text-gray-400">{"Instrumento de Avalia\u00e7\u00e3o \u00b7 v2.0"}</p>
+              <h1 className="text-xl lg:text-2xl font-bold text-gray-800">{"Avaliação TerraRisk"}</h1>
+              <p className="text-xs text-gray-400">{"Instrumento de Avaliação · v2.0"}</p>
             </div>
           </div>
           <p className="text-sm text-gray-600 bg-white rounded-lg p-4 border border-gray-200">
-            {"Este instrumento avalia sua experi\u00eancia com a ferramenta TerraRisk e o marco anal\u00edtico TerraX. N\u00e3o h\u00e1 respostas certas ou erradas. As respostas s\u00e3o utilizadas exclusivamente para fins de autoavalia\u00e7\u00e3o e otimiza\u00e7\u00e3o da ferramenta. S\u00e3o 10 perguntas de sele\u00e7\u00e3o e 5 descritivas. O preenchimento leva aproximadamente 5 minutos."}
+            {"Este instrumento avalia sua experiência com a ferramenta TerraRisk e o marco analítico TerraX. Não há respostas certas ou erradas. As respostas são utilizadas exclusivamente para fins de autoavaliação e otimização da ferramenta. São 10 perguntas de seleção e 5 descritivas. O preenchimento leva aproximadamente 5 minutos."}
           </p>
         </div>
 
         {/* Likert instructions */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-700">
-          <strong>Escala:</strong>{" Para cada afirma\u00e7\u00e3o, selecione de "}<strong>1</strong>{" (Discordo totalmente) a "}<strong>7</strong>{" (Concordo totalmente)."}
+          <strong>Escala:</strong>{" Para cada afirmação, selecione de "}<strong>1</strong>{" (Discordo totalmente) a "}<strong>7</strong>{" (Concordo totalmente)."}
         </div>
 
         {/* ── BLOCO I — Experiência com o TerraRisk ── */}
         <section className="bg-white rounded-xl shadow-sm p-6">
           <div className="mb-4 p-4 rounded-lg bg-purple-50 border border-purple-200">
-            <p className="text-xs font-semibold text-purple-500 uppercase tracking-wide">{"Bloco I \u2014 Experi\u00eancia com o TerraRisk"}</p>
-            <p className="text-sm text-purple-700 mt-1 font-medium">{"Como foi sua experi\u00eancia com a ferramenta?"}</p>
+            <p className="text-xs font-semibold text-purple-500 uppercase tracking-wide">{"Bloco I — Experiência com o TerraRisk"}</p>
+            <p className="text-sm text-purple-700 mt-1 font-medium">{"Como foi sua experiência com a ferramenta?"}</p>
           </div>
-          <LikertItem n={1} label="A ferramenta me ajudou a entender melhor o territ\u00f3rio que analiso." value={responses.exp1} onChange={(v) => setLikert('exp1', v)} disabled={disabled} />
-          <LikertItem n={2} label="Consigo identificar rela\u00e7\u00f5es entre vari\u00e1veis que antes n\u00e3o considerava." value={responses.exp2} onChange={(v) => setLikert('exp2', v)} disabled={disabled} />
-          <LikertItem n={3} label="Os dados apresentados s\u00e3o relevantes para meu trabalho." value={responses.exp3} onChange={(v) => setLikert('exp3', v)} disabled={disabled} />
-          <LikertItem n={4} label="A escala municipal foi adequada para a an\u00e1lise." value={responses.exp4} onChange={(v) => setLikert('exp4', v)} disabled={disabled} />
-          <LikertItem n={5} label="Os resultados fazem sentido com o que conhe\u00e7o do territ\u00f3rio." value={responses.exp5} onChange={(v) => setLikert('exp5', v)} disabled={disabled} />
-          <LikertItem n={6} label="A ferramenta \u00e9 \u00fatil para apoiar decis\u00f5es na minha \u00e1rea de atua\u00e7\u00e3o." value={responses.exp6} onChange={(v) => setLikert('exp6', v)} disabled={disabled} />
+          <LikertItem n={1} label="A ferramenta me ajudou a entender melhor o território que analiso." value={responses.exp1} onChange={(v) => setLikert('exp1', v)} disabled={disabled} />
+          <LikertItem n={2} label="Consigo identificar relações entre variáveis que antes não considerava." value={responses.exp2} onChange={(v) => setLikert('exp2', v)} disabled={disabled} />
+          <LikertItem n={3} label="Os dados apresentados são relevantes para meu trabalho." value={responses.exp3} onChange={(v) => setLikert('exp3', v)} disabled={disabled} />
+          <LikertItem n={4} label="A escala municipal foi adequada para a análise." value={responses.exp4} onChange={(v) => setLikert('exp4', v)} disabled={disabled} />
+          <LikertItem n={5} label="Os resultados fazem sentido com o que conheço do território." value={responses.exp5} onChange={(v) => setLikert('exp5', v)} disabled={disabled} />
+          <LikertItem n={6} label="A ferramenta é útil para apoiar decisões na minha área de atuação." value={responses.exp6} onChange={(v) => setLikert('exp6', v)} disabled={disabled} />
           <LikertItem n={7} label="Eu usaria o TerraRisk no meu trabalho." value={responses.exp7} onChange={(v) => setLikert('exp7', v)} disabled={disabled} />
-          <LikertItem n={8} label="Recomendaria o TerraRisk a colegas ou institui\u00e7\u00f5es." value={responses.exp8} onChange={(v) => setLikert('exp8', v)} disabled={disabled} />
+          <LikertItem n={8} label="Recomendaria o TerraRisk a colegas ou instituições." value={responses.exp8} onChange={(v) => setLikert('exp8', v)} disabled={disabled} />
         </section>
 
         {/* ── BLOCO II — Aplicação prática ── */}
         <section className="bg-white rounded-xl shadow-sm p-6">
           <div className="mb-4 p-4 rounded-lg bg-teal-50 border border-teal-200">
-            <p className="text-xs font-semibold text-teal-600 uppercase tracking-wide">{"Bloco II \u2014 Aplica\u00e7\u00e3o pr\u00e1tica"}</p>
-            <p className="text-sm text-teal-700 mt-1 font-medium">{"Como voc\u00ea aplicaria o TerraRisk?"}</p>
+            <p className="text-xs font-semibold text-teal-600 uppercase tracking-wide">{"Bloco II — Aplicação prática"}</p>
+            <p className="text-sm text-teal-700 mt-1 font-medium">{"Como você aplicaria o TerraRisk?"}</p>
           </div>
           <div className="space-y-6">
             <div>
@@ -336,33 +336,33 @@ export default function ITECSSurvey() {
             </div>
             <div>
               <label className="text-sm font-medium text-gray-700 block mb-1">
-                <span className="font-bold text-teal-600">10.</span>{" Que hip\u00f3tese causal espec\u00edfica voc\u00ea investigaria utilizando o TerraRisk?"}
+                <span className="font-bold text-teal-600">10.</span>{" Que hipótese causal específica você investigaria utilizando o TerraRisk?"}
               </label>
               <textarea
                 disabled={disabled}
                 value={responses.q10}
                 onChange={(e) => setResponses((p) => ({ ...p, q10: e.target.value }))}
                 rows={3}
-                placeholder={"Ex: A fragmenta\u00e7\u00e3o institucional aumenta a vulnerabilidade \u00e0 dengue em munic\u00edpios de m\u00e9dio porte..."}
+                placeholder={"Ex: A fragmentação institucional aumenta a vulnerabilidade à dengue em municípios de médio porte..."}
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent disabled:bg-gray-50 resize-none"
               />
             </div>
             <div>
               <label className="text-sm font-medium text-gray-700 block mb-1">
-                <span className="font-bold text-teal-600">11.</span>{" Que dados ou funcionalidades faltam para que a ferramenta seja mais \u00fatil para voc\u00ea?"}
+                <span className="font-bold text-teal-600">11.</span>{" Que dados ou funcionalidades faltam para que a ferramenta seja mais útil para você?"}
               </label>
               <textarea
                 disabled={disabled}
                 value={responses.q11}
                 onChange={(e) => setResponses((p) => ({ ...p, q11: e.target.value }))}
                 rows={3}
-                placeholder={"Descreva dados, vari\u00e1veis ou funcionalidades que agregariam valor..."}
+                placeholder={"Descreva dados, variáveis ou funcionalidades que agregariam valor..."}
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent disabled:bg-gray-50 resize-none"
               />
             </div>
             <div>
               <label className="text-sm font-medium text-gray-700 block mb-3">
-                <span className="font-bold text-teal-600">12.</span>{" Que institui\u00e7\u00f5es ou redes do seu contexto se beneficiariam desta ferramenta? (Indique at\u00e9 5)"}
+                <span className="font-bold text-teal-600">12.</span>{" Que instituições ou redes do seu contexto se beneficiariam desta ferramenta? (Indique até 5)"}
               </label>
               <CollaboratorTable
                 value={responses.q12}
@@ -372,14 +372,14 @@ export default function ITECSSurvey() {
             </div>
             <div>
               <label className="text-sm font-medium text-gray-700 block mb-1">
-                <span className="font-bold text-teal-600">13.</span>{" Que configura\u00e7\u00e3o voc\u00ea entende que deveria existir para articular melhor o uso de evid\u00eancias na elabora\u00e7\u00e3o de pol\u00edticas p\u00fablicas vinculadas \u00e0 mudan\u00e7a clim\u00e1tica?"}
+                <span className="font-bold text-teal-600">13.</span>{" Que configuração você entende que deveria existir para articular melhor o uso de evidências na elaboração de políticas públicas vinculadas à mudança climática?"}
               </label>
               <textarea
                 disabled={disabled}
                 value={responses.q13}
                 onChange={(e) => setResponses((p) => ({ ...p, q13: e.target.value }))}
                 rows={3}
-                placeholder={"Descreva a configura\u00e7\u00e3o ideal..."}
+                placeholder={"Descreva a configuração ideal..."}
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent disabled:bg-gray-50 resize-none"
               />
             </div>
@@ -389,11 +389,11 @@ export default function ITECSSurvey() {
         {/* ── BLOCO III — Próximos passos ── */}
         <section className="bg-white rounded-xl shadow-sm p-6">
           <div className="mb-4 p-4 rounded-lg bg-purple-50 border border-purple-200">
-            <p className="text-xs font-semibold text-purple-500 uppercase tracking-wide">{"Bloco III \u2014 Pr\u00f3ximos passos"}</p>
+            <p className="text-xs font-semibold text-purple-500 uppercase tracking-wide">{"Bloco III — Próximos passos"}</p>
             <p className="text-sm text-purple-700 mt-1 font-medium">O que vem depois?</p>
           </div>
           <LikertItem n={14} label="Tenho interesse em participar de um piloto com o TerraRisk." value={responses.ps14} onChange={(v) => setLikert('ps14', v)} disabled={disabled} />
-          <LikertItem n={15} label="Identifico um contexto espec\u00edfico onde aplicar a ferramenta no curto prazo." value={responses.ps15} onChange={(v) => setLikert('ps15', v)} disabled={disabled} />
+          <LikertItem n={15} label="Identifico um contexto específico onde aplicar a ferramenta no curto prazo." value={responses.ps15} onChange={(v) => setLikert('ps15', v)} disabled={disabled} />
           <div className="py-3 mt-2">
             <div className="flex items-start gap-2">
               <span className="text-xs font-bold text-gray-400 mt-0.5 w-5 shrink-0">16.</span>
@@ -426,7 +426,7 @@ export default function ITECSSurvey() {
                       ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                     `}
                   >
-                    {"N\u00e3o"}
+                    {"Não"}
                   </button>
                 </div>
               </div>
@@ -448,13 +448,13 @@ export default function ITECSSurvey() {
             disabled={disabled}
             className="px-8 py-3 bg-purple-600 text-white rounded-lg font-semibold text-sm hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
           >
-            {"Enviar Avalia\u00e7\u00e3o"}
+            {"Enviar Avaliação"}
           </button>
           <p className="text-xs text-gray-400 text-center">
-            {"Suas respostas s\u00e3o vinculadas apenas ao grupo "}<strong>{group?.name}</strong>.
+            {"Suas respostas são vinculadas apenas ao grupo "}<strong>{group?.name}</strong>.
           </p>
           <p className="text-xs text-gray-300 italic">
-            {"ITECS v2.0 \u00b7 TerraX \u00b7 Dados anonimizados"}
+            {"ITECS v2.0 · TerraX · Dados anonimizados"}
           </p>
         </div>
 
